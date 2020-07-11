@@ -1,0 +1,53 @@
+{
+  "author": "Daniel Wade",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@default-services/components": "^1.0.4",
+    "@default-services/icons": "^2.0.8",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "get-port": "^5.1.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1"
+  },
+  "description": "fix names of tv show episode files",
+  "devDependencies": {
+    "electron": "^9.0.5",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.7.0",
+    "prettier": "^2.0.4",
+    "sass": "^1.26.5"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "homepage": "./",
+  "license": "CC0-1.0",
+  "main": "main.js",
+  "name": "media-name-fixer",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "start:react": "react-scripts start",
+    "start:electron": "electron .",
+    "build": "react-scripts build",
+    "build:react": "react-scripts build",
+    "test:react": "react-scripts test",
+    "eject:react": "react-scripts eject"
+  },
+  "version": "1.0.0"
+}
