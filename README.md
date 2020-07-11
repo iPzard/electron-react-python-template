@@ -4,7 +4,9 @@
 
 # ⚙️ Config
 See `./utils/requests.js` for pre-made React request functions. You can use these to invoke your Python scripts in `app.py`.
+
 **React:** React files can be found in the `./src/` folder.
+
 **Python:** Python can be created in the `./app.py` file.
 
 <br>
