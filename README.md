@@ -8,15 +8,21 @@
 * **Python:** Python can be created in the `./app.py` file.
 
 # 🛠️ Setup
-Clone this repository, navigate to its directory, and install Python requirements:
+Clone this repository, navigate to its directory, and install Node & Python dependencies:
 
-**requirements:**
+**install python dependencies:**
 ```bash
 pip3 install -r requirements.txt
 ```
 
+**install node dependencies:**
+```bash
+npm install
+```
+
 You can run the Flask server manually to run your own tests from the root directory with:
-**flask:**
+
+**run flask:**
 ```bash
 py app.py
 ```
@@ -24,7 +30,7 @@ py app.py
 # 📜 Scripts
 To use your React/Python app in Electron, you must build it with:
 
-**build:**
+**build react:**
 ```bash
 npm run build
 ```
