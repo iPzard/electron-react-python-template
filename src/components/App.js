@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
 import { mapDispatchToProps, mapStateToProps } from 'state/dispatch';
 
+import React from 'react';
 import Titlebar from 'components/titlebar/Titlebar';
 import { connect } from 'react-redux';
 import { customTheme } from 'theme/palette';
