@@ -1,5 +1,5 @@
 # Electron, React, & Python Template
-> Reusable template for Electron projects which uses a React front-end with Redux and is integrated with Python/Flask microservices.
+> Reusable template for Electron projects which uses a React front-end with Redux and is integrated with Python/Flask for microservices.
 <br>
 
 # ⚙️ Config
