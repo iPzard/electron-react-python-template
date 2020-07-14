@@ -21,9 +21,9 @@ See `./src/utils/requests.js` for pre-made React request functions. You can use 
 
 **Electron:** Electron's `main.js`, `preload.js`, and `renderer.js` files can be found in the project's root directory.
 
-**Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls.
-
 **React:** React files can be found in the `./src/` folder, the custom toolbar is in `./src/components/toolbar`.
+
+**Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls.
 
 <br>
 
