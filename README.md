@@ -2,15 +2,6 @@
 > Reusable template for Electron projects which uses a React front-end with Redux and is integrated with Python/Flask for microservices.
 <br>
 
-# ⚙️ Config
-See `./src/utils/requests.js` for pre-made React request functions. You can use these to invoke your Python scripts in the `app.py` file.
-
-**React:** React files can be found in the `./src/` folder.
-
-**Python:** Python can be created in the `./app.py` file.
-
-<br>
-
 # 🛠️ Setup
 Clone this repository, navigate to its directory, and install Node & Python dependencies:
 
@@ -23,6 +14,15 @@ pip3 install -r requirements.txt
 ```bash
 npm install
 ```
+<br>
+
+# ⚙️ Config
+See `./src/utils/requests.js` for pre-made React request functions. You can use these to invoke your Python scripts in the `app.py` file.
+
+**React:** React files can be found in the `./src/` folder.
+
+**Python:** Python can be created in the `./app.py` file.
+
 <br>
 
 # 📜 Scripts
