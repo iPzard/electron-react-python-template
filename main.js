@@ -17,13 +17,8 @@ function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     frame: false,
-    width: 850,
-    height: 800,
-    minWidth: 850,
-    minHeight: 800,
-    maxWidth: 1050,
-    maxHeight: 1200,
     webPreferences: {
+      enableRemoteModule: true,
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js')
     }
@@ -35,11 +30,11 @@ function createWindow () {
   // Open the DevTools.
    mainWindow.webContents.openDevTools();
 
-   // Set opacity for title on window blur & focus
-   const setTitleOpacity = value => `
-     document.querySelector("section[class*=titlebar] div img + span").style.opacity = ${value};
-     document.querySelector("section[class*=titlebar] div:nth-child(2)").style.opacity = ${value}
-   `;
+  // Set opacity for title on window blur & focus
+  const setTitleOpacity = value => `
+    document.getElementById('electron-window-title-text').style.opacity = ${value};
+    document.getElementById('electron-window-title-buttons').style.opacity = ${value}
+  `;
 
    const executeOnWindow = command => mainWindow.webContents.executeJavaScript(command);
    mainWindow.on('focus', ()=> executeOnWindow(setTitleOpacity(1)));

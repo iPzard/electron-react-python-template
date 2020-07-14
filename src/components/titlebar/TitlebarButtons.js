@@ -12,7 +12,7 @@ export const MinimizeButton = props => (
 
 export const MaximizeButton = props => (
   <IconButton
-    iconProps={{ iconName: 'MiniExpand' }}
+    iconProps={{ iconName: 'Checkbox' }}
     title="Maximize"
     ariaLabel="Maximize"
     { ...props }

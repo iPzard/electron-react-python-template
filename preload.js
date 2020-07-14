@@ -2,6 +2,8 @@
 // It has the same sandbox as a Chrome extension.
 window.addEventListener('DOMContentLoaded', () => {
 
+  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
+
   const replaceText = (selector, text) => {
     const element = document.getElementById(selector);
     if (element) element.innerText = text;

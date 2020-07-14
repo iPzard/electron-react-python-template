@@ -6,7 +6,6 @@ import {
 } from 'components/titlebar/TitlebarButtons';
 import React, { useState } from 'react';
 
-//import PropTypes from 'prop-types';
 import { app } from 'utils/services';
 import favicon from 'components/titlebar/img/favicon.png';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
@@ -14,8 +13,13 @@ import styles from 'components/titlebar/Titlebar.module.scss';
 
 initializeIcons();
 
+/*
+  NOTICE:
+  the IDs 'electron-window-title-text' & 'electron-window-title-buttons' below
+  are used in main.js to set opacity when the screen goes in and out of focus.
+*/
 
-const Titlebar = props => {
+const Titlebar = () => {
 
   const [ maximized, setMaximized ] = useState(false);
 
@@ -28,10 +32,10 @@ const Titlebar = props => {
     <section className={ styles.titlebar }>
       <div>
         <img src={ favicon } alt='favicon' />
-        <span>{ document.title }</span>
+        <span id='electron-window-title-text'>{ document.title }</span>
       </div>
 
-      <div>
+      <div id='electron-window-title-buttons'>
         <MinimizeButton onClick={ app.minimize }/>
 
         {
@@ -44,7 +48,5 @@ const Titlebar = props => {
     </section>
   );
 };
-
-//Titlebar.propTypes = { };
 
 export default Titlebar;

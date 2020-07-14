@@ -43,12 +43,9 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "start:react": "react-scripts start",
-    "start:electron": "electron .",
     "build": "react-scripts build",
-    "build:react": "react-scripts build",
-    "test:react": "react-scripts test",
-    "eject:react": "react-scripts eject"
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "version": "1.0.0"
 }
