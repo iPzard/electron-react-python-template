@@ -38,6 +38,7 @@ To start Electron, using your React build for its HTML page, use:
 **Start Electron:**
 ```bash
 npm run start
+```
 
 You can run the Flask server manually to run your own tests from the root directory with:
 
