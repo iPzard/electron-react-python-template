@@ -42,7 +42,7 @@ npm run start
 
 You can run the Flask server manually to run your own tests from the root directory with:
 
-**Run Flask:**
+**Testing Flask:**
 ```bash
 py app.py
 ```
