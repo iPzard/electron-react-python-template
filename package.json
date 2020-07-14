@@ -25,7 +25,7 @@
     "react-scripts": "3.4.1",
     "redux": "^4.0.5"
   },
-  "description": "fix names of tv show episode files",
+  "description": "Started template for Electron, React, Python app",
   "devDependencies": {
     "electron": "^9.0.5",
     "eslint": "^6.8.0",
