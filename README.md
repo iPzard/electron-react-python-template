@@ -51,7 +51,7 @@ py app.py
 <br>
 
 # 🐱‍💻 Docs
-[JSDoc](https://en.wikipedia.org/wiki/JSDoc) code documentation for this template can be found [here](https://ipzard.github.io/electron-react-python-template/).
+Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found [here](https://ipzard.github.io/electron-react-python-template/).
 <br><br>
 
 ## 🏷️ License
