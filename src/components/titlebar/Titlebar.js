@@ -9,15 +9,17 @@ import React, { useState } from 'react';
 import { app } from 'utils/services';
 import favicon from 'components/titlebar/img/favicon.png';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import styles from 'components/titlebar/Titlebar.module.scss';
+import styles from 'components/titlebar/scss/Titlebar.module.scss';
 
 initializeIcons();
 
-/*
-  NOTICE:
-  the IDs 'electron-window-title-text' & 'electron-window-title-buttons' below
-  are used in main.js to set opacity when the screen goes in and out of focus.
-*/
+/**
+ * @namespace Titlebar
+ * @description Title Component to use as an Electron customized titlebar.
+ *
+ * @property {id} electron-window-title-text used in main.js to set opacity on/off focus.
+ * @property {id} electron-window-title-buttons used in main.js to set opacity on/off focus.
+ */
 
 const Titlebar = () => {
 

@@ -1,0 +1,24 @@
+.button {
+  padding: 0 25px;
+  -webkit-app-region: no-drag;
+  color: #252525;
+  border-radius: 0;
+
+  &:hover {
+    background-color: rgb(225, 225, 225);
+    color: #252525;
+  }
+
+  &:last-child {
+    &:hover {
+      background-color: #ff0000;
+      span {
+        color: #f5f5f5;
+      }
+    }
+  }
+
+  span i {
+    font-size: 12px;
+  }
+}
