@@ -50,6 +50,10 @@ py app.py
 ```
 <br>
 
+# 📚 Documentation
+Code documentation is available and can be found [here](https://ipzard.github.io/electron-react-python-template/).
+<br>
+
 ## 🏷️ License
 
 MIT © [iPzard](https://github.com/iPzard/electron-react-python-template/blob/master/LICENSE)
