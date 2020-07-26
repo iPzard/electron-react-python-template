@@ -50,8 +50,8 @@ py app.py
 ```
 <br>
 
-# 📚 Documentation
-Code documentation for this template can be found [here](https://ipzard.github.io/electron-react-python-template/).
+# 🐱‍💻 Docs
+[JSDoc](https://en.wikipedia.org/wiki/JSDoc) code documentation for this template can be found [here](https://ipzard.github.io/electron-react-python-template/).
 <br><br>
 
 ## 🏷️ License
