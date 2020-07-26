@@ -48,11 +48,10 @@ You can run the Flask server manually to run your own tests from the root direct
 ```bash
 py app.py
 ```
-<br>
 
 # 📚 Documentation
 Code documentation is available and can be found [here](https://ipzard.github.io/electron-react-python-template/).
-<br>
+<br><br>
 
 ## 🏷️ License
 
