@@ -45,7 +45,7 @@
   "private": true,
   "scripts": {
     "build": "react-scripts build",
-    "docs": "jsdoc -c jsdoc.json",
+    "build:docs": "jsdoc -c jsdoc.json",
     "eject": "react-scripts eject",
     "start": "electron .",
     "test": "react-scripts test"

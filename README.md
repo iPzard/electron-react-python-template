@@ -35,6 +35,13 @@ To use your React/Python app in Electron, you must build it with:
 npm run build
 ```
 
+To update the JSDoc code documentation build, run:
+
+**Build Documentation :**
+```bash
+npm run build:docs
+```
+
 To start Electron, using your React build for its HTML page, use:
 
 **Start Electron:**
