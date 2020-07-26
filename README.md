@@ -34,6 +34,7 @@ To use your React/Python app in Electron, you must build it with:
 ```bash
 npm run build
 ```
+<br>
 
 To update the JSDoc code documentation build, run:
 
@@ -41,6 +42,7 @@ To update the JSDoc code documentation build, run:
 ```bash
 npm run build:docs
 ```
+<br>
 
 To start Electron, using your React build for its HTML page, use:
 
@@ -48,6 +50,7 @@ To start Electron, using your React build for its HTML page, use:
 ```bash
 npm run start
 ```
+<br>
 
 You can run the Flask server manually to run your own tests from the root directory with:
 
