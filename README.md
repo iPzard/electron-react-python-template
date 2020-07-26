@@ -36,7 +36,7 @@ npm run build
 ```
 <br>
 
-To update the JSDoc code documentation build, run:
+If you want to update the JSDoc code documentation build, run:
 
 **Build Documentation :**
 ```bash
