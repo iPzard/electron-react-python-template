@@ -1132,11 +1132,6 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@daybrush/utils@^0.10.0":
-  version "0.10.5"
-  resolved "https://registry.yarnpkg.com/@daybrush/utils/-/utils-0.10.5.tgz#96427101f5de99ceb13bce1f09916374e62c84f1"
-  integrity sha512-VCPbgJgImkUmGHX33drZJh/5FYBhfSM+EFqlBY7fzKIahBGEemjYfninVSp9BdzqF9P2MyCh7R3hgxmySXLEzg==
-
 "@electron/get@^1.0.1":
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/@electron/get/-/get-1.12.2.tgz#6442066afb99be08cefb9a281e4b4692b33764f3"
@@ -3792,13 +3787,6 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     abab "^2.0.0"
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
-
-daybrush-jsdoc-template@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/daybrush-jsdoc-template/-/daybrush-jsdoc-template-1.6.0.tgz#850f2f7a27850d182b2c22542b89c9ccd38e0b0c"
-  integrity sha512-bbhzsTSXmePFM4BTH7a4wdUPYRLP8qimuDh1856dDFi98OnsWlQALhypCBkxBZSM0c5j0q/Lxdjk/BifwlmUGw==
-  dependencies:
-    "@daybrush/utils" "^0.10.0"
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
