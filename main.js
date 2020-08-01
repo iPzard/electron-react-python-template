@@ -1,6 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require('electron');
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 const getPort = require('get-port');
 const path = require('path');
 
@@ -60,8 +60,8 @@ app.whenReady().then(() => {
   })
 
   // Connect to Python micro-services
-  const flask = exec(`cd ${__dirname} && flask run -p ${port}`); //.stdout.pipe(process.stdout); // console.log python stuffs
-  process.on('exit', ()=> flask.kill());
+  // Change `detached` to `true` for debug shell
+  spawn(`flask run -p ${port}`, { detached: false, shell: true, stdio: 'inherit' });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
