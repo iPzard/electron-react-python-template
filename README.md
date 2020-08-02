@@ -2,7 +2,7 @@
 > Reusable template for Electron projects which uses a React front-end with Redux and is integrated with Python/Flask for microservices.
 <br>
 
-# 🛠️ Setup
+## 🛠️ Setup
 Clone this repository, navigate to its directory, and install Node & Python dependencies:
 
 **Install python dependencies:**
@@ -16,7 +16,7 @@ npm install
 ```
 <br>
 
-# ⚙️ Config
+## ⚙️ Config
 See `./src/utils/requests.js` for pre-made React request functions. You can use these to invoke your Python scripts in the `app.py` file.
 
 **Electron:** Electron's `main.js`, `preload.js`, and `renderer.js` files can be found in the project's root directory.
@@ -27,7 +27,7 @@ See `./src/utils/requests.js` for pre-made React request functions. You can use 
 
 <br>
 
-# 📜 Scripts
+## 📜 Scripts
 To use your React/Python app in Electron, you must build it with:
 
 **Build React:**
@@ -60,9 +60,9 @@ py app.py
 ```
 <br>
 
-# 🐱‍💻 Docs
+## 🐱‍💻 Docs
 Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found here:<br>
-[Template Code Documentation](https://ipzard.github.io/electron-react-python-template/)
+[Electron, React, & Python Template](https://ipzard.github.io/electron-react-python-template/)
 <br><br>
 
 ## 🏷️ License
