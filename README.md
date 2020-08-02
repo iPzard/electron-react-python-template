@@ -23,6 +23,7 @@ See `./src/utils/requests.js` for pre-made React request functions. You can use 
 **React:** React files can be found in the `./src/` folder, the custom toolbar is in `./src/components/toolbar`.
 
 **Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls.
+
 <br>
 
 ## 📜 Scripts
