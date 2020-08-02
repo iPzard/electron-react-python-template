@@ -1,6 +1,5 @@
 # Electron, React, & Python Template
 > Reusable template for Electron projects which uses a React front-end with Redux and is integrated with Python/Flask for microservices.
-<br>
 
 ## 🛠️ Setup
 Clone this repository, navigate to its directory, and install Node & Python dependencies:
@@ -14,7 +13,6 @@ pip3 install -r requirements.txt
 ```bash
 npm install
 ```
-<br>
 
 ## ⚙️ Config
 See `./src/utils/requests.js` for pre-made React request functions. You can use these to invoke your Python scripts in the `app.py` file.
@@ -25,7 +23,6 @@ See `./src/utils/requests.js` for pre-made React request functions. You can use 
 
 **Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls.
 
-<br>
 
 ## 📜 Scripts
 To use your React/Python app in Electron, you must build it with:
@@ -34,7 +31,6 @@ To use your React/Python app in Electron, you must build it with:
 ```bash
 npm run build
 ```
-<br>
 
 If you want to update the JSDoc code documentation build, run:
 
@@ -42,7 +38,6 @@ If you want to update the JSDoc code documentation build, run:
 ```bash
 npm run build:docs
 ```
-<br>
 
 To start Electron, using your React build for its HTML page, use:
 
@@ -50,7 +45,6 @@ To start Electron, using your React build for its HTML page, use:
 ```bash
 npm run start
 ```
-<br>
 
 You can run the Flask server manually to run your own tests from the root directory with:
 
@@ -58,12 +52,11 @@ You can run the Flask server manually to run your own tests from the root direct
 ```bash
 py app.py
 ```
-<br>
 
 ## 🐱‍💻 Docs
 Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found here:<br>
 [Electron, React, & Python Template](https://ipzard.github.io/electron-react-python-template/)
-<br><br>
+
 
 ## 🏷️ License
 
