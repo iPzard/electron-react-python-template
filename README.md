@@ -13,6 +13,7 @@ pip3 install -r requirements.txt
 ```bash
 npm install
 ```
+<br>
 
 ## ⚙️ Config
 See `./src/utils/requests.js` for pre-made React request functions. You can use these to invoke your Python scripts in the `app.py` file.
@@ -22,7 +23,7 @@ See `./src/utils/requests.js` for pre-made React request functions. You can use 
 **React:** React files can be found in the `./src/` folder, the custom toolbar is in `./src/components/toolbar`.
 
 **Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls.
-
+<br>
 
 ## 📜 Scripts
 To use your React/Python app in Electron, you must build it with:
@@ -52,11 +53,12 @@ You can run the Flask server manually to run your own tests from the root direct
 ```bash
 py app.py
 ```
+<br>
 
 ## 📚 Docs
 Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found here:<br>
 [Electron, React, & Python Template](https://ipzard.github.io/electron-react-python-template/)
-
+<br>
 
 ## 🏷️ License
 
