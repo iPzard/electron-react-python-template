@@ -15,6 +15,7 @@ pip3 install -r requirements.txt
 ```bash
 npm install
 ```
+
 <br>
 
 ## ⚙️ Config
@@ -61,6 +62,7 @@ py app.py
 ## 📚 Docs
 Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found here:<br>
 [Electron, React, & Python Template](https://ipzard.github.io/electron-react-python-template/)
+
 <br>
 
 ## 🏷️ License
