@@ -1,6 +1,8 @@
 # Electron, React, & Python Template
 > Reusable template for Electron projects which uses a React front-end with Redux and is integrated with Python/Flask for microservices.
 
+<br>
+
 ## 🛠️ Setup
 Clone this repository, navigate to its directory, and install Node & Python dependencies:
 
