@@ -53,7 +53,7 @@ You can run the Flask server manually to run your own tests from the root direct
 py app.py
 ```
 
-## 🐱‍💻 Docs
+## 📚 Docs
 Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found here:<br>
 [Electron, React, & Python Template](https://ipzard.github.io/electron-react-python-template/)
 
