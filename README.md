@@ -61,5 +61,4 @@ Code documentation for this template, created with [JSDoc](https://github.com/js
 <br>
 
 ## 🏷️ License
-
 MIT © [iPzard](https://github.com/iPzard/electron-react-python-template/blob/master/LICENSE)
