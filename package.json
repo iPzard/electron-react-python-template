@@ -46,7 +46,7 @@
   "scripts": {
     "build": "react-scripts build",
     "build:docs": "jsdoc -c jsdoc.json",
-    "build:dist": "electron-packager . media-file-renamer --asar=true --all --icon ./public/favicon.svg --out ./dist --overwrite",
+    "build:all": "electron-packager . media-file-renamer --asar=true --all --icon ./public/favicon.svg --out ./dist --overwrite",
     "build:linux": "electron-packager . media-file-renamer --asar=true --linux --out ./dist --overwrite",
     "build:mac": "electron-packager . media-file-renamer --asar=true --darwin --out ./dist --overwrite",
     "build:windows": "electron-packager . media-file-renamer --asar=true --win32 --out ./dist --overwrite",
