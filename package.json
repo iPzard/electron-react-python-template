@@ -28,6 +28,7 @@
   "description": "Started template for Electron, React, Python app",
   "devDependencies": {
     "electron": "^9.0.5",
+    "electron-packager": "^15.0.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.7.0",
     "jsdoc": "^3.6.5",
@@ -45,6 +46,11 @@
   "scripts": {
     "build": "react-scripts build",
     "build:docs": "jsdoc -c jsdoc.json",
+    "build:dist": "electron-packager . media-file-renamer --asar=true --all --icon ./public/favicon.svg --out ./dist --overwrite",
+    "build:dist:all": "electron-packager . media-file-renamer --asar=true --all --out ./dist --overwrite",
+    "build:dist:linux": "electron-packager . media-file-renamer --asar=true --linux --out ./dist --overwrite",
+    "build:dist:mac": "electron-packager . media-file-renamer --asar=true --darwin --out ./dist --overwrite",
+    "build:dist:windows": "electron-packager . media-file-renamer --asar=true --win32 --out ./dist --overwrite",
     "eject": "react-scripts eject",
     "start": "electron .",
     "test": "react-scripts test"
