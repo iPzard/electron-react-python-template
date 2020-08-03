@@ -59,9 +59,13 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   })
 
+
   // Connect to Python micro-services
-  // Change `detached` to `true` for debug shell
-  spawn(`flask run -p ${port}`, { detached: false, shell: true, stdio: 'inherit' });
+  // Use this if you need to debug Flask in a shell
+  spawn(`flask run -p ${port}`, { detached: true, shell: true, stdio: 'inherit' });
+
+  // Use this if you're ready for production, to remove the shell
+  //spawn(`flask run -p ${port}`, { detached: false, shell: true, stdio: 'pipe' });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
