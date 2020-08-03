@@ -46,10 +46,10 @@
   "scripts": {
     "build": "react-scripts build",
     "build:docs": "jsdoc -c jsdoc.json",
-    "build:all": "electron-packager . app --asar=true --all --icon ./public/favicon.svg --out ./dist --overwrite",
-    "build:linux": "electron-packager . app --asar=true --linux --out ./dist --overwrite",
-    "build:mac": "electron-packager . app --asar=true --darwin --out ./dist --overwrite",
-    "build:windows": "electron-packager . app --asar=true --win32 --out ./dist --overwrite",
+    "build:all": "electron-packager . app --asar --all --icon ./public/favicon.svg --out ./dist --overwrite",
+    "build:linux": "electron-packager . app --asar --linux --out ./dist --overwrite",
+    "build:mac": "electron-packager . app --asar --darwin --out ./dist --overwrite",
+    "build:windows": "electron-packager . app --asar --win32 --out ./dist --overwrite",
     "eject": "react-scripts eject",
     "start": "electron .",
     "test": "react-scripts test"
