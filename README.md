@@ -30,44 +30,49 @@ See `./src/utils/requests.js` for pre-made React request functions. You can use 
 <br>
 
 ## 📜 Scripts
-To use your React/Python app in Electron, you must build it with:
+To use your React/Python app in Electron, you must build React:
 
 **Build React:**
 ```bash
 npm run build
 ```
 
-If you want to update the JSDoc code documentation build, run:
+If you want to update the JSDoc code documentation build:
 
 **Build Documentation:**
 ```bash
 npm run build:docs
 ```
 
-To start Electron, using your React build for its HTML page, use:
+To start Electron, using your React build for its HTML page:
 
 **Start Electron:**
 ```bash
 npm run start
 ```
-<br>
 
-## 📦 Packaging
+To build a distributable package for every OS (Linux, MacOS, and Windows):
 
-**Build every OS:**
+**Build all:**
 ```bash
 npm run build:all
 ```
 
+To build a distributable package for Linux:
 **Build Linux:**
 ```bash
 npm run build:linux
 ```
 
+
+To build a distributable package for macOS:
+
 **Build MacOS:**
 ```bash
 npm run build:mac
 ```
+
+To build a distributable package for Windows:
 
 **Build Windows:**
 ```bash
