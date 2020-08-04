@@ -37,14 +37,14 @@ See `./src/utils/requests.js` for pre-made React request functions. You can use 
 npm run build
 ```
 
-**Build Documentation:**
-```bash
-npm run build:docs
-```
-
 **Start Electron:**
 ```bash
 npm run start
+```
+
+**Build Documentation:**
+```bash
+npm run build:docs
 ```
 <br>
 
