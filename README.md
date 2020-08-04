@@ -50,11 +50,6 @@ npm run start
 
 ## 📦 Packaging
 
-**Build all OS:**
-```bash
-npm run build:all
-```
-
 **Build Linux:**
 ```bash
 npm run build:linux
@@ -68,6 +63,11 @@ npm run build:mac
 **Build Windows:**
 ```bash
 npm run build:windows
+```
+
+**Build all:**
+```bash
+npm run build:all
 ```
 <br>
 
