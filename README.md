@@ -39,7 +39,7 @@ npm run build
 
 If you want to update the JSDoc code documentation build, run:
 
-**Build Documentation :**
+**Build Documentation:**
 ```bash
 npm run build:docs
 ```
@@ -50,16 +50,32 @@ To start Electron, using your React build for its HTML page, use:
 ```bash
 npm run start
 ```
+<br>
 
-You can run the Flask server manually to run your own tests from the root directory with:
+## 📦 Packaging
 
-**Testing Flask:**
+**Build every OS:**
 ```bash
-py app.py
+npm run build:all
+```
+
+**Build Linux:**
+```bash
+npm run build:linux
+```
+
+**Build MacOS:**
+```bash
+npm run build:mac
+```
+
+**Build Windows:**
+```bash
+npm run build:windows
 ```
 <br>
 
-## 📚 Docs
+## 🐱‍👓 Docs
 Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found here:<br>
 [Electron, React, & Python Template](https://ipzard.github.io/electron-react-python-template/)
 
