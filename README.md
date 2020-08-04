@@ -19,6 +19,7 @@ npm install
 <br>
 
 ## ⚙️ Config
+
 See `./src/utils/requests.js` for pre-made React request functions. You can use these to invoke your Python scripts in the `app.py` file.
 
 **Electron:** Electron's `main.js`, `preload.js`, and `renderer.js` files can be found in the project's root directory.
@@ -45,6 +46,9 @@ npm run build:docs
 ```bash
 npm run start
 ```
+<br>
+
+## 📦 Packaging
 
 **Build all OS:**
 ```bash
