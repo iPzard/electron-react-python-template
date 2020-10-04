@@ -32,6 +32,11 @@ See `./src/utils/requests.js` for pre-made React request functions. You can use 
 
 ## 📜 Scripts
 
+**Build Documentation:**
+```bash
+npm run build:docs
+```
+
 **Build React & Python:**
 ```bash
 npm run build
@@ -50,11 +55,6 @@ npm run build:python
 **Start Electron:**
 ```bash
 npm run start
-```
-
-**Build Documentation:**
-```bash
-npm run build:docs
 ```
 <br>
 
