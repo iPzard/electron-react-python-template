@@ -53,10 +53,10 @@
     <section class="readme">
         <article><h1>Electron, React, &amp; Python Template</h1>
 <blockquote>
-<p>Reusable template for Electron projects which uses a React front-end with Redux and is integrated with Python/Flask for microservices.
-<br></p>
+<p>Reusable template for Electron projects which uses a React front-end with Redux and is integrated with Python/Flask for microservices.</p>
 </blockquote>
-<h1>🛠️ Setup</h1>
+<br>
+<h2>🛠️ Setup</h2>
 <p>Clone this repository, navigate to its directory, and install Node &amp; Python dependencies:</p>
 <p><strong>Install python dependencies:</strong></p>
 <pre class="prettyprint source lang-bash"><code>pip3 install -r requirements.txt
@@ -65,37 +65,47 @@
 <pre class="prettyprint source lang-bash"><code>npm install
 </code></pre>
 <br>
-<h1>⚙️ Config</h1>
+<h2>⚙️ Config</h2>
 <p>See <code>./src/utils/requests.js</code> for pre-made React request functions. You can use these to invoke your Python scripts in the <code>app.py</code> file.</p>
 <p><strong>Electron:</strong> Electron's <code>main.js</code>, <code>preload.js</code>, and <code>renderer.js</code> files can be found in the project's root directory.</p>
 <p><strong>React:</strong> React files can be found in the <code>./src/</code> folder, the custom toolbar is in <code>./src/components/toolbar</code>.</p>
-<p><strong>Python:</strong> Python scripts can be created in the <code>./app.py</code> file and used on events via <a href="https://developer.mozilla.org/en-US/docs/Glossary/REST">REST</a> calls.</p>
+<p><strong>Python:</strong> Python scripts can be created in the <code>./app.py</code> file and used on events via <a href="https://developer.mozilla.org/en-US/docs/Glossary/REST">REST</a> calls. This is converted into an executable <code>app.exe</code> so Python isn't needed from the end-user.f</p>
 <br>
-<h1>📜 Scripts</h1>
-<p>To use your React/Python app in Electron, you must build it with:</p>
-<p><strong>Build React:</strong></p>
+<h2>📜 Scripts</h2>
+<p><strong>Build React &amp; Python:</strong></p>
 <pre class="prettyprint source lang-bash"><code>npm run build
 </code></pre>
-<br>
-<p>If you want to update the JSDoc code documentation build, run:</p>
-<p><strong>Build Documentation :</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run build:docs
+<p><strong>Build React:</strong></p>
+<pre class="prettyprint source lang-bash"><code>npm run build:react
 </code></pre>
-<br>
-<p>To start Electron, using your React build for its HTML page, use:</p>
+<p><strong>Build Python:</strong></p>
+<pre class="prettyprint source lang-bash"><code>npm run build:python
+</code></pre>
 <p><strong>Start Electron:</strong></p>
 <pre class="prettyprint source lang-bash"><code>npm run start
 </code></pre>
-<br>
-<p>You can run the Flask server manually to run your own tests from the root directory with:</p>
-<p><strong>Testing Flask:</strong></p>
-<pre class="prettyprint source lang-bash"><code>py app.py
+<p><strong>Build Documentation:</strong></p>
+<pre class="prettyprint source lang-bash"><code>npm run build:docs
 </code></pre>
 <br>
-<h1>🐱‍💻 Docs</h1>
+<h2>📦 Packaging</h2>
+<p><strong>Build Linux:</strong></p>
+<pre class="prettyprint source lang-bash"><code>npm run build:package:linux
+</code></pre>
+<p><strong>Build MacOS:</strong></p>
+<pre class="prettyprint source lang-bash"><code>npm run build:package:mac
+</code></pre>
+<p><strong>Build Windows:</strong></p>
+<pre class="prettyprint source lang-bash"><code>npm run build:package:windows
+</code></pre>
+<p><strong>Build all:</strong></p>
+<pre class="prettyprint source lang-bash"><code>npm run build:package:all
+</code></pre>
+<br>
+<h2>🐱‍👓 Docs</h2>
 <p>Code documentation for this template, created with <a href="https://github.com/jsdoc/jsdoc">JSDoc</a>, can be found here:<br>
-<a href="https://ipzard.github.io/electron-react-python-template/">Template Code Documentation</a>
-<br><br></p>
+<a href="https://ipzard.github.io/electron-react-python-template/">Electron, React, &amp; Python Template</a></p>
+<br>
 <h2>🏷️ License</h2>
 <p>MIT © <a href="https://github.com/iPzard/electron-react-python-template/blob/master/LICENSE">iPzard</a></p></article>
     </section>

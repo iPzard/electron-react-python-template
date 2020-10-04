@@ -26,15 +26,25 @@ See `./src/utils/requests.js` for pre-made React request functions. You can use 
 
 **React:** React files can be found in the `./src/` folder, the custom toolbar is in `./src/components/toolbar`.
 
-**Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls.
+**Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls. This is converted into an executable `app.exe` so Python isn't needed from the end-user.f
 
 <br>
 
 ## 📜 Scripts
 
-**Build React:**
+**Build React & Python:**
 ```bash
 npm run build
+```
+
+**Build React:**
+```bash
+npm run build:react
+```
+
+**Build Python:**
+```bash
+npm run build:python
 ```
 
 **Start Electron:**
@@ -52,22 +62,22 @@ npm run build:docs
 
 **Build Linux:**
 ```bash
-npm run build:linux
+npm run build:package:linux
 ```
 
 **Build MacOS:**
 ```bash
-npm run build:mac
+npm run build:package:mac
 ```
 
 **Build Windows:**
 ```bash
-npm run build:windows
+npm run build:package:windows
 ```
 
 **Build all:**
 ```bash
-npm run build:all
+npm run build:package:all
 ```
 <br>
 

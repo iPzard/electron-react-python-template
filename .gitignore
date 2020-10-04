@@ -1,5 +1,15 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+#cache
+app.pyc
+app.spec
+__pycache__
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # dependencies
 /node_modules
 /.pnp
@@ -10,6 +20,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -17,7 +28,3 @@
 .env.development.local
 .env.test.local
 .env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*

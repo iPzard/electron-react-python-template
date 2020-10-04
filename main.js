@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { spawn } = require('child_process');
+const fetch = require('node-fetch');
 const getPort = require('get-port');
 const path = require('path');
 
@@ -12,6 +13,11 @@ let port;
   ipcMain.on('get-port-number', (event, arg) => event.returnValue = port);
 })();
 
+const shutdown = (port)=> {
+  fetch(`http://localhost:${port}/quit`)
+    .then(() => app.quit())
+    .catch(()=> app.quit());
+};
 
 function createWindow () {
   // Create the browser window.
@@ -43,7 +49,7 @@ function createWindow () {
    // Send window control event listeners to front end
    ipcMain.on('app-maximize', (event, arg) => mainWindow.maximize());
    ipcMain.on('app-minimize', (event, arg) => mainWindow.minimize());
-   ipcMain.on('app-quit', (event, arg) => app.quit());
+   ipcMain.on('app-quit', (event, arg) => shutdown(port));
    ipcMain.on('app-unmaximize', (event, arg) => mainWindow.unmaximize());
 };
 
@@ -61,16 +67,17 @@ app.whenReady().then(() => {
 
 
   // Connect to Python micro-services
-  // Use this if you need to debug Flask in a shell
-  spawn(`flask run -p ${port}`, { detached: true, shell: true, stdio: 'inherit' });
+  spawn(`start ./dist/app/app.exe ${port}`, { detached: false, shell: true, stdio: 'pipe' });
 
-  // Use this if you're ready for production, to remove the shell
-  //spawn(`flask run -p ${port}`, { detached: false, shell: true, stdio: 'pipe' });
+  // Run Flask in a shell for dev, debugging or testing
+  //spawn(`flask run -p ${port}`, { detached: true, shell: true, stdio: 'inherit' });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin')
+    shutdown();
+
 });
