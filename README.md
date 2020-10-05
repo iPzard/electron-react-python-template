@@ -13,7 +13,7 @@ pip3 install -r requirements.txt
 
 **Install node dependencies:**
 ```bash
-npm install
+yarn install
 ```
 
 <br>
@@ -34,27 +34,27 @@ You **must** build Python and React using the scripts below before starting Elec
 
 **Build Documentation:**
 ```bash
-npm run build:docs
+yarn run build:docs
 ```
 
 **Build Python & React:**
 ```bash
-npm run build
+yarn run build
 ```
 
 **Build Python:**
 ```bash
-npm run build:python
+yarn run build:python
 ```
 
 **Build React:**
 ```bash
-npm run build:react
+yarn run build:react
 ```
 
 **Start Electron:**
 ```bash
-npm run start
+yarn run start
 ```
 <br>
 
@@ -62,22 +62,22 @@ npm run start
 
 **Build Linux:**
 ```bash
-npm run build:package:linux
+yarn run build:package:linux
 ```
 
 **Build MacOS:**
 ```bash
-npm run build:package:mac
+yarn run build:package:mac
 ```
 
 **Build Windows:**
 ```bash
-npm run build:package:windows
+yarn run build:package:windows
 ```
 
 **Build all:**
 ```bash
-npm run build:package:all
+yarn run build:package:all
 ```
 <br>
 
