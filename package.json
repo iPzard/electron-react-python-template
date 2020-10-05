@@ -12,6 +12,11 @@
       "last 1 safari version"
     ]
   },
+  "build": {
+    "extraResources": [
+      "./resources/app"
+    ]
+  },
   "dependencies": {
     "@fluentui/react": "^7.121.12",
     "@testing-library/jest-dom": "^4.2.4",
@@ -30,8 +35,10 @@
   "devDependencies": {
     "electron": "^9.0.5",
     "electron-packager": "^15.0.0",
+    "electron-wix-msi": "^3.0.4",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.7.0",
+    "exe-icon-extractor": "^1.0.8",
     "jsdoc": "^3.6.5",
     "prettier": "^2.0.4",
     "sass": "^1.26.5"
@@ -42,17 +49,16 @@
   "homepage": "./",
   "license": "CC0-1.0",
   "main": "main.js",
-  "name": "media-name-fixer",
+  "name": "electron-react-python-template",
   "private": true,
   "scripts": {
     "build": "node ./scripts/build",
+    "build:all": "node ./scripts/build",
+    "build:react": "node ./scripts/build react",
+    "build:python": "node ./scripts/build python",
     "build:docs": "jsdoc -c jsdoc.json",
-    "build:python": "node ./scripts/pyinstaller",
-    "build:react": "react-scripts build",
-    "build:package:all": "electron-packager . app --asar --all --icon ./public/favicon.svg --out ./dist --overwrite",
-    "build:package:linux": "electron-packager . app --asar --linux --out ./dist --overwrite",
-    "build:package:mac": "electron-packager . app --asar --darwin --out ./dist --overwrite",
-    "build:package:windows": "electron-packager . app --asar --win32 --out ./dist --overwrite",
+    "build:package:mac": "node ./scripts/package mac",
+    "build:package:windows": "node ./scripts/package windows",
     "eject": "react-scripts eject",
     "start": "electron .",
     "test": "react-scripts test"

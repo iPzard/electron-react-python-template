@@ -66,8 +66,8 @@ app.whenReady().then(() => {
   })
 
 
-  // Connect to Python micro-services
-  spawn(`start ./dist/app/app.exe ${port}`, { detached: false, shell: true, stdio: 'pipe' });
+  // Connect to Python micro-services..
+  spawn(`start ./resources/app/app.exe ${port}`, { detached: false, shell: true, stdio: 'pipe' });
 
   // Run Flask in a shell for dev, debugging or testing
   //spawn(`flask run -p ${port}`, { detached: true, shell: true, stdio: 'inherit' });

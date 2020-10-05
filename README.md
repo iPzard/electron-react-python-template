@@ -20,13 +20,13 @@ npm install
 
 ## ⚙️ Config
 
-See `./src/utils/requests.js` for pre-made React request functions. You can use these to invoke your Python scripts in the `app.py` file.
+You **must** build Python and React using the scripts below before starting Electron. See `./src/utils/requests.js` and `app.py` for pre-made REST call examples.
 
 **Electron:** Electron's `main.js`, `preload.js`, and `renderer.js` files can be found in the project's root directory.
 
 **React:** React files can be found in the `./src/` folder, the custom toolbar is in `./src/components/toolbar`.
 
-**Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls. This is converted into an executable `app.exe` so the end-user doesn't need Python installed.
+**Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls.
 
 <br>
 
