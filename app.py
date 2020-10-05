@@ -1,15 +1,12 @@
 
 import sys
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
-""" Get Flask port:
-Accepts port as system argument
-e.g., `start app.exe 3000`
 """
-port = sys.argv[1]
-
+--------------------------- REST CALLS -----------------------------
+"""
 
 """ Microservice commands:
 Use this area below as an example
@@ -22,6 +19,28 @@ def index(command):
   # Serves as an example, erase and write your code here.
   if command == "one":
     return "one"
+
+"""
+--------------------------------------------------------------------
+"""
+
+""" Shutdown Flask:
+Generic function to shutdown
+Flask when Electron app closes.
+"""
+@app.route('/quit')
+def quit():
+  shutdown = request.environ.get('werkzeug.server.shutdown')
+  shutdown()
+
+  return
+
+
+""" Get Flask port:
+Accepts port as system argument
+e.g., `start app.exe 3000`
+"""
+port = sys.argv[1]
 
 
 """
