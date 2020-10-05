@@ -62,44 +62,44 @@
 <pre class="prettyprint source lang-bash"><code>pip3 install -r requirements.txt
 </code></pre>
 <p><strong>Install node dependencies:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm install
+<pre class="prettyprint source lang-bash"><code>yarn install
 </code></pre>
 <br>
 <h2>⚙️ Config</h2>
-<p>See <code>./src/utils/requests.js</code> for pre-made React request functions. You can use these to invoke your Python scripts in the <code>app.py</code> file.</p>
+<p>You <strong>must</strong> build Python and React using the scripts below before starting Electron. See <code>./src/utils/requests.js</code> and <code>app.py</code> for pre-made REST call examples.</p>
 <p><strong>Electron:</strong> Electron's <code>main.js</code>, <code>preload.js</code>, and <code>renderer.js</code> files can be found in the project's root directory.</p>
 <p><strong>React:</strong> React files can be found in the <code>./src/</code> folder, the custom toolbar is in <code>./src/components/toolbar</code>.</p>
-<p><strong>Python:</strong> Python scripts can be created in the <code>./app.py</code> file and used on events via <a href="https://developer.mozilla.org/en-US/docs/Glossary/REST">REST</a> calls. This is converted into an executable <code>app.exe</code> so Python isn't needed from the end-user.f</p>
+<p><strong>Python:</strong> Python scripts can be created in the <code>./app.py</code> file and used on events via <a href="https://developer.mozilla.org/en-US/docs/Glossary/REST">REST</a> calls.</p>
 <br>
 <h2>📜 Scripts</h2>
-<p><strong>Build React &amp; Python:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run build
+<p><strong>Build Documentation:</strong></p>
+<pre class="prettyprint source lang-bash"><code>yarn run build:docs
 </code></pre>
-<p><strong>Build React:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run build:react
+<p><strong>Build Python &amp; React:</strong></p>
+<pre class="prettyprint source lang-bash"><code>yarn run build
 </code></pre>
 <p><strong>Build Python:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run build:python
+<pre class="prettyprint source lang-bash"><code>yarn run build:python
+</code></pre>
+<p><strong>Build React:</strong></p>
+<pre class="prettyprint source lang-bash"><code>yarn run build:react
 </code></pre>
 <p><strong>Start Electron:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run start
-</code></pre>
-<p><strong>Build Documentation:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run build:docs
+<pre class="prettyprint source lang-bash"><code>yarn run start
 </code></pre>
 <br>
 <h2>📦 Packaging</h2>
 <p><strong>Build Linux:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run build:package:linux
+<pre class="prettyprint source lang-bash"><code>yarn run build:package:linux
 </code></pre>
 <p><strong>Build MacOS:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run build:package:mac
+<pre class="prettyprint source lang-bash"><code>yarn run build:package:mac
 </code></pre>
 <p><strong>Build Windows:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run build:package:windows
+<pre class="prettyprint source lang-bash"><code>yarn run build:package:windows
 </code></pre>
 <p><strong>Build all:</strong></p>
-<pre class="prettyprint source lang-bash"><code>npm run build:package:all
+<pre class="prettyprint source lang-bash"><code>yarn run build:package:all
 </code></pre>
 <br>
 <h2>🐱‍👓 Docs</h2>
