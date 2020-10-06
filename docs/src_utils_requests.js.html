@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Requests - Documentation</title>
+    <title>src/utils/requests.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="Requests - Documentation"/>
+    <meta name="description" content="src/utils/requests.js - Documentation"/>
 
 </head>
 <body>
@@ -32,237 +32,61 @@
 
 <div id="main">
     
-    <h1 class="page-title">Requests</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        Requests
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils_requests.js.html">src/utils/requests.js</a>, <a href="src_utils_requests.js.html#line7">line 7</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-        
-            <div class="description"><ul>
-<li>Helper functions for network requests (e.g., get, post, put, delete, etc..)</li>
-</ul></div>
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id=".exports.get"><span class="type-signature">(static, constant) </span>get<span class="type-signature"></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils_requests.js.html">src/utils/requests.js</a>, <a href="src_utils_requests.js.html#line19">line 19</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <ul>
-<li>Helper GET method for sending requests to and from the Python/Flask services.</li>
-</ul>
-</div>
-
-
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".exports.post"><span class="type-signature">(static, constant) </span>post<span class="type-signature"></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils_requests.js.html">src/utils/requests.js</a>, <a href="src_utils_requests.js.html#line35">line 35</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <ul>
-<li>Helper POST method for sending requests to and from the Python/Flask services.</li>
-</ul>
-</div>
-
-
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">src/utils/requests.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Electron Inter Process Communication and dialog
+const { ipcRenderer } = window.require('electron');
+
+// Dynamically generated TCP (open) port between 3000-3999
+const port = ipcRenderer.sendSync('get-port-number');
+
+/**
+ * @namespace Requests
+ * @description - Helper functions for network requests (e.g., get, post, put, delete, etc..)
+ */
+
+/**
+* @description - Helper GET method for sending requests to and from the Python/Flask services.
+* @param {string} url - URL route of the Python/Flask service you want to use.
+* @param {Function} callback - Callback function which uses the returned data as an argument.
+* @return response data from Python/Flask service.
+* @memberof Requests
+*/
+export const get = (url, callback) => {
+  fetch(url)
+  .catch(error => console.error(error))
+  .then(response => response.json())
+  .then(response => callback(response));
+};
+
+
+/**
+* @description - Helper POST method for sending requests to and from the Python/Flask services.
+* @param body     - request body of data that you want to pass.
+* @param route    - URL route of the Python/Flask service you want to use.
+* @param callback - optional callback function to be invoked if provided.
+* @return response data from Python/Flask service.
+* @memberof Requests
+*/
+export const post = (body, route, callback) => {
+  fetch(`http://localhost:${port}/${route}`, {
+    body,
+    method: 'POST',
+    headers: { 'Content-type': 'application/json' }
+  })
+  .catch(error => console.error(error))
+  .then(response => response.json()).then(response => callback(response));
+};</code></pre>
+        </article>
+    </section>
 
 
 
@@ -271,10 +95,10 @@
 <style>
 
 
-nav li[file="requests"]:after {
+nav li[file="src/utils/requests"]:after {
     display: none;
 }
-nav li[file="requests"] h4, nav li[file="requests"] ul {
+nav li[file="src/utils/requests"] h4, nav li[file="src/utils/requests"] ul {
     display: block;
 }
 </style>

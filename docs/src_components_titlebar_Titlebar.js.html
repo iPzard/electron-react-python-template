@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Requests - Documentation</title>
+    <title>src/components/titlebar/Titlebar.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="Requests - Documentation"/>
+    <meta name="description" content="src/components/titlebar/Titlebar.js - Documentation"/>
 
 </head>
 <body>
@@ -32,237 +32,72 @@
 
 <div id="main">
     
-    <h1 class="page-title">Requests</h1>
+    <h1 class="page-title">src/components/titlebar/Titlebar.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
-    
-        <h2>
-        Requests
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils_requests.js.html">src/utils/requests.js</a>, <a href="src_utils_requests.js.html#line7">line 7</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-        
-            <div class="description"><ul>
-<li>Helper functions for network requests (e.g., get, post, put, delete, etc..)</li>
-</ul></div>
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id=".exports.get"><span class="type-signature">(static, constant) </span>get<span class="type-signature"></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils_requests.js.html">src/utils/requests.js</a>, <a href="src_utils_requests.js.html#line19">line 19</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <ul>
-<li>Helper GET method for sending requests to and from the Python/Flask services.</li>
-</ul>
-</div>
-
-
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".exports.post"><span class="type-signature">(static, constant) </span>post<span class="type-signature"></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils_requests.js.html">src/utils/requests.js</a>, <a href="src_utils_requests.js.html#line35">line 35</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
     
-
-    
-
-    
-</dl>
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {
+  CloseButton,
+  ContractButton,
+  MaximizeButton,
+  MinimizeButton
+} from 'components/titlebar/TitlebarButtons';
+import React, { useState } from 'react';
 
+import { app } from 'utils/services';
+import favicon from 'components/titlebar/img/favicon.png';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import styles from 'components/titlebar/scss/Titlebar.module.scss';
 
+initializeIcons();
 
+/**
+ * @namespace Titlebar
+ * @description Title Component to use as an Electron customized titlebar.
+ *
+ * @property {id} electron-window-title-text used in main.js to set opacity on/off focus.
+ * @property {id} electron-window-title-buttons used in main.js to set opacity on/off focus.
+ */
 
-<div class="description">
-    <ul>
-<li>Helper POST method for sending requests to and from the Python/Flask services.</li>
-</ul>
-</div>
+const Titlebar = () => {
 
+  const [ maximized, setMaximized ] = useState(false);
 
+  const handleMaximizeToggle = () => {
+    !maximized ? app.maximize() : app.unmaximize();
+    setMaximized(!maximized);
+  };
 
+  return (
+    &lt;section className={ styles.titlebar }>
+      &lt;div>
+        &lt;img src={ favicon } alt='favicon' />
+        &lt;span id='electron-window-title-text'>{ document.title }&lt;/span>
+      &lt;/div>
 
+      &lt;div id='electron-window-title-buttons'>
+        &lt;MinimizeButton onClick={ app.minimize }/>
 
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
+        {
+          maximized ?
+          &lt;ContractButton onClick={ handleMaximizeToggle }/> :
+          &lt;MaximizeButton onClick={ handleMaximizeToggle }/>
+        }
+        &lt;CloseButton onClick={ app.quit } />
+      &lt;/div>
+    &lt;/section>
+  );
+};
 
-</section>
+export default Titlebar;</code></pre>
+        </article>
+    </section>
 
 
 
@@ -271,10 +106,10 @@
 <style>
 
 
-nav li[file="requests"]:after {
+nav li[file="src/components/titlebar/titlebar"]:after {
     display: none;
 }
-nav li[file="requests"] h4, nav li[file="requests"] ul {
+nav li[file="src/components/titlebar/titlebar"] h4, nav li[file="src/components/titlebar/titlebar"] ul {
     display: block;
 }
 </style>

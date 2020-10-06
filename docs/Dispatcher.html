@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Requests - Documentation</title>
+    <title>Dispatcher - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="Requests - Documentation"/>
+    <meta name="description" content="Dispatcher - Documentation"/>
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Requests</h1>
+    <h1 class="page-title">Dispatcher</h1>
     
 
     
@@ -45,7 +45,7 @@
 <header>
     
         <h2>
-        Requests
+        Dispatcher
         </h2>
         
     
@@ -61,7 +61,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils_requests.js.html">src/utils/requests.js</a>, <a href="src_utils_requests.js.html#line7">line 7</a>
+        <a href="scripts_dispatch.js.html">scripts/dispatch.js</a>, <a href="scripts_dispatch.js.html#line5">line 5</a>
     </li></ul></dd>
     
 
@@ -101,7 +101,7 @@
 
         
             <div class="description"><ul>
-<li>Helper functions for network requests (e.g., get, post, put, delete, etc..)</li>
+<li>Dispatches script commands to various scripts.</li>
 </ul></div>
         
 
@@ -120,12 +120,18 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title" id="methods">Methods</h3>
 
         
             
-<h4 class="name" id=".exports.get"><span class="type-signature">(static, constant) </span>get<span class="type-signature"></span></h4>
 
+    
+
+    <h4 class="name" id=".buildApp"><span class="type-signature">(static) </span>buildApp<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
 
 
 
@@ -135,7 +141,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils_requests.js.html">src/utils/requests.js</a>, <a href="src_utils_requests.js.html#line19">line 19</a>
+        <a href="scripts_dispatch.js.html">scripts/dispatch.js</a>, <a href="scripts_dispatch.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -176,7 +182,7 @@
 
 <div class="description">
     <ul>
-<li>Helper GET method for sending requests to and from the Python/Flask services.</li>
+<li>Builds various production builds (e.g., Python, React).</li>
 </ul>
 </div>
 
@@ -187,10 +193,34 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
             
-<h4 class="name" id=".exports.post"><span class="type-signature">(static, constant) </span>post<span class="type-signature"></span></h4>
 
+    
+
+    <h4 class="name" id=".packageApp"><span class="type-signature">(static) </span>packageApp<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
 
 
 
@@ -200,7 +230,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils_requests.js.html">src/utils/requests.js</a>, <a href="src_utils_requests.js.html#line35">line 35</a>
+        <a href="scripts_dispatch.js.html">scripts/dispatch.js</a>, <a href="scripts_dispatch.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -241,7 +271,7 @@
 
 <div class="description">
     <ul>
-<li>Helper POST method for sending requests to and from the Python/Flask services.</li>
+<li>Builds various installers (e.g., DMG, MSI).</li>
 </ul>
 </div>
 
@@ -252,9 +282,27 @@
 
 
 
-        
-    
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
@@ -271,10 +319,10 @@
 <style>
 
 
-nav li[file="requests"]:after {
+nav li[file="dispatcher"]:after {
     display: none;
 }
-nav li[file="requests"] h4, nav li[file="requests"] ul {
+nav li[file="dispatcher"] h4, nav li[file="dispatcher"] ul {
     display: block;
 }
 </style>
