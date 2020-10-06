@@ -47,7 +47,7 @@
     "extends": "react-app"
   },
   "homepage": "./",
-  "license": "CC0-1.0",
+  "license": "MIT",
   "main": "main.js",
   "name": "electron-react-python-template",
   "private": true,
