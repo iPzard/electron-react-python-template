@@ -1,18 +1,11 @@
 import * as actionModules from 'state/actions';
 
-const list = [];
-for(let action in actionModules) {
-  list.push(actionModules[action]);
-}
-
 export const mapStateToProps = state => ({ state });
 
-export const mapDispatchToProps = function(dispatch) {
+export const mapDispatchToProps = (dispatch) => {
+  const list = [ ...Object.values(actionModules) ];
 
-  const actions = list.reduce((acc, action) => {
-    acc = { ...acc, ...action(dispatch) }
-    return acc;
+  return list.reduce((acc, action) => {
+    return acc = { ...acc, ...action(dispatch) }
   }, {});
-
-  return actions;
 };

@@ -1,4 +1,4 @@
-const counterReducer = (state = 0, action) => {
+const count = (state = 0, action) => {
   switch (action.type) {
     case 'ADD':
       return state + 1;
@@ -10,6 +10,5 @@ const counterReducer = (state = 0, action) => {
       return state;
   };
 };
-counterReducer.stateName = 'count';
 
-export { counterReducer };
+export { count };
