@@ -6,12 +6,12 @@
 ## 🛠️ Setup
 Clone this repository, navigate to its directory, and install Node & Python dependencies:
 
-**Install python dependencies:**
+**Install Python dependencies:**
 ```bash
 pip3 install -r requirements.txt
 ```
 
-**Install node dependencies:**
+**Install Node dependencies:**
 ```bash
 yarn install
 ```
