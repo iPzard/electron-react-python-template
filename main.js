@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { spawn } = require('child_process');
-const fetch = require('node-fetch');
+const { get } = require('axios');
 const getPort = require('get-port');
 const path = require('path');
 
@@ -14,7 +14,7 @@ let port;
 })();
 
 const shutdown = (port)=> {
-  fetch(`http://localhost:${port}/quit`)
+  get(`http://localhost:${port}/quit`)
     .then(() => app.quit())
     .catch(()=> app.quit());
 };

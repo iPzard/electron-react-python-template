@@ -13,6 +13,7 @@ class Builder {
    */
   buildAll = () => {
     const { buildPython, buildReact } = this;
+
     buildPython();
     buildReact();
   }
@@ -23,17 +24,18 @@ class Builder {
    */
   buildPython = () => {
     console.log('Creating Python distribution files...');
-    
+
     const app = 'app.py';
     const icon = './public/favicon.ico';
-  
+
     const options = [
-      '--noconsole',
-      '--noconfirm',
-      '--distpath ./resources',
-      `--icon ${icon}`
+      '--noconsole', // No shell
+      '--noconfirm', // Don't confirm overwrite
+      '--distpath ./resources', // Dist (out) path
+      `--icon ${icon}` // Icon to use
     ].join(' ');
-  
+    // TODO: Check if python is installed.. If not, prompt user
+    // "Python is required but not installed, install it? (y/n)"
     spawnSync(`pyinstaller ${options} ${app}`, { detached: false, shell: true, stdio: 'inherit' });
   }
 
