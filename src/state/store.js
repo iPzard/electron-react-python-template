@@ -2,4 +2,5 @@ import * as reducerModules from 'state/reducers';
 
 import { combineReducers, createStore } from 'redux';
 
-export const store = createStore(combineReducers({ ...reducerModules }));
+const reducers = combineReducers({ ...reducerModules });
+export const store = createStore(reducers);
