@@ -4,7 +4,7 @@
 ![electron_react_python](https://user-images.githubusercontent.com/8584126/95290114-59e42900-0821-11eb-8e43-a708959e8449.gif)
 
 ## 🛠️ Setup
-Ensure you have [Node](https://nodejs.org/en/download/) and [Python](https://www.python.org/downloads/) installed, then clone the project. Navigate to the project's root directory and run the following scripts in a terminal application *(e.g., Git Bash)*:
+Ensure you have [Node](https://nodejs.org/en/download/) and [Python](https://www.python.org/downloads/) installed, then clone this repository. Navigate to the project's root directory and run the following scripts in a terminal application *(e.g., Git Bash)*:
 
 **Install Python dependencies:**
 ```bash
