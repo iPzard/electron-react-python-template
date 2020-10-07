@@ -4,7 +4,8 @@
 ![electron_react_python](https://user-images.githubusercontent.com/8584126/95290114-59e42900-0821-11eb-8e43-a708959e8449.gif)
 
 ## 🛠️ Setup
-Ensure you have [Node](https://nodejs.org/en/download/) and [Python](https://www.python.org/downloads/) installed, then clone this repository. After it's cloned, navigate to the project's root directory on your computer and run the following scripts in a terminal application *(e.g., Git Bash)*:
+Ensure you have [Node](https://nodejs.org/en/download/) and [Python](https://www.python.org/downloads/) installed, then clone this repository. After it's cloned, navigate to the project's root directory on your computer and
+:
 
 **Install Python dependencies:**
 ```bash
@@ -20,7 +21,7 @@ yarn install
 
 ## ⚙️ Config
 
-You **must** build Python and React using the scripts below, **before** starting Electron.
+You ***must*** build Python and React using the scripts below, ***before*** starting Electron.
 
 **Electron:** Electron's `main.js`, `preload.js`, and `renderer.js` files can be found in the project's root directory.
 
