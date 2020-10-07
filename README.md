@@ -21,7 +21,7 @@ yarn install
 
 ## ⚙️ Config
 
-You ***must*** build Python and React using the scripts below, ***before*** starting Electron.
+***Before*** starting Electron, you ***must*** build Python and React using the scripts below.
 
 **Electron:** Electron's `main.js`, `preload.js`, and `renderer.js` files can be found in the project's root directory.
 
