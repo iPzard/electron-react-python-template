@@ -60,12 +60,12 @@ yarn run start
 
 ## 📦 Packaging
 
-**Package for Windows:**
+**Windows:**
 ```bash
 yarn run build:package:windows
 ```
 
-**Package for MacOS:**
+**MacOS:**
 ```bash
 yarn run build:package:mac
 ```
