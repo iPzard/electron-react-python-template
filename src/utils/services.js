@@ -7,7 +7,6 @@ const { ipcRenderer } = window.require('electron');
  * @property {function} maximize - Function to maximize the screen size of the program.
  * @property {function} minimize - Function to minimize the screen size of the program.
  * @property {function} quit - Function to close and exit the program.
- * @property {function} resize - Function to resize the screen size of the program, accepts ({ width: x, height: x }).
  * @property {function} unmaximize - Function to contract (unmaximize) the screen size of the program.
  */
 export const app = {
