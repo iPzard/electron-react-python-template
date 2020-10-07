@@ -4,7 +4,7 @@
 ![electron_react_python](https://user-images.githubusercontent.com/8584126/95290114-59e42900-0821-11eb-8e43-a708959e8449.gif)
 
 ## 🛠️ Setup
-Clone this repository, navigate to its directory, and install Node & Python dependencies:
+Clone the project and then run the following scripts in the project's root directory. Requires [Node](https://nodejs.org/en/download/) and [Python](https://www.python.org/downloads/).
 
 **Install Python dependencies:**
 ```bash
