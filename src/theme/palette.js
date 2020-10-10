@@ -1,3 +1,10 @@
+/**
+ * @namespace Theme
+ * @description - Theme for Microsoft Fluent UI, which is built into the project.
+ *
+ * @tutorial - https://www.aka.ms/themedesigner
+*/
+
 export const customTheme = {
   themePrimary: '#57a9a9',
   themeLighterAlt: '#030707',
