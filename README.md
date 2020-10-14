@@ -5,7 +5,7 @@
 
 ## 🛠️ Setup
 Ensure you have [Node](https://nodejs.org/en/download/) and [Python](https://www.python.org/downloads/) installed, then clone this repository. After it's cloned, navigate to the project's root directory on your computer and
-:
+run the following scrips in a terminal application *(e.g., Git Bash)*:
 
 **Install Python dependencies:**
 ```bash
@@ -60,6 +60,8 @@ yarn run start
 <br>
 
 ## 📦 Packaging
+
+Installer packages can be created for both Windows and Mac using the scripts below. Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi) for packaging and Mac uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg).
 
 **Windows:**
 ```bash

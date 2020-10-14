@@ -11,16 +11,16 @@ const port = ipcRenderer.sendSync('get-port-number');
 
 /**
 * @description - Helper GET method for sending requests to and from the Python/Flask services.
-* @param {string} url - URL route of the Python/Flask service you want to use.
+* @param {string} route - Path of the Python/Flask service you want to use.
 * @param {Function} callback - Callback function which uses the returned data as an argument.
 * @return response data from Python/Flask service.
 * @memberof Requests
 */
-export const get = (url, callback) => {
-  fetch(url)
-  .catch(error => console.error(error))
-  .then(response => response.json())
-  .then(response => callback(response));
+export const get = (route, callback) => {
+  fetch(`http://localhost:${port}/${route}`)
+    .catch(error => console.error(error))
+    .then(response => response.json())
+    .then(response => callback(response));
 };
 
 
