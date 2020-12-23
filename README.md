@@ -77,8 +77,11 @@ yarn run build:package:mac
 ## 🐱‍👓 Docs
 Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found here:<br>
 [Electron, React, & Python Template](https://ipzard.github.io/electron-react-python-template/)
+<br><br>
 
-<br>
+## 🦟 bugs
+Bugs reported on the project's [issues page](https://github.com/iPzard/electron-react-python-template/issues) will be exterminated as quickly as possible, be sure to include steps to reproduce so they can be spotted easily.
+<br><br>
 
 ## 🏷️ License
 MIT © [iPzard](https://github.com/iPzard/electron-react-python-template/blob/master/LICENSE)
