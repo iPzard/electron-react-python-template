@@ -1,16 +1,18 @@
-// Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain } = require('electron');
-const { spawn } = require('child_process');
-const { get } = require('axios');
 const getPort = require('get-port');
+const isDevMode = require('electron-is-dev');
 const path = require('path');
+const { spawn } = require('child_process');
+
+// Modules to help control application life cycle
+const { app, BrowserWindow, ipcMain } = require('electron');
+const { get } = require('axios');
 
 // Dynamically set the port number to an open port within the range of 3000-3999
 // This way if a port is in use it will just go to the next.
 let port;
 (async () => {
-  port = await getPort({port: getPort.makeRange(3000, 3999)});
-  ipcMain.on('get-port-number', (event, arg) => event.returnValue = port);
+  port = await getPort({ port: getPort.makeRange(3001, 3999) });
+  ipcMain.on('get-port-number', (event, _arg) => event.returnValue = port);
 })();
 
 const shutdown = (port)=> {
@@ -30,8 +32,9 @@ function createWindow () {
     }
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'build/index.html'));
+  // and load the index.html of the app or localhost for (dev).
+  if(isDevMode) mainWindow.loadURL('http://localhost:3000');
+  else mainWindow.loadFile(path.join(__dirname, 'build/index.html'));
 
   // Open the DevTools.
    mainWindow.webContents.openDevTools();
@@ -47,10 +50,10 @@ function createWindow () {
    mainWindow.on('blur',  ()=> executeOnWindow(setTitleOpacity(.5)));
 
    // Send window control event listeners to front end
-   ipcMain.on('app-maximize', (event, arg) => mainWindow.maximize());
-   ipcMain.on('app-minimize', (event, arg) => mainWindow.minimize());
-   ipcMain.on('app-quit', (event, arg) => shutdown(port));
-   ipcMain.on('app-unmaximize', (event, arg) => mainWindow.unmaximize());
+   ipcMain.on('app-maximize', (_event, _arg) => mainWindow.maximize());
+   ipcMain.on('app-minimize', (_event, _arg) => mainWindow.minimize());
+   ipcMain.on('app-quit', (_event, _arg) => shutdown(port));
+   ipcMain.on('app-unmaximize', (_event, _arg) => mainWindow.unmaximize());
 };
 
 // This method will be called when Electron has finished
@@ -63,14 +66,13 @@ app.whenReady().then(() => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  })
+  });
 
+  // Run Flask in a shell for developer mode.
+  if(isDevMode) spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
 
-  // Connect to Python micro-services..
-  spawn(`start ./resources/app/app.exe ${port}`, { detached: false, shell: true, stdio: 'pipe' });
-
-  // Run Flask in a shell for dev, debugging or testing
-  //spawn(`flask run -p ${port}`, { detached: true, shell: true, stdio: 'inherit' });
+  // Connect to Python micro-services for production.
+  else spawn(`start ./resources/app/app.exe ${port}`, { detached: false, shell: true, stdio: 'pipe' });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -78,6 +80,5 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin')
-    shutdown();
-
+    shutdown(port);
 });

@@ -16,9 +16,8 @@ initializeIcons();
 /**
  * @namespace Titlebar
  * @description Title Component to use as an Electron customized titlebar.
- *
- * @property {id} electron-window-title-text used in main.js to set opacity on/off focus.
- * @property {id} electron-window-title-buttons used in main.js to set opacity on/off focus.
+ * electron-window-title-text used in main.js to set opacity on/off focus.
+ * electron-window-title-buttons used in main.js to set opacity on/off focus.
  */
 
 const Titlebar = () => {

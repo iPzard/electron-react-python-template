@@ -3677,6 +3677,13 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+cross-env@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-7.0.3.tgz#865264b29677dc015ba8418918965dd232fc54cf"
+  integrity sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==
+  dependencies:
+    cross-spawn "^7.0.1"
+
 cross-spawn@7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.1.tgz#0ab56286e0f7c24e153d04cc2aa027e43a9a5d14"
@@ -3696,6 +3703,15 @@ cross-spawn@^6.0.0, cross-spawn@^6.0.5:
     semver "^5.5.0"
     shebang-command "^1.2.0"
     which "^1.2.9"
+
+cross-spawn@^7.0.1:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
+  integrity sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==
+  dependencies:
+    path-key "^3.1.0"
+    shebang-command "^2.0.0"
+    which "^2.0.1"
 
 crypto-browserify@^3.11.0:
   version "3.12.0"
@@ -4336,6 +4352,11 @@ electron-installer-dmg@^3.0.0:
     minimist "^1.1.1"
   optionalDependencies:
     appdmg "^0.6.0"
+
+electron-is-dev@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/electron-is-dev/-/electron-is-dev-1.2.0.tgz#2e5cea0a1b3ccf1c86f577cee77363ef55deb05e"
+  integrity sha512-R1oD5gMBPS7PVU8gJwH6CtT0e6VSoD0+SzSnYpNm+dBkcijgA+K7VAMHDfnRq/lkKPZArpzplTW6jfiMYosdzw==
 
 electron-notarize@^1.0.0:
   version "1.0.0"

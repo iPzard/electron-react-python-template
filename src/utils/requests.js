@@ -16,28 +16,34 @@ const port = ipcRenderer.sendSync('get-port-number');
 * @return response data from Python/Flask service.
 * @memberof Requests
 */
-export const get = (route, callback) => {
+export const get = (route, callback, errorCallback) => {
   fetch(`http://localhost:${port}/${route}`)
-    .catch(error => console.error(error))
-    .then(response => response.json())
-    .then(response => callback(response));
+    .then((response) => response.json())
+    .then((response) => callback(response))
+    .catch((error) => errorCallback ? errorCallback(error) : console.error(error));
 };
 
 
 /**
 * @description - Helper POST method for sending requests to and from the Python/Flask services.
-* @param body     - request body of data that you want to pass.
-* @param route    - URL route of the Python/Flask service you want to use.
+* @param body - request body of data that you want to pass.
+* @param route - URL route of the Python/Flask service you want to use.
 * @param callback - optional callback function to be invoked if provided.
 * @return response data from Python/Flask service.
 * @memberof Requests
 */
-export const post = (body, route, callback) => {
+export const post = (
+  body,
+  route,
+  callback,
+  errorCallback
+) => {
   fetch(`http://localhost:${port}/${route}`, {
     body,
     method: 'POST',
     headers: { 'Content-type': 'application/json' }
   })
-  .catch(error => console.error(error))
-  .then(response => response.json()).then(response => callback(response));
+    .then((response) => response.json())
+    .then(response => callback(response))
+    .catch((error) => errorCallback ? errorCallback(error) : console.error(error));
 };

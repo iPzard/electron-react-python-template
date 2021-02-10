@@ -1,52 +1,49 @@
-
 import sys
-from flask import Flask, request
+from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+app_config = {"host": "0.0.0.0", "port": sys.argv[1]}
+
+"""
+---------------------- DEVELOPER MODE CONFIG -----------------------
+"""
+# Developer mode uses app.py
+if "app.py" in sys.argv[0]:
+
+  # Update app config
+  app_config["debug"] = True
+
+  # CORS settings
+  cors = CORS(
+    app,
+    resources={r"/*": {"origins": "http://localhost*"}},
+  )
+
+  # CORS headers
+  app.config["CORS_HEADERS"] = "Content-Type"
+
 
 """
 --------------------------- REST CALLS -----------------------------
 """
+# Remove and replace with your own
+@app.route("/example")
+def example():
+  return jsonify("Hello world!")
 
-""" Microservice commands:
-Use this area below as an example
-of how you can add your own REST
-commands.
-"""
-@app.route("/<command>")
-def index(command):
-
-  # Serves as an example, erase and write your code here.
-  if command == "one":
-    return "one"
 
 """
---------------------------------------------------------------------
+-------------------------- APP SERVICES ----------------------------
 """
-
-""" Shutdown Flask:
-Generic function to shutdown
-Flask when Electron app closes.
-"""
-@app.route('/quit')
+# Quits Flask on Electron exit
+@app.route("/quit")
 def quit():
-  shutdown = request.environ.get('werkzeug.server.shutdown')
+  shutdown = request.environ.get("werkzeug.server.shutdown")
   shutdown()
 
   return
 
 
-""" Get Flask port:
-Accepts port as system argument
-e.g., `start app.exe 3000`
-"""
-port = sys.argv[1]
-
-
-"""
-Start flask microservice server:
-Uses a random port between 3000
-and 3999.
-"""
-if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=port)
+if __name__ == "__main__":
+  app.run(**app_config)

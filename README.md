@@ -21,8 +21,6 @@ yarn install
 
 ## ⚙️ Config
 
-Before starting Electron, you <em>**must**</em> build Python and React using the scripts below.
-
 **Electron:** Electron's `main.js`, `preload.js`, and `renderer.js` files can be found in the project's root directory.
 
 **React:** React files can be found in the `./src/` folder, the custom toolbar is in `./src/components/toolbar`.
@@ -33,45 +31,28 @@ Before starting Electron, you <em>**must**</em> build Python and React using the
 
 ## 📜 Scripts
 
+Below are the scripts you'll need to run and package your application, as well as build out JSDoc documentation, if you choose to do so. An exhaustive list of scripts that are available can be found in the `package.json` file of the project's root directory, in the `scripts` section.
+
 **Build Documentation:**
 ```bash
 yarn run build:docs
 ```
 
-**Build Python & React:**
-```bash
-yarn run build:all
-```
-
-**Build Python:**
-```bash
-yarn run build:python
-```
-
-**Build React:**
-```bash
-yarn run build:react
-```
-
-**Start Electron:**
+**Start Developer Mode:**
 ```bash
 yarn run start
 ```
-<br>
 
-## 📦 Packaging
-
-Installer packages can be created for both Windows and Mac using the scripts below. Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi) for packaging and Mac uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg).
-
-**Windows:**
+**Package Windows:**
 ```bash
 yarn run build:package:windows
 ```
 
-**MacOS:**
+**Package MacOS:**
 ```bash
 yarn run build:package:mac
 ```
+*Note: Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi) for packaging, MacOS uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg).*
 <br>
 
 ## 🐱‍👓 Docs
