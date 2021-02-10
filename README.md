@@ -33,11 +33,6 @@ yarn install
 
 Below are the scripts you'll need to run and package your application, as well as build out JSDoc documentation, if you choose to do so. An exhaustive list of scripts that are available can be found in the `package.json` file of the project's root directory, in the `scripts` section.
 
-**Build Documentation:**
-```bash
-yarn run build:docs
-```
-
 **Start Developer Mode:**
 ```bash
 yarn run start
@@ -51,6 +46,11 @@ yarn run build:package:windows
 **Package MacOS:**
 ```bash
 yarn run build:package:mac
+```
+
+**Build Documentation:**
+```bash
+yarn run build:docs
 ```
 *Note: Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi) for packaging, MacOS uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg).*
 <br><br>
