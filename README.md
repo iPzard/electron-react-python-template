@@ -53,7 +53,7 @@ yarn run build:package:windows
 yarn run build:package:mac
 ```
 *Note: Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi) for packaging, MacOS uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg).*
-<br>
+<br><br>
 
 ## 🐱‍👓 Docs
 Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found here:<br>
