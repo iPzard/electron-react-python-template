@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>scripts/dispatch.js - Documentation</title>
+    <title>Theme - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="scripts/dispatch.js - Documentation"/>
+    <meta name="description" content="Theme - Documentation"/>
 
 </head>
 <body>
@@ -32,85 +32,110 @@
 
 <div id="main">
     
-    <h1 class="page-title">scripts/dispatch.js</h1>
+    <h1 class="page-title">Theme</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const [ , , script, command ] = process.argv;
-const { Builder } = require('./build');
-const { Developer } = require('./develop');
-const { Packager } = require('./package');
+        <h2>
+        Theme
+        </h2>
+        
+    
+</header>
 
-/**
- * @namespace Dispatcher
- * @description - Dispatches script commands to various scripts.
- * @argument script - Script manager to use (e.g., build or package).
- * @argument command - Command argument describing exact script to run.
- */
+<article>
+    <div class="container-overview">
+    
+        
 
-switch(script) {
-  case 'build':
-    return buildApp();
+<dl class="details">
 
-  case 'package':
-    return packageApp();
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_theme_palette.js.html">src/theme/palette.js</a>, <a href="src_theme_palette.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
 
-  case 'start':
-    return startApp();
-}
+    
 
-/**
- * @description - Builds various production builds (e.g., Python, React).
- * @memberof Dispatcher
- */
-function buildApp() {
-  const builder = new Builder();
+    
 
-  switch(command) {
-    case 'react':
-      return builder.buildReact();
+    
 
-    case 'python':
-      return builder.buildPython();
+    
 
-    case 'all':
-      return builder.buildAll();
-  }
-};
+    
 
-/**
- * @description - Builds various installers (e.g., DMG, MSI).
- * @memberof Dispatcher
- */
-function packageApp() {
-  const packager = new Packager();
+    
 
-  switch(command) {
-    case 'windows':
-      return packager.packageWindows();
+    
 
-    case 'mac':
-      return packager.packageMacOS();
-  }
-};
+    
 
-/**
- * @description - Starts developer mode of app.
- * Including; React, Electron, and Python/Flask.
- * @memberof Dispatcher
- */
-function startApp() {
-  const developerMode = new Developer();
-  developerMode.start();
-};</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-tutorial">Tutorials:</dt>
+    <dd class="tag-tutorial">
+        <ul>
+            <li><em class="disabled">Tutorial: - https://www.aka.ms/themedesigner</em></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+</dl>
+
+
+
+
+        
+            <div class="description"><ul>
+<li>Theme for Microsoft Fluent UI, which is built into the project.</li>
+</ul></div>
+        
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -119,10 +144,10 @@ function startApp() {
 <style>
 
 
-nav li[file="scripts/dispatch"]:after {
+nav li[file="theme"]:after {
     display: none;
 }
-nav li[file="scripts/dispatch"] h4, nav li[file="scripts/dispatch"] ul {
+nav li[file="theme"] h4, nav li[file="theme"] ul {
     display: block;
 }
 </style>

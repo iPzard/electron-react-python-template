@@ -27,7 +27,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><div class="search"><div class="input-area"><input type="text"/></div><button></button></div><ul class="namespaces"><li file="builder" class="parent"><a href="Builder.html">Builder</a><h4><a href="Builder.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Builder.html#.buildAll">buildAll</a></li><li data-type='member'><a href="Builder.html#.buildPython">buildPython</a></li><li data-type='member'><a href="Builder.html#.buildReact">buildReact</a></li></ul></li><li file="dispatcher" class="parent"><a href="Dispatcher.html">Dispatcher</a><h4><a href="Dispatcher.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="Dispatcher.html#.buildApp">buildApp</a></li><li data-type='method'><a href="Dispatcher.html#.packageApp">packageApp</a></li></ul></li><li file="packager" class="parent"><a href="Packager.html">Packager</a><h4><a href="Packager.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Packager.html#.packageMacOS">packageMacOS</a></li><li data-type='member'><a href="Packager.html#.packageWindows">packageWindows</a></li></ul></li><li file="requests" class="parent"><a href="Requests.html">Requests</a><h4><a href="Requests.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Requests.html#.exports.get">get</a></li><li data-type='member'><a href="Requests.html#.exports.post">post</a></li></ul></li><li file="services" class="parent"><a href="Services.html">Services</a></li><li file="titlebar" class="parent"><a href="Titlebar.html">Titlebar</a><h4><a href="Titlebar.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Titlebar.html#.exports.CloseButton">CloseButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.ContractButton">ContractButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.MaximizeButton">MaximizeButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.MinimizeButton">MinimizeButton</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><div class="search"><div class="input-area"><input type="text"/></div><button></button></div><ul class="namespaces"><li file="builder" class="parent"><a href="Builder.html">Builder</a><h4><a href="Builder.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Builder.html#.buildAll">buildAll</a></li><li data-type='member'><a href="Builder.html#.buildPython">buildPython</a></li><li data-type='member'><a href="Builder.html#.buildReact">buildReact</a></li></ul></li><li file="developer" class="parent"><a href="Developer.html">Developer</a><h4><a href="Developer.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Developer.html#.start">start</a></li></ul></li><li file="dispatcher" class="parent"><a href="Dispatcher.html">Dispatcher</a><h4><a href="Dispatcher.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="Dispatcher.html#.buildApp">buildApp</a></li><li data-type='method'><a href="Dispatcher.html#.packageApp">packageApp</a></li><li data-type='method'><a href="Dispatcher.html#.startApp">startApp</a></li></ul></li><li file="packager" class="parent"><a href="Packager.html">Packager</a><h4><a href="Packager.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Packager.html#.packageMacOS">packageMacOS</a></li><li data-type='member'><a href="Packager.html#.packageWindows">packageWindows</a></li></ul></li><li file="requests" class="parent"><a href="Requests.html">Requests</a><h4><a href="Requests.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Requests.html#.exports.get">get</a></li><li data-type='member'><a href="Requests.html#.exports.post">post</a></li></ul></li><li file="services" class="parent"><a href="Services.html">Services</a></li><li file="theme" class="parent"><a href="Theme.html">Theme</a></li><li file="titlebar" class="parent"><a href="Titlebar.html">Titlebar</a><h4><a href="Titlebar.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Titlebar.html#.exports.CloseButton">CloseButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.ContractButton">ContractButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.MaximizeButton">MaximizeButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.MinimizeButton">MinimizeButton</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -51,61 +51,49 @@
 
 
     <section class="readme">
-        <article><h1>Electron, React, &amp; Python Template</h1>
+        <article><h1>Electron, React &amp; Python Template</h1>
 <blockquote>
-<p>Reusable template for Electron projects which uses a React front-end with Redux and is integrated with Python/Flask for microservices.</p>
+<p>A reusable Electron template that uses a React front-end with Redux &amp; Redux Toolkit, and is integrated with Python/Flask for microservices.</p>
 </blockquote>
-<br>
+<p><img src="https://user-images.githubusercontent.com/8584126/95290114-59e42900-0821-11eb-8e43-a708959e8449.gif" alt="electron_react_python"></p>
 <h2>🛠️ Setup</h2>
-<p>Clone this repository, navigate to its directory, and install Node &amp; Python dependencies:</p>
-<p><strong>Install python dependencies:</strong></p>
+<p>Ensure you have <a href="https://nodejs.org/en/download/">Node</a> and <a href="https://www.python.org/downloads/">Python</a> installed, then clone this repository. After it's cloned, navigate to the project's root directory on your computer and
+run the following scrips in a terminal application <em>(e.g., Git Bash)</em>:</p>
+<p><strong>Install Python dependencies:</strong></p>
 <pre class="prettyprint source lang-bash"><code>pip3 install -r requirements.txt
 </code></pre>
-<p><strong>Install node dependencies:</strong></p>
+<p><strong>Install Node dependencies:</strong></p>
 <pre class="prettyprint source lang-bash"><code>yarn install
 </code></pre>
 <br>
 <h2>⚙️ Config</h2>
-<p>You <strong>must</strong> build Python and React using the scripts below before starting Electron. See <code>./src/utils/requests.js</code> and <code>app.py</code> for pre-made REST call examples.</p>
 <p><strong>Electron:</strong> Electron's <code>main.js</code>, <code>preload.js</code>, and <code>renderer.js</code> files can be found in the project's root directory.</p>
 <p><strong>React:</strong> React files can be found in the <code>./src/</code> folder, the custom toolbar is in <code>./src/components/toolbar</code>.</p>
 <p><strong>Python:</strong> Python scripts can be created in the <code>./app.py</code> file and used on events via <a href="https://developer.mozilla.org/en-US/docs/Glossary/REST">REST</a> calls.</p>
 <br>
 <h2>📜 Scripts</h2>
+<p>Below are the scripts you'll need to run and package your application, as well as build out JSDoc documentation, if you choose to do so. An exhaustive list of scripts that are available can be found in the <code>package.json</code> file of the project's root directory, in the <code>scripts</code> section.</p>
+<p><strong>Start Developer Mode:</strong></p>
+<pre class="prettyprint source lang-bash"><code>yarn run start
+</code></pre>
+<p><strong>Package Windows:</strong></p>
+<pre class="prettyprint source lang-bash"><code>yarn run build:package:windows
+</code></pre>
+<p><strong>Package MacOS:</strong></p>
+<pre class="prettyprint source lang-bash"><code>yarn run build:package:mac
+</code></pre>
 <p><strong>Build Documentation:</strong></p>
 <pre class="prettyprint source lang-bash"><code>yarn run build:docs
 </code></pre>
-<p><strong>Build Python &amp; React:</strong></p>
-<pre class="prettyprint source lang-bash"><code>yarn run build
-</code></pre>
-<p><strong>Build Python:</strong></p>
-<pre class="prettyprint source lang-bash"><code>yarn run build:python
-</code></pre>
-<p><strong>Build React:</strong></p>
-<pre class="prettyprint source lang-bash"><code>yarn run build:react
-</code></pre>
-<p><strong>Start Electron:</strong></p>
-<pre class="prettyprint source lang-bash"><code>yarn run start
-</code></pre>
-<br>
-<h2>📦 Packaging</h2>
-<p><strong>Build Linux:</strong></p>
-<pre class="prettyprint source lang-bash"><code>yarn run build:package:linux
-</code></pre>
-<p><strong>Build MacOS:</strong></p>
-<pre class="prettyprint source lang-bash"><code>yarn run build:package:mac
-</code></pre>
-<p><strong>Build Windows:</strong></p>
-<pre class="prettyprint source lang-bash"><code>yarn run build:package:windows
-</code></pre>
-<p><strong>Build all:</strong></p>
-<pre class="prettyprint source lang-bash"><code>yarn run build:package:all
-</code></pre>
-<br>
+<p><em>Note: Windows uses <a href="https://github.com/felixrieseberg/electron-wix-msi">electron-wix-msi</a> for packaging, MacOS uses <a href="https://github.com/electron-userland/electron-installer-dmg">electron-installer-dmg</a>.</em>
+<br><br></p>
 <h2>🐱‍👓 Docs</h2>
 <p>Code documentation for this template, created with <a href="https://github.com/jsdoc/jsdoc">JSDoc</a>, can be found here:<br>
-<a href="https://ipzard.github.io/electron-react-python-template/">Electron, React, &amp; Python Template</a></p>
-<br>
+<a href="https://ipzard.github.io/electron-react-python-template/">Electron, React, &amp; Python Template</a>
+<br><br></p>
+<h2>🦟 Bugs</h2>
+<p>Bugs reported on the project's <a href="https://github.com/iPzard/electron-react-python-template/issues">issues page</a> will be exterminated as quickly as possible, be sure to include steps to reproduce so they can be spotted easily.
+<br><br></p>
 <h2>🏷️ License</h2>
 <p>MIT © <a href="https://github.com/iPzard/electron-react-python-template/blob/master/LICENSE">iPzard</a></p></article>
     </section>

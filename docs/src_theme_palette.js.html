@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>scripts/dispatch.js - Documentation</title>
+    <title>src/theme/palette.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="scripts/dispatch.js - Documentation"/>
+    <meta name="description" content="src/theme/palette.js - Documentation"/>
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">scripts/dispatch.js</h1>
+    <h1 class="page-title">src/theme/palette.js</h1>
     
 
     
@@ -42,72 +42,36 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const [ , , script, command ] = process.argv;
-const { Builder } = require('./build');
-const { Developer } = require('./develop');
-const { Packager } = require('./package');
+            <pre class="prettyprint source linenums"><code>/**
+ * @namespace Theme
+ * @description - Theme for Microsoft Fluent UI, which is built into the project.
+ *
+ * @tutorial - https://www.aka.ms/themedesigner
+*/
 
-/**
- * @namespace Dispatcher
- * @description - Dispatches script commands to various scripts.
- * @argument script - Script manager to use (e.g., build or package).
- * @argument command - Command argument describing exact script to run.
- */
-
-switch(script) {
-  case 'build':
-    return buildApp();
-
-  case 'package':
-    return packageApp();
-
-  case 'start':
-    return startApp();
-}
-
-/**
- * @description - Builds various production builds (e.g., Python, React).
- * @memberof Dispatcher
- */
-function buildApp() {
-  const builder = new Builder();
-
-  switch(command) {
-    case 'react':
-      return builder.buildReact();
-
-    case 'python':
-      return builder.buildPython();
-
-    case 'all':
-      return builder.buildAll();
-  }
-};
-
-/**
- * @description - Builds various installers (e.g., DMG, MSI).
- * @memberof Dispatcher
- */
-function packageApp() {
-  const packager = new Packager();
-
-  switch(command) {
-    case 'windows':
-      return packager.packageWindows();
-
-    case 'mac':
-      return packager.packageMacOS();
-  }
-};
-
-/**
- * @description - Starts developer mode of app.
- * Including; React, Electron, and Python/Flask.
- * @memberof Dispatcher
- */
-function startApp() {
-  const developerMode = new Developer();
-  developerMode.start();
+export const customTheme = {
+  themePrimary: '#57a9a9',
+  themeLighterAlt: '#030707',
+  themeLighter: '#0e1b1b',
+  themeLight: '#1a3232',
+  themeTertiary: '#336565',
+  themeSecondary: '#4c9494',
+  themeDarkAlt: '#63b1b1',
+  themeDark: '#77bdbd',
+  themeDarker: '#96cece',
+  neutralLighterAlt: '#eeeeee',
+  neutralLighter: '#eaeaea',
+  neutralLight: '#e1e1e1',
+  neutralQuaternaryAlt: '#d1d1d1',
+  neutralQuaternary: '#c8c8c8',
+  neutralTertiaryAlt: '#c0c0c0',
+  neutralTertiary: '#b5b5b5',
+  neutralSecondary: '#9d9d9d',
+  neutralPrimaryAlt: '#868686',
+  neutralPrimary: '#252525',
+  neutralDark: '#565656',
+  black: '#3e3e3e',
+  white: '#f5f5f5',
 };</code></pre>
         </article>
     </section>
@@ -119,10 +83,10 @@ function startApp() {
 <style>
 
 
-nav li[file="scripts/dispatch"]:after {
+nav li[file="src/theme/palette"]:after {
     display: none;
 }
-nav li[file="scripts/dispatch"] h4, nav li[file="scripts/dispatch"] ul {
+nav li[file="src/theme/palette"] h4, nav li[file="src/theme/palette"] ul {
     display: block;
 }
 </style>

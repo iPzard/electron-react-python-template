@@ -27,7 +27,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><div class="search"><div class="input-area"><input type="text"/></div><button></button></div><ul class="namespaces"><li file="builder" class="parent"><a href="Builder.html">Builder</a><h4><a href="Builder.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Builder.html#.buildAll">buildAll</a></li><li data-type='member'><a href="Builder.html#.buildPython">buildPython</a></li><li data-type='member'><a href="Builder.html#.buildReact">buildReact</a></li></ul></li><li file="dispatcher" class="parent"><a href="Dispatcher.html">Dispatcher</a><h4><a href="Dispatcher.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="Dispatcher.html#.buildApp">buildApp</a></li><li data-type='method'><a href="Dispatcher.html#.packageApp">packageApp</a></li></ul></li><li file="packager" class="parent"><a href="Packager.html">Packager</a><h4><a href="Packager.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Packager.html#.packageMacOS">packageMacOS</a></li><li data-type='member'><a href="Packager.html#.packageWindows">packageWindows</a></li></ul></li><li file="requests" class="parent"><a href="Requests.html">Requests</a><h4><a href="Requests.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Requests.html#.exports.get">get</a></li><li data-type='member'><a href="Requests.html#.exports.post">post</a></li></ul></li><li file="services" class="parent"><a href="Services.html">Services</a></li><li file="titlebar" class="parent"><a href="Titlebar.html">Titlebar</a><h4><a href="Titlebar.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Titlebar.html#.exports.CloseButton">CloseButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.ContractButton">ContractButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.MaximizeButton">MaximizeButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.MinimizeButton">MinimizeButton</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><div class="search"><div class="input-area"><input type="text"/></div><button></button></div><ul class="namespaces"><li file="builder" class="parent"><a href="Builder.html">Builder</a><h4><a href="Builder.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Builder.html#.buildAll">buildAll</a></li><li data-type='member'><a href="Builder.html#.buildPython">buildPython</a></li><li data-type='member'><a href="Builder.html#.buildReact">buildReact</a></li></ul></li><li file="developer" class="parent"><a href="Developer.html">Developer</a><h4><a href="Developer.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Developer.html#.start">start</a></li></ul></li><li file="dispatcher" class="parent"><a href="Dispatcher.html">Dispatcher</a><h4><a href="Dispatcher.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="Dispatcher.html#.buildApp">buildApp</a></li><li data-type='method'><a href="Dispatcher.html#.packageApp">packageApp</a></li><li data-type='method'><a href="Dispatcher.html#.startApp">startApp</a></li></ul></li><li file="packager" class="parent"><a href="Packager.html">Packager</a><h4><a href="Packager.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Packager.html#.packageMacOS">packageMacOS</a></li><li data-type='member'><a href="Packager.html#.packageWindows">packageWindows</a></li></ul></li><li file="requests" class="parent"><a href="Requests.html">Requests</a><h4><a href="Requests.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Requests.html#.exports.get">get</a></li><li data-type='member'><a href="Requests.html#.exports.post">post</a></li></ul></li><li file="services" class="parent"><a href="Services.html">Services</a></li><li file="theme" class="parent"><a href="Theme.html">Theme</a></li><li file="titlebar" class="parent"><a href="Titlebar.html">Titlebar</a><h4><a href="Titlebar.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Titlebar.html#.exports.CloseButton">CloseButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.ContractButton">ContractButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.MaximizeButton">MaximizeButton</a></li><li data-type='member'><a href="Titlebar.html#.exports.MinimizeButton">MinimizeButton</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -43,6 +43,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const { spawnSync } = require('child_process');
+const spawnOptions = { detached: false, shell: true, stdio: 'inherit' };
 
 /**
  * @namespace Builder
@@ -57,6 +58,7 @@ class Builder {
    */
   buildAll = () => {
     const { buildPython, buildReact } = this;
+
     buildPython();
     buildReact();
   }
@@ -67,18 +69,19 @@ class Builder {
    */
   buildPython = () => {
     console.log('Creating Python distribution files...');
-    
+
     const app = 'app.py';
     const icon = './public/favicon.ico';
-  
+
     const options = [
-      '--noconsole',
-      '--noconfirm',
-      '--distpath ./resources',
-      `--icon ${icon}`
+      '--noconsole', // No shell
+      '--noconfirm', // Don't confirm overwrite
+      '--distpath ./resources', // Dist (out) path
+      `--icon ${icon}` // Icon to use
     ].join(' ');
-  
-    spawnSync(`pyinstaller ${options} ${app}`, { detached: false, shell: true, stdio: 'inherit' });
+    // TODO: Check if python is installed.. If not, prompt user
+    // "Python is required but not installed, install it? (y/n)"
+    spawnSync(`pyinstaller ${options} ${app}`, spawnOptions);
   }
 
   /**
@@ -87,7 +90,7 @@ class Builder {
    */
   buildReact = () => {
     console.log('Creating React distribution files...');
-    spawnSync(`react-scripts build`, { detached: false, shell: true, stdio: 'inherit' });
+    spawnSync(`react-scripts build`, spawnOptions);
   }
 }
 
