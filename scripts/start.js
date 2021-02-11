@@ -2,21 +2,20 @@ const { spawn } = require('child_process');
 const spawnOptions = { detached: false, shell: true, stdio: 'inherit' };
 
 /**
- * @namespace Developer
- * @description - Scripts to starts React & Electron (+ Python) developer mode.
+ * @namespace Starter
+ * @description - Scripts to starts React & Electron (+ Python) Starter mode.
  */
-class Developer {
+class Starter {
 
   /**
    * @description - Starts developer mode for Electron + React.
-   * @memberof Developer
+   * @memberof Starter
    */
-  start = () => {
-    // NOTICE: cannot use `spawnSync`, must use `spawn`.
+  developerMode = () => {
     spawn(`cross-env BROWSER=none react-scripts start`, spawnOptions);
     spawn('electron .', spawnOptions);
   };
 
 }
 
-module.exports = { Developer };
+module.exports = { Starter };
