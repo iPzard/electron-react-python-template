@@ -3,12 +3,12 @@ const spawnOptions = { detached: false, shell: true, stdio: 'inherit' };
 
 /**
  * @namespace Starter
- * @description - Scripts to starts React & Electron (+ Python) Starter mode.
+ * @description - Scripts to start Electron, React, and Python.
  */
 class Starter {
 
   /**
-   * @description - Starts developer mode for Electron + React.
+   * @description - Starts developer mode.
    * @memberof Starter
    */
   developerMode = () => {
