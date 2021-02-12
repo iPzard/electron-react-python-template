@@ -6,13 +6,6 @@ const { spawn } = require('child_process');
 // Modules to help control application life cycle
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { get } = require('axios');
-let port, loadingWindow;
-
-// Set port in range of 3001-3999, based on availability
-(async () => {
-  port = await getPort({ port: getPort.makeRange(3001, 3999) });
-  ipcMain.on('get-port-number', (event, _arg) => event.returnValue = port);
-})();
 
 // Function to shutdown Electron & Flask
 const shutdown = (port)=> {
@@ -21,24 +14,18 @@ const shutdown = (port)=> {
     .catch(()=> app.quit());
 };
 
-function createWindow () {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    frame: false,
-    webPreferences: {
-      enableRemoteModule: true,
-      nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js')
-    }
-  });
+// Function to create window
+const createMainWindow = (port) => {
+  const { loadingWindow, mainWindow } = browserWindows;
 
-  // Show loading screen while creating developer build
+  // If in developer mode, show a loading window while
+  // the app and developer server compile.
   if(isDevMode) {
-    mainWindow.hide(); // Hide while dev build is created
+    mainWindow.hide();
     mainWindow.loadURL('http://localhost:3000');
-    mainWindow.webContents.on('dom-ready', () => { // Once dev build is complete
-      loadingWindow.destroy(); // Get rid of loading window
-      mainWindow.show(); // Show main window
+    mainWindow.webContents.on('dom-ready', () => {
+      loadingWindow.destroy();
+      mainWindow.show();
     });
   }
 
@@ -63,13 +50,14 @@ function createWindow () {
    ipcMain.on('app-minimize', (_event, _arg) => mainWindow.minimize());
    ipcMain.on('app-quit', (_event, _arg) => shutdown(port));
    ipcMain.on('app-unmaximize', (_event, _arg) => mainWindow.unmaximize());
+   ipcMain.on('get-port-number', (event, _arg) => event.returnValue = port);
 };
 
 // Loading window to show while Dev Build is being created
-function createLoadingWindow() {
-  loadingWindow = new BrowserWindow({ frame: false });
-
+const createLoadingWindow = () => {
   return new Promise((resolve, reject) => {
+    const { loadingWindow } = browserWindows;
+
     try {
       loadingWindow.loadFile(path.join(__dirname, 'utilities/loading/index.html'));
       loadingWindow.webContents.on('did-finish-load', () => {
@@ -81,30 +69,52 @@ function createLoadingWindow() {
   });
 };
 
+// Browser window configurations
+const browserWindows = {};
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  if(isDevMode) createLoadingWindow().then(createWindow);
-  else createWindow();
+app.whenReady().then(async () => {
+
+  // Method to set port in range of 3001-3999, based on availability
+  const port = await getPort({
+    port: getPort.makeRange(3001, 3999)
+  });
+
+  browserWindows.loadingWindow = new BrowserWindow({ frame: false }),
+  browserWindows.mainWindow = new BrowserWindow({
+    frame: false,
+    webPreferences: {
+      enableRemoteModule: true,
+      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js')
+    }
+  });
+
+  // Run Flask in a shell for developer mode.
+  if(isDevMode) {
+    createLoadingWindow().then(()=> createMainWindow(port));
+    spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
+  }
+
+  // Connect to Python micro-services for production.
+  else {
+    createMainWindow(port);
+    spawn(`start ./resources/app/app.exe ${port}`, { detached: false, shell: true, stdio: 'pipe' });
+  }
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
   });
 
-  // Run Flask in a shell for developer mode.
-  if(isDevMode) spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
-
-  // Connect to Python micro-services for production.
-  else spawn(`start ./resources/app/app.exe ${port}`, { detached: false, shell: true, stdio: 'pipe' });
-});
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin')
-    shutdown(port);
+  // Quit when all windows are closed, except on macOS. There, it's common
+  // for applications and their menu bar to stay active until the user quits
+  // explicitly with Cmd + Q.
+  app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin')
+      shutdown(port);
+  });
 });
