@@ -36,12 +36,12 @@ const createMainWindow = (port) => {
    mainWindow.webContents.openDevTools();
 
   // Set opacity for title on window blur & focus
-  const setTitleOpacity = value => `
+  const setTitleOpacity = (value) => `
     document.getElementById('electron-window-title-text').style.opacity = ${value};
     document.getElementById('electron-window-title-buttons').style.opacity = ${value}
   `;
 
-   const executeOnWindow = command => mainWindow.webContents.executeJavaScript(command);
+   const executeOnWindow = (command) => mainWindow.webContents.executeJavaScript(command);
    mainWindow.on('focus', () => executeOnWindow(setTitleOpacity(1)));
    mainWindow.on('blur', () => executeOnWindow(setTitleOpacity(.5)));
 
