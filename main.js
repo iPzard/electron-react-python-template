@@ -1,11 +1,11 @@
-const getPort = require('get-port');
-const isDevMode = require('electron-is-dev');
-const path = require('path');
+const { get } = require('axios');
 const { spawn } = require('child_process');
+const path = require('path');
 
 // Modules to help control application life cycle
 const { app, BrowserWindow, ipcMain } = require('electron');
-const { get } = require('axios');
+const getPort = require('get-port');
+const isDevMode = require('electron-is-dev');
 
 // Function to shutdown Electron & Flask
 const shutdown = (port)=> {
@@ -13,6 +13,9 @@ const shutdown = (port)=> {
     .then(() => app.quit())
     .catch(()=> app.quit());
 };
+
+// Browser window configurations
+const browserWindows = {};
 
 // Function to create window
 const createMainWindow = (port) => {
@@ -26,14 +29,12 @@ const createMainWindow = (port) => {
     mainWindow.webContents.on('dom-ready', () => {
       loadingWindow.destroy();
       mainWindow.show();
+      mainWindow.webContents.openDevTools(); // Open the DevTools
     });
   }
 
   // Use build/index.html for production release
   else mainWindow.loadFile(path.join(__dirname, 'build/index.html'));
-
-  // Open the DevTools
-   mainWindow.webContents.openDevTools();
 
   // Set opacity for title on window blur & focus
   const setTitleOpacity = (value) => `
@@ -57,9 +58,13 @@ const createMainWindow = (port) => {
 const createLoadingWindow = () => {
   return new Promise((resolve, reject) => {
     const { loadingWindow } = browserWindows;
+    const loaderConfig = {
+      react: 'utilities/loaders/react/index.html',
+      redux: 'utilities/loaders/redux/index.html'
+    };
 
     try {
-      loadingWindow.loadFile(path.join(__dirname, 'utilities/loading/index.html'));
+      loadingWindow.loadFile(path.join(__dirname, loaderConfig.redux));
       loadingWindow.webContents.on('did-finish-load', () => {
         resolve(loadingWindow.show());
       });
@@ -68,9 +73,6 @@ const createLoadingWindow = () => {
     }
   });
 };
-
-// Browser window configurations
-const browserWindows = {};
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -82,7 +84,7 @@ app.whenReady().then(async () => {
     port: getPort.makeRange(3001, 3999)
   });
 
-  browserWindows.loadingWindow = new BrowserWindow({ frame: false }),
+  // Initialize main browser window
   browserWindows.mainWindow = new BrowserWindow({
     frame: false,
     webPreferences: {
@@ -92,8 +94,9 @@ app.whenReady().then(async () => {
     }
   });
 
-  // Run Flask in a shell for developer mode.
+  // If dev mode, use loading window and run Flask in shell
   if(isDevMode) {
+    browserWindows.loadingWindow = new BrowserWindow({ frame: false }),
     createLoadingWindow().then(()=> createMainWindow(port));
     spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
   }
@@ -109,6 +112,16 @@ app.whenReady().then(async () => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createMainWindow(port);
   });
+
+  // Feature to ensure single app instance
+  const initialInstance = app.requestSingleInstanceLock();
+  if (!initialInstance) app.quit();
+  else {
+    app.on('second-instance', () => {
+      if(browserWindows.mainWindow?.isMinimized()) browserWindows.mainWindow?.restore();
+      browserWindows.mainWindow?.focus();
+    });
+  }
 
   // Quit when all windows are closed, except on macOS. There, it's common
   // for applications and their menu bar to stay active until the user quits

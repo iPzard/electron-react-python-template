@@ -62,9 +62,9 @@
     "build:package:mac": "node ./scripts/dispatch package mac",
     "build:package:windows": "node ./scripts/dispatch package windows",
     "eject": "react-scripts eject",
+    "start": "node ./scripts/dispatch start",
     "start:electron": "electron .",
     "start:react": "react-scripts start",
-    "start": "node ./scripts/dispatch start",
     "test": "react-scripts test"
   },
   "version": "1.0.0"
