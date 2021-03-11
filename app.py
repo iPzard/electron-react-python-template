@@ -48,7 +48,7 @@ def getCPUStats():
     origin = request.headers["origin"]
     cpuPercent = hardwareMonitor.getCPUPercentage()
     cpuFreq = hardwareMonitor.getCPUFrequency()
-    return sendResponse({ 'percent': cpuPercent, 'frequency': cpuFreq })
+    return sendResponse({ 'percent': cpuPercent, 'frequency': cpuFreq }, origin)
 """
 -------------------------- APP SERVICES ----------------------------
 """

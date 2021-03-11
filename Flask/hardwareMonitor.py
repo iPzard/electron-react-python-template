@@ -8,11 +8,11 @@ class HardwareMonitor:
         print('helloworld')
 
     def getCPUPercentage(self):
-        cpuPercent = psutil.cpu_percent(interval = 1, percpu=True)
-        return cpu
+        cpuPercent = psutil.cpu_percent(interval=3, percpu=True)
+        return cpuPercent
 
     def getCPUFrequency(self):
-        cpuFreq = psutil.cpu_freq(interval = 1, percpu=True)
+        cpuFreq = psutil.cpu_freq(percpu=True)
         return cpuFreq
 
     
