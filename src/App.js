@@ -54,17 +54,22 @@ export default class App extends Component {
             if (percent !== 0) {
                 let i = 0;
                 percent.forEach( t => {
-                    threads += `<span style="margin-right: 20px;">Thread ${i}: ${t}%</span><span>${frequency[i]}</br>`;
+                    threads += `<span style="margin-right: 20px;">Thread ${i}: ${t}%</span></br>`;
                     i += 1;
                 });
             }
             div.innerHTML = threads;
 
             let cpu = document.getElementById('CpuUsageWrapper');
+            
             if (cpu) {
                 cpu.innerHTML = '';
+                if (frequency !== 0) {
+                    cpu.innerHTML = `<h2>Cpu Frequency:</h2><span style="margin-right: 20px;">Current: ${frequency[0]}</span><span style="margin-right: 20px;">Min: ${frequency[1]}</span><span style="margin-right: 20px;">Max: ${frequency[2]}</span>`;
+                }
                 cpu.append(div);
             }
+            
         }
         getEachCore(this.state.cpuPercent, this.state.cpuFrequency);
         return (
@@ -75,6 +80,7 @@ export default class App extends Component {
                         <Button id="toggleMonitorBtn" type="primary" shape="round" onClick={async () => this._toggleWatches()}>
                             {this.state.monitorBtnTxt}
                         </Button>
+                        <div id="CpuFrequencyWrapper" style={{'font-size': 'small'}}></div>
                         <div id="CpuUsageWrapper" style={{'font-size': 'small'}}>
                         </div>
                         <div id="RamUsageWrapper">
