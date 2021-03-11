@@ -95,7 +95,7 @@ app.whenReady().then(async () => {
   });
 
   // If dev mode, use loading window and run Flask in shell
-  if(isDevMode) {
+  if(true) {
     browserWindows.loadingWindow = new BrowserWindow({ frame: false }),
     createLoadingWindow().then(()=> createMainWindow(port));
     spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
