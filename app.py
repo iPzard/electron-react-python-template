@@ -37,8 +37,18 @@ def getCPUUsage():
     print(cpu)
     return sendResponse(cpu, origin)
 
+@app.route("/CPUFreq")
+def getCPUFrequency():
+    origin = request.headers['origin']
+    cpuFreq = hardwareMonitor.getCPUFrequency()
+    return cpuFreq
 
-
+@app.route("/GetCPUStats")
+def getCPUStats():
+    origin = request.headers["origin"]
+    cpuPercent = hardwareMonitor.getCPUPercentage()
+    cpuFreq = hardwareMonitor.getCPUFrequency()
+    return sendResponse({ 'percent': cpuPercent, 'frequency': cpuFreq })
 """
 -------------------------- APP SERVICES ----------------------------
 """
@@ -48,8 +58,6 @@ def sendResponse(content, origin):
     response = jsonify(content)
     response.headers.add('Access-Control-Allow-Origin', origin)
     return response
-
-
 
 
 # Quits Flask on Electron exit

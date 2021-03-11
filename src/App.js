@@ -18,13 +18,14 @@ export default class App extends Component {
             monitorBtnTxt: 'Start Monitors',
             cpuWatch: null,
             cpuPercent: 0,
+            cpuFrequency: 0,
         }
     }
     
     _toggleWatches = () => {
         const cpuWatch = this._toggleCpuWatch();
         this.setState({
-            monitorBtnTxt: this.state.monitorBtnTxt === 'Start Monitors' ? 'Start Monitors' : 'Stop Monitors',
+            monitorBtnTxt: this.state.monitorBtnTxt === 'Start Monitors' ? 'Stop Monitors' : 'Start Monitors',
             cpuWatch,
         });
     };
@@ -34,27 +35,26 @@ export default class App extends Component {
         let cpuWatch = null;
         if (this.state.cpuWatch === null) {
             cpuWatch = setInterval( async () => {
-                const res = await fetch(`${this._host}/CPUPercent`, {
-
-                }).then(res => res.json());
-                console.log(res);
-                this.setState({cpuPercent: res}); 
+                const res = await fetch(`${this._host}/GetCPUStats`, { method: "GET"}).then(res => res.json());
+                this.setState({cpuPercent: res.percent, cpuFrequency: res.frequency}); 
             }, 1000);
         } else {
             clearInterval(this.state.cpuWatch);
-            this.setState({cpuPercent: 0});
+            this.setState({cpuPercent: 0, cpuFrequency: 0});
         }
         return cpuWatch;
     }
 
+
+
     render() {
-        function getEachCore(percent) {
+        function getEachCore(percent, frequency) {
             let div = document.createElement('div');
             let threads = '';
             if (percent !== 0) {
                 let i = 0;
                 percent.forEach( t => {
-                    threads += `<span>Thread ${i}: ${t}%</span></br>`;
+                    threads += `<span style="margin-right: 20px;">Thread ${i}: ${t}%</span><span>${frequency[i]}</br>`;
                     i += 1;
                 });
             }
@@ -62,15 +62,16 @@ export default class App extends Component {
 
             let cpu = document.getElementById('CpuUsageWrapper');
             if (cpu) {
-                cpu.append(div)
+                cpu.innerHTML = '';
+                cpu.append(div);
             }
         }
-        getEachCore(this.state.cpuPercent)
+        getEachCore(this.state.cpuPercent, this.state.cpuFrequency);
         return (
             <Fragment>
                 <Titlebar/>
                 <div className={ styles.app }>
-                    <header className={ styles['app-header']}>
+                    <header className={ styles['app-header'] }>
                         <Button id="toggleMonitorBtn" type="primary" shape="round" onClick={async () => this._toggleWatches()}>
                             {this.state.monitorBtnTxt}
                         </Button>
