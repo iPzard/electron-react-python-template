@@ -65,7 +65,7 @@ export default class App extends Component {
             if (cpu) {
                 cpu.innerHTML = '';
                 if (frequency !== 0) {
-                    cpu.innerHTML = `<h2>Cpu Frequency:</h2><span style="margin-right: 20px;">Current: ${frequency[0]}</span><span style="margin-right: 20px;">Min: ${frequency[1]}</span><span style="margin-right: 20px;">Max: ${frequency[2]}</span>`;
+                    cpu.innerHTML = `<h2>Cpu Frequency:</h2><span style="margin-right: 20px;">Current: ${frequency[0][0]}</span><span style="margin-right: 20px;">Min: ${frequency[0][1]}</span><span style="margin-right: 20px;">Max: ${frequency[0][2]}</span>`;
                 }
                 cpu.append(div);
             }
