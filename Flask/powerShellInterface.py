@@ -24,5 +24,4 @@ class PowerShellInterface:
         return str(res.stdout)[2:-3]
 
 
-        
 
