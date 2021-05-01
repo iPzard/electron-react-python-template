@@ -30,7 +30,6 @@ export default class App extends Component {
         });
     };
 
-
     _toggleCpuWatch = () => {
         let cpuWatch = null;
         if (this.state.cpuWatch === null) {
@@ -44,8 +43,6 @@ export default class App extends Component {
         }
         return cpuWatch;
     }
-
-
 
     render() {
         function getEachCore(percent, frequency) {
