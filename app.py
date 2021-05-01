@@ -14,7 +14,7 @@ if "app.py" in sys.argv[0]:
     # Update app config
     app_config["debug"] = True
 
-    origin = 'htt'
+    origin = 'http'
     # CORS headers
     app.config["CORS_HEADERS"] = "Content-Type"
 
@@ -65,7 +65,6 @@ def sendResponse(content, origin):
 def quit():
     shutdown = request.environ.get("werkzeug.server.shutdown")
     shutdown()
-
     return
 
 

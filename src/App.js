@@ -53,6 +53,7 @@ export default class App extends Component {
             let threads = '';
             if (percent !== 0) {
                 let i = 0;
+                console.log(percent);
                 percent.forEach( t => {
                     threads += `<span style="margin-right: 20px;">Thread ${i}: ${t}%</span></br>`;
                     i += 1;
