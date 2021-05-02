@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import Titlebar from 'components/titlebar/Titlebar';
 import { customTheme } from 'theme/palette';
 import { loadTheme } from 'office-ui-fabric-react';
-import logo from 'logo.svg';
 import styles from './App.module.scss';
 import 'antd/dist/antd.dark.css';
 import { Button } from 'antd';
+import { ResourceBar } from 'components/resourceBar/resourceBar';
 
 loadTheme({ palette: customTheme });
 
@@ -81,6 +81,7 @@ export default class App extends Component {
                         <div id="CpuFrequencyWrapper" style={{'font-size': 'small'}}></div>
                         <div id="CpuUsageWrapper" style={{'font-size': 'small'}}>
                         </div>
+                        
                         <div id="RamUsageWrapper">
                             <span>
 
@@ -90,8 +91,12 @@ export default class App extends Component {
                             <span>
 
                             </span>
+                        </div>
+                        <div>
+                            <ResourceBar barColor = "#0000FF" resource = '50%'></ResourceBar>
                         </div>  
                     </header>
+                    
                 </div>
             </Fragment>
         )
