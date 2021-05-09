@@ -56,7 +56,7 @@ yarn run build:package:mac
 ```bash
 yarn run build:docs
 ```
-*Note: Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi) for packaging, MacOS uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg).*
+*Note: Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi) for packaging, MacOS uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg). See documentation links provided in this note for prerequisites and dependencies, which may involve installing their program and/or adding a path to your environment variables.*
 <br><br>
 
 ## 🐱‍👓 Docs
