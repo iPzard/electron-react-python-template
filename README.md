@@ -56,7 +56,7 @@ yarn run build:package:mac
 ```bash
 yarn run build:docs
 ```
-*Note: Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi) for packaging, MacOS uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg). See documentation links provided in this note for prerequisites and dependencies, which may involve installing their program and/or adding a path to your environment variables.*
+*Note: For packaging, you must install [PyInstaller](https://pypi.org/project/pyinstaller) and include its path in your environment variables. Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi), which must also be installed and have its path included in your environment variables. MacOS uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg).*
 <br><br>
 
 ## 🐱‍👓 Docs
