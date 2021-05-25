@@ -8,10 +8,10 @@ const getPort = require('get-port');
 const isDevMode = require('electron-is-dev');
 
 // Function to shutdown Electron & Flask
-const shutdown = (port)=> {
+const shutdown = (port) => {
   get(`http://localhost:${port}/quit`)
-    .then(() => app.quit())
-    .catch(()=> app.quit());
+    .then(app.quit)
+    .catch(app.quit);
 };
 
 // Browser window configurations

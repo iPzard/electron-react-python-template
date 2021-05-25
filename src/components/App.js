@@ -1,9 +1,11 @@
+import React, { Fragment } from 'react';
+
 import { Counter } from 'components/counter/Counter';
-import { Fragment } from 'react';
-import React from 'react';
 import Titlebar from 'components/titlebar/Titlebar';
+
 import { customTheme } from 'theme/palette';
 import { loadTheme } from 'office-ui-fabric-react';
+
 import logo from 'logo.svg';
 import styles from 'components/App.module.scss';
 
