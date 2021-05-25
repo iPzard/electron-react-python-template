@@ -39,7 +39,7 @@ const createMainWindow = (port) => {
     /**
      * Destroy loading window once the main
      * window is ready.
-     */
+    */
     mainWindow.webContents.on('dom-ready', () => {
       loadingWindow.destroy();
       mainWindow.show();
@@ -51,20 +51,23 @@ const createMainWindow = (port) => {
 
   // Set opacity for title on window blur & focus
   const setTitleOpacity = (value) => `
-    document.getElementById('electron-window-title-text').style.opacity = ${value};
-    document.getElementById('electron-window-title-buttons').style.opacity = ${value}
+    if(document.readyState === 'complete') {
+      document.getElementById('electron-window-title-text').style.opacity = ${value};
+      document.getElementById('electron-window-title-buttons').style.opacity = ${value};
+    }
   `;
 
-   const executeOnWindow = (command) => mainWindow.webContents.executeJavaScript(command);
-   mainWindow.on('focus', () => executeOnWindow(setTitleOpacity(1)));
-   mainWindow.on('blur', () => executeOnWindow(setTitleOpacity(.5)));
+  // Set window event handlers
+  const executeOnWindow = (command) => mainWindow.webContents.executeJavaScript(command);
+  mainWindow.on('focus', () => executeOnWindow(setTitleOpacity(1)));
+  mainWindow.on('blur', () => executeOnWindow(setTitleOpacity(.5)));
 
-   // Send window control event listeners to front end
-   ipcMain.on('app-maximize', (_event, _arg) => mainWindow.maximize());
-   ipcMain.on('app-minimize', (_event, _arg) => mainWindow.minimize());
-   ipcMain.on('app-quit', (_event, _arg) => shutdown(port));
-   ipcMain.on('app-unmaximize', (_event, _arg) => mainWindow.unmaximize());
-   ipcMain.on('get-port-number', (event, _arg) => event.returnValue = port);
+  // Send window control event listeners to front end
+  ipcMain.on('app-maximize', (_event, _arg) => mainWindow.maximize());
+  ipcMain.on('app-minimize', (_event, _arg) => mainWindow.minimize());
+  ipcMain.on('app-quit', (_event, _arg) => shutdown(port));
+  ipcMain.on('app-unmaximize', (_event, _arg) => mainWindow.unmaximize());
+  ipcMain.on('get-port-number', (event, _arg) => event.returnValue = port);
 };
 
 // Loading window to show while Dev Build is being created
