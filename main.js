@@ -57,12 +57,6 @@ const createMainWindow = (port) => {
         .then(() => loadingWindow.hide())
         .then(() => mainWindow.show());
     });
-
-      // Set did-fail-load listener
-      mainWindow.webContents.on('did-fail-load', (event) => {
-        // console.log(event);
-        mainWindow.loadURL('http://localhost:3000');
-      });
   }
 
   // Use build/index.html for production release
@@ -137,15 +131,7 @@ app.whenReady().then(async () => {
 
   // If dev mode, use loading window and run Flask in shell
   if(isDevMode) {
-    browserWindows.loadingWindow = new BrowserWindow({
-      frame: false,
-      webPreferences: {
-        contextIsolation: false,
-        enableRemoteModule: true,
-        nodeIntegration: true,
-        preload: path.join(app.getAppPath(), 'preload.js')
-      }
-    }),
+    browserWindows.loadingWindow = new BrowserWindow({ frame: false }),
     createLoadingWindow().then(()=> createMainWindow(port));
     spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
   }
