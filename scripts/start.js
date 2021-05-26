@@ -32,7 +32,9 @@ class Starter {
     // Kill processes on exit
     const exitEvents = ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException', 'SIGTERM'];
     exitEvents.forEach((event) => {
-      process.on(event, () => {
+
+      // .once or behavior will persist after closing
+      process.once(event, () => {
         try {
 
           // These errors are expected since the connection is closing
