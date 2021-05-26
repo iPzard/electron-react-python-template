@@ -4,7 +4,7 @@ const path = require('path');
 
 // Modules to help control application life cycle
 const { app, BrowserWindow, ipcMain } = require('electron');
-const getPort = require('get-port');
+const { openPort } = require('./scripts/port');
 const isDevMode = require('electron-is-dev');
 
 // Function to shutdown Electron & Flask
@@ -34,15 +34,29 @@ const createMainWindow = (port) => {
      * to avoid occasional error from the webContents
      * object being destroyed.
     */
-    mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools({ mode: 'undocked' });
 
     /**
-     * Destroy loading window once the main
+     * Hide loading window once the main
      * window is ready.
     */
     mainWindow.webContents.on('dom-ready', () => {
-      loadingWindow.destroy();
-      mainWindow.show();
+
+
+      // Fix page if error occurs during hot-loading
+      const consistencyCheck = `
+        var isBodyEmpty = document.body.innerHTML === "";
+        var isHeadEmpty = document.head.innerHTML === "";
+        var isLoadFail = isBodyEmpty && isHeadEmpty;
+
+        if(isLoadFail) location.reload();
+      `;
+
+      // Check consistency, hide loading window & show main
+      mainWindow.webContents.executeJavaScript(consistencyCheck)
+        .catch((error) => console.error(error))
+        .then(() => loadingWindow.hide())
+        .then(() => mainWindow.show());
     });
   }
 
@@ -52,13 +66,18 @@ const createMainWindow = (port) => {
   // Set opacity for title on window blur & focus
   const setTitleOpacity = (value) => `
     if(document.readyState === 'complete') {
-      document.getElementById('electron-window-title-text').style.opacity = ${value};
-      document.getElementById('electron-window-title-buttons').style.opacity = ${value};
+      const titleBar = document.getElementById('electron-window-title-text');
+      const titleButtons = document.getElementById('electron-window-title-buttons');
+
+      if(titleBar) titleBar.style.opacity = ${value};
+      if(titleButtons) titleButtons.style.opacity = ${value};
     }
   `;
 
   // Set window event handlers
-  const executeOnWindow = (command) => mainWindow.webContents.executeJavaScript(command);
+  const executeOnWindow = (command) => mainWindow.webContents.executeJavaScript(command)
+    .catch((error) => console.error(error));
+
   mainWindow.on('focus', () => executeOnWindow(setTitleOpacity(1)));
   mainWindow.on('blur', () => executeOnWindow(setTitleOpacity(.5)));
 
@@ -98,9 +117,7 @@ const createLoadingWindow = () => {
 app.whenReady().then(async () => {
 
   // Method to set port in range of 3001-3999, based on availability
-  const port = await getPort({
-    port: getPort.makeRange(3001, 3999)
-  });
+  const port = await openPort();
 
   // Initialize main browser window
   browserWindows.mainWindow = new BrowserWindow({
@@ -114,7 +131,14 @@ app.whenReady().then(async () => {
 
   // If dev mode, use loading window and run Flask in shell
   if(isDevMode) {
-    browserWindows.loadingWindow = new BrowserWindow({ frame: false }),
+    browserWindows.loadingWindow = new BrowserWindow({
+      frame: false,
+      webPreferences: {
+        enableRemoteModule: true,
+        nodeIntegration: true,
+        preload: path.join(__dirname, 'preload.js')
+      }
+    }),
     createLoadingWindow().then(()=> createMainWindow(port));
     spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
   }
