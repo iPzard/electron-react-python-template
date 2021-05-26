@@ -27,13 +27,11 @@ class Starter {
 
     // Start & identify React & Electron processes
     spawn(`cross-env BROWSER=none react-scripts start`, spawnOptions.showLogs);
-    spawn('electron .', spawnOptions.showLogs);
+    const electronChild = spawn('electron .', spawnOptions.showLogs);
+    electronChild.on('error', () => console.log('err'));
 
     // Kill processes on exit
-    const exitEvents = ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException', 'SIGTERM'];
-    exitEvents.forEach((event) => {
-
-      // .once or behavior will persist after closing
+    const exitOnEvent = (event) => {
       process.once(event, () => {
         try {
 
@@ -50,7 +48,10 @@ class Starter {
           if(error.code !== 'ESRCH') console.error(error);
         }
       });
-    });
+    };
+
+    const exitEvents = ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException', 'SIGTERM'];
+    exitEvents.forEach(exitOnEvent);
   };
 
 }

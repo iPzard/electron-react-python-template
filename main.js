@@ -26,9 +26,8 @@ const createMainWindow = (port) => {
    * the app and developer server compile.
   */
   if(isDevMode) {
-    mainWindow.hide();
     mainWindow.loadURL('http://localhost:3000');
-
+    mainWindow.hide();
     /**
      * Opening devTools, must be done before dom-ready
      * to avoid occasional error from the webContents
@@ -58,6 +57,12 @@ const createMainWindow = (port) => {
         .then(() => loadingWindow.hide())
         .then(() => mainWindow.show());
     });
+
+      // Set did-fail-load listener
+      mainWindow.webContents.on('did-fail-load', (event) => {
+        // console.log(event);
+        mainWindow.loadURL('http://localhost:3000');
+      });
   }
 
   // Use build/index.html for production release
@@ -123,9 +128,10 @@ app.whenReady().then(async () => {
   browserWindows.mainWindow = new BrowserWindow({
     frame: false,
     webPreferences: {
+      contextIsolation: false,
       enableRemoteModule: true,
       nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(app.getAppPath(), 'preload.js')
     }
   });
 
@@ -134,9 +140,10 @@ app.whenReady().then(async () => {
     browserWindows.loadingWindow = new BrowserWindow({
       frame: false,
       webPreferences: {
+        contextIsolation: false,
         enableRemoteModule: true,
         nodeIntegration: true,
-        preload: path.join(__dirname, 'preload.js')
+        preload: path.join(app.getAppPath(), 'preload.js')
       }
     }),
     createLoadingWindow().then(()=> createMainWindow(port));
