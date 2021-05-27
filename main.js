@@ -29,6 +29,7 @@ const createMainWindow = (port) => {
 
     mainWindow.loadURL('http://localhost:3000');
     mainWindow.hide();
+
     /**
      * Opening devTools, must be done before dom-ready
      * to avoid occasional error from the webContents
@@ -52,10 +53,22 @@ const createMainWindow = (port) => {
         isLoadSuccess || location.reload();
       `;
 
+      // Updates windows if page is loaded
+      const handleLoad = (isLoaded) => {
+        if(isLoaded) {
+
+          /**
+           * Keep show() & hide() in this order to prevent
+           * unresponsive behavior during page load.
+           */
+          mainWindow.show();
+          loadingWindow.hide();
+        }
+      };
+
       // Check consistency, hide loading window & show main
       mainWindow.webContents.executeJavaScript(consistencyCheck)
-        .then(() => loadingWindow.hide())
-        .then(() => mainWindow.show())
+        .then(handleLoad)
         .catch(console.error);
     });
   }
@@ -105,7 +118,7 @@ const createLoadingWindow = () => {
         resolve(loadingWindow.show());
       });
     } catch(error) {
-      reject(console.error);
+      reject(console.error(error));
     }
   });
 };
