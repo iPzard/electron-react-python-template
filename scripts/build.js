@@ -5,7 +5,6 @@ const spawnOptions = { detached: false, shell: true, stdio: 'inherit' };
  * @namespace Builder
  * @description - Builds React & Python builds of project so Electron can be used.
  */
-
 class Builder {
 
   /**

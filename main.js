@@ -4,8 +4,8 @@ const path = require('path');
 
 // Modules to help control application life cycle
 const { app, BrowserWindow, ipcMain } = require('electron');
-const { openPort } = require('./scripts/port');
 const isDevMode = require('electron-is-dev');
+const getPort = require('get-port');
 
 // Function to shutdown Electron & Flask
 const shutdown = (port) => {
@@ -26,6 +26,7 @@ const createMainWindow = (port) => {
    * the app and developer server compile.
   */
   if(isDevMode) {
+
     mainWindow.loadURL('http://localhost:3000');
     mainWindow.hide();
     /**
@@ -39,23 +40,23 @@ const createMainWindow = (port) => {
      * Hide loading window once the main
      * window is ready.
     */
-    mainWindow.webContents.on('dom-ready', () => {
+    mainWindow.webContents.on('did-finish-load', () => {
 
 
       // Fix page if error occurs during hot-loading
       const consistencyCheck = `
-        var isBodyEmpty = document.body.innerHTML === "";
-        var isHeadEmpty = document.head.innerHTML === "";
-        var isLoadFail = isBodyEmpty && isHeadEmpty;
+        var isBodyFull = document.body.innerHTML !== "";
+        var isHeadFull = document.head.innerHTML !== "";
+        var isLoadSuccess = isBodyFull && isHeadFull;
 
-        if(isLoadFail) location.reload();
+        isLoadSuccess || location.reload();
       `;
 
       // Check consistency, hide loading window & show main
       mainWindow.webContents.executeJavaScript(consistencyCheck)
-        .catch((error) => console.error(error))
         .then(() => loadingWindow.hide())
-        .then(() => mainWindow.show());
+        .then(() => mainWindow.show())
+        .catch(console.error);
     });
   }
 
@@ -75,7 +76,7 @@ const createMainWindow = (port) => {
 
   // Set window event handlers
   const executeOnWindow = (command) => mainWindow.webContents.executeJavaScript(command)
-    .catch((error) => console.error(error));
+    .catch(console.error);
 
   mainWindow.on('focus', () => executeOnWindow(setTitleOpacity(1)));
   mainWindow.on('blur', () => executeOnWindow(setTitleOpacity(.5)));
@@ -99,11 +100,12 @@ const createLoadingWindow = () => {
 
     try {
       loadingWindow.loadFile(path.join(__dirname, loaderConfig.redux));
+
       loadingWindow.webContents.on('did-finish-load', () => {
         resolve(loadingWindow.show());
       });
     } catch(error) {
-      reject((error) => console.error(error));
+      reject(console.error);
     }
   });
 };
@@ -116,7 +118,9 @@ const createLoadingWindow = () => {
 app.whenReady().then(async () => {
 
   // Method to set port in range of 3001-3999, based on availability
-  const port = await openPort();
+  const port = await getPort({
+    port: getPort.makeRange(3001, 3999)
+  });
 
   // Initialize main browser window
   browserWindows.mainWindow = new BrowserWindow({

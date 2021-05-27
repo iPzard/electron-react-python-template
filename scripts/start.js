@@ -1,6 +1,6 @@
-const { spawn, spawnSync } = require('child_process');
+const { spawn } = require('child_process');
 const getPort = require('get-port');
-const axios = require('axios');
+const { get } = require('axios');
 
 /**
  * @namespace Starter
@@ -25,10 +25,12 @@ class Starter {
       port: getPort.makeRange(3001, 3999)
     });
 
+    // Kill anything that might using required React port
+    spawn(`npx kill-port 3000`, spawnOptions.hideLogs);
+
     // Start & identify React & Electron processes
     spawn(`cross-env BROWSER=none react-scripts start`, spawnOptions.showLogs);
-    const electronChild = spawn('electron .', spawnOptions.showLogs);
-    electronChild.on('error', () => console.log('err'));
+    spawn('electron .', spawnOptions.showLogs);
 
     // Kill processes on exit
     const exitOnEvent = (event) => {
@@ -39,7 +41,7 @@ class Starter {
           const expectedErrors = ['ECONNRESET', 'ECONNREFUSED'];
 
           // Send command to Flask server to quit and close
-          axios.get(`http://localhost:${port}/quit`)
+          get(`http://localhost:${port}/quit`)
             .catch((error) => !expectedErrors.includes(error.code) && console.log(error));
 
         } catch(error) {

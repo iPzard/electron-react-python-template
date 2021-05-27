@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/components/titlebar/Titlebar.js - Documentation</title>
+    <title>scripts/clean.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="src/components/titlebar/Titlebar.js - Documentation"/>
+    <meta name="description" content="scripts/clean.js - Documentation"/>
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">src/components/titlebar/Titlebar.js</h1>
+    <h1 class="page-title">scripts/clean.js</h1>
     
 
     
@@ -42,59 +42,42 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import {
-  CloseButton,
-  ContractButton,
-  MaximizeButton,
-  MinimizeButton
-} from 'components/titlebar/TitlebarButtons';
-import React, { useState } from 'react';
-
-import { app } from 'utils/services';
-import favicon from 'components/titlebar/img/favicon.png';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import styles from 'components/titlebar/scss/Titlebar.module.scss';
-
-initializeIcons();
+            <pre class="prettyprint source linenums"><code>const {
+  existsSync,
+  readdirSync,
+  rmdirSync,
+  statSync,
+  unlinkSync
+ } = require('fs');
 
 /**
- * @namespace Titlebar
- * @description Title Component to use as an Electron customized titlebar.
- * electron-window-title-text used in main.js to set opacity on/off focus.
- * electron-window-title-buttons used in main.js to set opacity on/off focus.
+ * @namespace Cleaner
+ * @description - Cleans project by removing the following files and folders:
+ * docs, node_modules, yarn.lock, and package-lock.json.
  */
+class Cleaner {
 
-const Titlebar = () => {
+  removePath = (pathToRemove) => {
+    if (existsSync(pathToRemove)) {
+      console.log(`Removing: ${pathToRemove}`);
+      if (statSync(pathToRemove).isFile()) unlinkSync(pathToRemove);
 
-  const [ maximized, setMaximized ] = useState(false);
+      else {
+        const files = readdirSync(pathToRemove);
 
-  const handleMaximizeToggle = () => {
-    !maximized ? app.maximize() : app.unmaximize();
-    setMaximized(!maximized);
+        files.forEach((file) => {
+          const filePath = `${pathToRemove}/${file}`;
+
+          if (statSync(filePath).isDirectory()) this.removePath(filePath);
+          else unlinkSync(filePath);
+        });
+        rmdirSync(pathToRemove);
+      }
+    }
   };
+}
 
-  return (
-    &lt;section className={ styles.titlebar }>
-      &lt;div>
-        &lt;img src={ favicon } alt='favicon' />
-        &lt;span id='electron-window-title-text'>{ document.title }&lt;/span>
-      &lt;/div>
-
-      &lt;div id='electron-window-title-buttons'>
-        &lt;MinimizeButton onClick={ app.minimize }/>
-
-        {
-          maximized ?
-          &lt;ContractButton onClick={ handleMaximizeToggle }/> :
-          &lt;MaximizeButton onClick={ handleMaximizeToggle }/>
-        }
-        &lt;CloseButton onClick={ app.quit } />
-      &lt;/div>
-    &lt;/section>
-  );
-};
-
-export default Titlebar;</code></pre>
+module.exports.Cleaner = Cleaner;</code></pre>
         </article>
     </section>
 
@@ -105,10 +88,10 @@ export default Titlebar;</code></pre>
 <style>
 
 
-nav li[file="src/components/titlebar/titlebar"]:after {
+nav li[file="scripts/clean"]:after {
     display: none;
 }
-nav li[file="src/components/titlebar/titlebar"] h4, nav li[file="src/components/titlebar/titlebar"] ul {
+nav li[file="scripts/clean"] h4, nav li[file="scripts/clean"] ul {
     display: block;
 }
 </style>

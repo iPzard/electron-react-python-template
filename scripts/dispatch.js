@@ -1,7 +1,11 @@
 const [ , , script, command ] = process.argv;
 const { Builder } = require('./build');
-const { Starter } = require('./start');
+const { Cleaner } = require('./clean');
 const { Packager } = require('./package');
+const { Starter } = require('./start');
+
+const path = require('path');
+
 
 /**
  * @namespace Dispatcher
@@ -13,6 +17,9 @@ const { Packager } = require('./package');
 switch(script) {
   case 'build':
     return buildApp();
+
+  case 'clean':
+    return cleanProject();
 
   case 'package':
     return packageApp();
@@ -38,6 +45,25 @@ function buildApp() {
     case 'all':
       return builder.buildAll();
   }
+};
+
+/**
+ * @description - Cleans project by removing various files and folders.
+ * @memberof Dispatcher
+ */
+function cleanProject() {
+  const cleaner = new Cleaner();
+
+  // Paths to remove
+  [
+    path.join(__dirname, '..', 'node_modules'),
+    path.join(__dirname, '..', 'docs'),
+    path.join(__dirname, '..', 'package-lock.json'),
+    path.join(__dirname, '..', 'yarn.lock')
+  ]
+    // Iterate and remove process
+    .forEach(cleaner.removePath);
+    console.log('Project is clean.');
 };
 
 /**
