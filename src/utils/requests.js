@@ -19,7 +19,7 @@ const port = ipcRenderer.sendSync('get-port-number');
 export const get = (route, callback, errorCallback) => {
   fetch(`http://localhost:${port}/${route}`)
     .then((response) => response.json())
-    .then((response) => callback(response))
+    .then(callback)
     .catch((error) => errorCallback ? errorCallback(error) : console.error(error));
 };
 
@@ -44,6 +44,6 @@ export const post = (
     headers: { 'Content-type': 'application/json' }
   })
     .then((response) => response.json())
-    .then(response => callback(response))
+    .then(callback)
     .catch((error) => errorCallback ? errorCallback(error) : console.error(error));
 };
