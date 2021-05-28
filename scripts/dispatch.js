@@ -53,14 +53,38 @@ function buildApp() {
  */
 function cleanProject() {
   const cleaner = new Cleaner();
+  const getPath = (file) => path.join(__dirname, '..', file);
 
-  // Paths to remove
+  // Files to remove during cleaning
   [
-    path.join(__dirname, '..', '__pycache__'),
-    path.join(__dirname, '..', 'docs'),
-    path.join(__dirname, '..', 'node_modules'),
-    path.join(__dirname, '..', 'package-lock.json'),
-    path.join(__dirname, '..', 'yarn.lock')
+    // Cache
+    getPath('app.pyc'),
+    getPath('app.spec'),
+    getPath('__pycache__'),
+
+    // Debug
+    getPath('npm-debug.log*'),
+    getPath('yarn-debug.log*'),
+    getPath('yarn-error.log*'),
+
+    // Dependencies
+    getPath('.pnp'),
+    getPath('.pnp.js'),
+    getPath('node_modules'),
+    getPath('package-lock.json'),
+    getPath('yarn.lock'),
+
+    // Testing
+    getPath('coverage'),
+
+    // Production
+    getPath('build'),
+    getPath('dist'),
+    getPath('docs'),
+    getPath('resources'),
+
+    // Misc
+    getPath('.DS_Store')
   ]
     // Iterate and remove process
     .forEach(cleaner.removePath);
