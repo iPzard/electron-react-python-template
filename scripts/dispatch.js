@@ -56,8 +56,9 @@ function cleanProject() {
 
   // Paths to remove
   [
-    path.join(__dirname, '..', 'node_modules'),
+    path.join(__dirname, '..', '__pycache__'),
     path.join(__dirname, '..', 'docs'),
+    path.join(__dirname, '..', 'node_modules'),
     path.join(__dirname, '..', 'package-lock.json'),
     path.join(__dirname, '..', 'yarn.lock')
   ]
