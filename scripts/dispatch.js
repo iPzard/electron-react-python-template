@@ -63,9 +63,9 @@ function cleanProject() {
     getPath('__pycache__'),
 
     // Debug
-    getPath('npm-debug.log*'),
-    getPath('yarn-debug.log*'),
-    getPath('yarn-error.log*'),
+    getPath('npm-debug.log'),
+    getPath('yarn-debug.log'),
+    getPath('yarn-error.log'),
 
     // Dependencies
     getPath('.pnp'),
