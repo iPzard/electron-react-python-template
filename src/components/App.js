@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
+import { get } from 'utils/requests';
 
 import { Counter } from 'components/counter/Counter';
 import Titlebar from 'components/titlebar/Titlebar';
@@ -12,6 +13,21 @@ import styles from 'components/App.module.scss';
 loadTheme({ palette: customTheme });
 
 function App() {
+
+  useEffect(() => {
+
+    /**
+     * Example call to Flask
+     * @see /src/utils/requests.js
+     * @see /app.py
+     */
+    get(
+      'example', // Route
+      (response) => console.log(response), // Response callback
+      (error) => console.error(error) // Error callback
+    );
+  }, []);
+
   return (
     <Fragment>
     <Titlebar />

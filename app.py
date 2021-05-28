@@ -30,7 +30,9 @@ if "app.py" in sys.argv[0]:
 # Remove and replace with your own
 @app.route("/example")
 def example():
-  return jsonify("Hello world!")
+
+  # See /src/components/App.js for frontend call
+  return jsonify("Example response from Flask! Learn more in /app.py & /src/components/App.js")
 
 
 """
