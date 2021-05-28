@@ -1,30 +1,60 @@
-const { get } = require('axios');
+// Built-in modules
 const { spawn } = require('child_process');
 const path = require('path');
 
-// Modules to help control application life cycle
+// Electron modules
 const { app, BrowserWindow, ipcMain } = require('electron');
-const isDevMode = require('electron-is-dev');
-const getPort = require('get-port');
 
-// Function to shutdown Electron & Flask
+// Extra modules
+const getPort = require('get-port');
+const isDevMode = require('electron-is-dev');
+const { get } = require('axios');
+
+
+/**
+ * @description - Shuts down Electron & Flask.
+ * @param {number} port - Port that Flask server is running on.
+ */
 const shutdown = (port) => {
   get(`http://localhost:${port}/quit`)
     .then(app.quit)
     .catch(app.quit);
 };
 
-// Browser window configurations
+
+/**
+ * @namespace BrowserWindow
+ * @description - Electron browser windows.
+ * @tutorial - https://www.electronjs.org/docs/api/browser-window
+ */
 const browserWindows = {};
 
-// Function to create window
+
+/**
+ * @description - Creates main window.
+ * @param {number} port - Port that Flask server is running on.
+ *
+ * @memberof BrowserWindow
+ */
 const createMainWindow = (port) => {
   const { loadingWindow, mainWindow } = browserWindows;
 
   /**
+   * @description - Function to use custom JavaSCript in the DOM.
+   * @param {string} command - JavaScript to execute in DOM.
+   * @param {function} callback - Callback to execute here once complete.
+   * @returns {promise}
+   */
+   const executeOnWindow = (command, callback) => {
+    return mainWindow.webContents.executeJavaScript(command)
+     .then(callback)
+     .catch(console.error);
+  };
+
+  /**
    * If in developer mode, show a loading window while
    * the app and developer server compile.
-  */
+   */
   if(isDevMode) {
 
     mainWindow.loadURL('http://localhost:3000');
@@ -34,26 +64,32 @@ const createMainWindow = (port) => {
      * Opening devTools, must be done before dom-ready
      * to avoid occasional error from the webContents
      * object being destroyed.
-    */
+     */
     mainWindow.webContents.openDevTools({ mode: 'undocked' });
 
     /**
-     * Hide loading window once the main
-     * window is ready.
-    */
+     * Hide loading window and show main window
+     * once the main window is ready.
+     */
     mainWindow.webContents.on('did-finish-load', () => {
 
 
-      // Fix page if error occurs during hot-loading
-      const consistencyCheck = `
+      /**
+       * Checks page for errors that may have occurred
+       * during the hot-loading process.
+       */
+      const isPageLoaded = `
         var isBodyFull = document.body.innerHTML !== "";
         var isHeadFull = document.head.innerHTML !== "";
         var isLoadSuccess = isBodyFull && isHeadFull;
 
-        isLoadSuccess || location.reload();
+        isLoadSuccess || Boolean(location.reload());
       `;
 
-      // Updates windows if page is loaded
+      /**
+       * @description Updates windows if page is loaded
+       * @param {*} isLoaded
+       */
       const handleLoad = (isLoaded) => {
         if(isLoaded) {
 
@@ -66,17 +102,25 @@ const createMainWindow = (port) => {
         }
       };
 
-      // Check consistency, hide loading window & show main
-      mainWindow.webContents.executeJavaScript(consistencyCheck)
-        .then(handleLoad)
-        .catch(console.error);
+      /**
+       * Checks if the page has been populated with
+       * React project. if so, shows the main page.
+       */
+       executeOnWindow(isPageLoaded, handleLoad);
     });
   }
 
-  // Use build/index.html for production release
+  /**
+   * If using in production, the built version of the
+   * React project will be used instead of localhost.
+   */
   else mainWindow.loadFile(path.join(__dirname, 'build/index.html'));
 
-  // Set opacity for title on window blur & focus
+
+  /**
+   * @description - Controls the opacity of title bar on focus/blur.
+   * @param {number} value - Opacity to set for title bar.
+   */
   const setTitleOpacity = (value) => `
     if(document.readyState === 'complete') {
       const titleBar = document.getElementById('electron-window-title-text');
@@ -87,14 +131,14 @@ const createMainWindow = (port) => {
     }
   `;
 
-  // Set window event handlers
-  const executeOnWindow = (command) => mainWindow.webContents.executeJavaScript(command)
-    .catch(console.error);
 
   mainWindow.on('focus', () => executeOnWindow(setTitleOpacity(1)));
   mainWindow.on('blur', () => executeOnWindow(setTitleOpacity(.5)));
 
-  // Send window control event listeners to front end
+  /**
+   * Listen and respond to ipcRenderer events on the frontend.
+   * @see `src\utils\services.js`
+   */
   ipcMain.on('app-maximize', (_event, _arg) => mainWindow.maximize());
   ipcMain.on('app-minimize', (_event, _arg) => mainWindow.minimize());
   ipcMain.on('app-quit', (_event, _arg) => shutdown(port));
@@ -102,10 +146,15 @@ const createMainWindow = (port) => {
   ipcMain.on('get-port-number', (event, _arg) => event.returnValue = port);
 };
 
-// Loading window to show while Dev Build is being created
+
+/**
+ * @description - Creates loading window to show while build is created.
+ * @memberof BrowserWindow
+ */
 const createLoadingWindow = () => {
   return new Promise((resolve, reject) => {
     const { loadingWindow } = browserWindows;
+
     const loaderConfig = {
       react: 'utilities/loaders/react/index.html',
       redux: 'utilities/loaders/redux/index.html'
@@ -123,6 +172,7 @@ const createLoadingWindow = () => {
   });
 };
 
+
 /**
  * This method will be called when Electron has finished
  * initialization and is ready to create browser windows.
@@ -130,12 +180,18 @@ const createLoadingWindow = () => {
 */
 app.whenReady().then(async () => {
 
-  // Method to set port in range of 3001-3999, based on availability
+  /**
+   * Method to set port in range of 3001-3999,
+   * based on availability.
+   */
   const port = await getPort({
     port: getPort.makeRange(3001, 3999)
   });
 
-  // Initialize main browser window
+  /**
+   * Assigns the main browser window on the
+   * browserWindows object.
+   */
   browserWindows.mainWindow = new BrowserWindow({
     frame: false,
     webPreferences: {
@@ -146,14 +202,20 @@ app.whenReady().then(async () => {
     }
   });
 
-  // If dev mode, use loading window and run Flask in shell
+  /**
+   * If not using in production, use the loading window
+   * and run Flask in shell.
+   */
   if(isDevMode) {
     browserWindows.loadingWindow = new BrowserWindow({ frame: false }),
     createLoadingWindow().then(()=> createMainWindow(port));
     spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
   }
 
-  // Connect to Python micro-services for production.
+  /**
+   * If using in production, use the main window
+   * and run bundled app.exe file.
+   */
   else {
     createMainWindow(port);
     spawn(`start ./resources/app/app.exe ${port}`, { detached: false, shell: true, stdio: 'pipe' });
@@ -167,7 +229,11 @@ app.whenReady().then(async () => {
     if (BrowserWindow.getAllWindows().length === 0) createMainWindow(port);
   });
 
-  // Feature to ensure single app instance
+  /**
+   * Ensures that only a single instance of the app
+   * can run, this correlates with the "name" property
+   * used in `package.json`.
+   */
   const initialInstance = app.requestSingleInstanceLock();
   if (!initialInstance) app.quit();
   else {
