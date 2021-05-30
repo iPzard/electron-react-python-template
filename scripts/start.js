@@ -20,7 +20,11 @@ class Starter {
       showLogs: { detached: false, shell: true, stdio: 'inherit' }
     };
 
-    // Method to set port in range of 3001-3999, based on availability
+    /**
+     * Method to get first port in range of 3001-3999,
+     * Remains unused here so will be the same as the
+     * port used in main.js
+     */
     const port = await getPort({
       port: getPort.makeRange(3001, 3999)
     });
