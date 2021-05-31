@@ -18,6 +18,7 @@
     ]
   },
   "dependencies": {
+    "@fluentui/react": "^7.121.12",
     "@reduxjs/toolkit": "^1.1.0",
     "axios": "^0.21.1",
     "electron-is-dev": "^1.2.0",
@@ -39,7 +40,6 @@
     "electron-installer-dmg": "^3.0.0",
     "electron-packager": "^15.0.0",
     "electron-wix-msi": "^3.0.4",
-    "eslint": "^7.27.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jsx-a11y": "^6.4.1",
