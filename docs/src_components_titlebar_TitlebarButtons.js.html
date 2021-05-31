@@ -42,65 +42,74 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { IconButton } from '@fluentui/react/lib/Button';
-import React from 'react';
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+
 import styles from 'components/titlebar/scss/TitlebarButtons.module.scss';
 
 /**
  * @description Titlebar minimize button.
  * @memberof Titlebar
  */
-
-export const MinimizeButton = props => (
-  &lt;IconButton
-    className={ styles.button }
-    iconProps={{ iconName: 'ChromeMinimize' }}
-    title="Minimize"
-    ariaLabel="Minimize"
+export const MinimizeButton = (props) => (
+  &lt;button
     { ...props }
-  />
+    aria-label="Minimize"
+    className={ styles['minimize-button'] }
+    title="Minimize"
+    type="button"
+  >
+    &lt;span />
+  &lt;/button>
 );
 
 /**
  * @description Titlebar maximize button.
  * @memberof Titlebar
  */
-export const MaximizeButton = props => (
-  &lt;IconButton
-    className={ styles.button }
-    iconProps={{ iconName: 'Checkbox' }}
-    title="Maximize"
-    ariaLabel="Maximize"
+export const MaximizeButton = (props) => (
+  &lt;button
     { ...props }
-  />
+    aria-label="Maximize"
+    className={ styles['maximize-button'] }
+    title="Maximize"
+    type="button"
+  >
+    &lt;span />
+  &lt;/button>
 );
 
 /**
  * @description Titlebar contract (unmaximize) button.
  * @memberof Titlebar
  */
-export const ContractButton = props => (
-  &lt;IconButton
-    className={ styles.button }
-    iconProps={{ iconName: 'MiniContract' }}
-    title="Unmaximize"
-    ariaLabel="Unmaximize"
+export const ContractButton = (props) => (
+  &lt;button
     { ...props }
-  />
+    aria-label="Contract"
+    className={ styles['contract-button'] }
+    title="Contract"
+    type="button"
+  >
+    &lt;span />
+    &lt;span />
+  &lt;/button>
 );
 
 /**
  * @description Titlebar close button.
  * @memberof Titlebar
  */
-export const CloseButton = props => (
-  &lt;IconButton
-    className={ styles.button }
-    iconProps={{ iconName: 'ChromeClose' }}
-    title="Close"
-    ariaLabel="Close"
+export const CloseButton = (props) => (
+  &lt;button
     { ...props }
-  />
+    aria-label="Close"
+    className={ styles['close-button'] }
+    title="Close"
+    type="button"
+  >
+    &lt;span />
+    &lt;span />
+  &lt;/button>
 );</code></pre>
         </article>
     </section>
