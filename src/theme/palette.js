@@ -27,5 +27,5 @@ export const customTheme = {
   neutralPrimary: '#252525',
   neutralDark: '#565656',
   black: '#3e3e3e',
-  white: '#f5f5f5',
+  white: '#f5f5f5'
 };

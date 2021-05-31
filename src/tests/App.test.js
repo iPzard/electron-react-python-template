@@ -6,7 +6,7 @@ import store from 'state/store';
 
 test('renders learn react link', () => {
   const { getByText } = render(
-    <Provider store={store}>
+    <Provider store={ store }>
       <App />
     </Provider>
   );

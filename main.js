@@ -45,17 +45,17 @@ const createMainWindow = (port) => {
    * @param {function} callback - Callback to execute here once complete.
    * @returns {promise}
    */
-   const executeOnWindow = (command, callback) => {
+  const executeOnWindow = (command, callback) => {
     return mainWindow.webContents.executeJavaScript(command)
-     .then(callback)
-     .catch(console.error);
+      .then(callback)
+      .catch(console.error);
   };
 
   /**
    * If in developer mode, show a loading window while
    * the app and developer server compile.
    */
-  if(isDevMode) {
+  if (isDevMode) {
 
     mainWindow.loadURL('http://localhost:3000');
     mainWindow.hide();
@@ -91,7 +91,7 @@ const createMainWindow = (port) => {
        * @param {*} isLoaded
        */
       const handleLoad = (isLoaded) => {
-        if(isLoaded) {
+        if (isLoaded) {
 
           /**
            * Keep show() & hide() in this order to prevent
@@ -106,7 +106,7 @@ const createMainWindow = (port) => {
        * Checks if the page has been populated with
        * React project. if so, shows the main page.
        */
-       executeOnWindow(isPageLoaded, handleLoad);
+      executeOnWindow(isPageLoaded, handleLoad);
     });
   }
 
@@ -133,7 +133,7 @@ const createMainWindow = (port) => {
 
 
   mainWindow.on('focus', () => executeOnWindow(setTitleOpacity(1)));
-  mainWindow.on('blur', () => executeOnWindow(setTitleOpacity(.5)));
+  mainWindow.on('blur', () => executeOnWindow(setTitleOpacity(0.5)));
 
   /**
    * Listen and respond to ipcRenderer events on the frontend.
@@ -166,7 +166,7 @@ const createLoadingWindow = () => {
       loadingWindow.webContents.on('did-finish-load', () => {
         resolve(loadingWindow.show());
       });
-    } catch(error) {
+    } catch (error) {
       reject(console.error(error));
     }
   });
@@ -206,9 +206,9 @@ app.whenReady().then(async () => {
    * If not using in production, use the loading window
    * and run Flask in shell.
    */
-  if(isDevMode) {
+  if (isDevMode) {
     browserWindows.loadingWindow = new BrowserWindow({ frame: false }),
-    createLoadingWindow().then(()=> createMainWindow(port));
+    createLoadingWindow().then(() => createMainWindow(port));
     spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
   }
 
@@ -238,7 +238,7 @@ app.whenReady().then(async () => {
   if (!initialInstance) app.quit();
   else {
     app.on('second-instance', () => {
-      if(browserWindows.mainWindow?.isMinimized()) browserWindows.mainWindow?.restore();
+      if (browserWindows.mainWindow?.isMinimized()) browserWindows.mainWindow?.restore();
       browserWindows.mainWindow?.focus();
     });
   }
@@ -249,7 +249,6 @@ app.whenReady().then(async () => {
    * explicitly with Cmd + Q.
   */
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin')
-      shutdown(port);
+    if (process.platform !== 'darwin') { shutdown(port); }
   });
 });

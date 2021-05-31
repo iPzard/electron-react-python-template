@@ -4,7 +4,7 @@ const {
   rmdirSync,
   statSync,
   unlinkSync
- } = require('fs');
+} = require('fs');
 
 /**
  * @namespace Cleaner
@@ -12,12 +12,11 @@ const {
  * docs, node_modules, yarn.lock, and package-lock.json.
  */
 class Cleaner {
-
   removePath = (pathToRemove) => {
+
     if (existsSync(pathToRemove)) {
       console.log(`Removing: ${pathToRemove}`);
       if (statSync(pathToRemove).isFile()) unlinkSync(pathToRemove);
-
       else {
         const files = readdirSync(pathToRemove);
 

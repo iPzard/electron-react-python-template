@@ -20,7 +20,7 @@ export const get = (route, callback, errorCallback) => {
   fetch(`http://localhost:${port}/${route}`)
     .then((response) => response.json())
     .then(callback)
-    .catch((error) => errorCallback ? errorCallback(error) : console.error(error));
+    .catch((error) => (errorCallback ? errorCallback(error) : console.error(error)));
 };
 
 
@@ -45,5 +45,5 @@ export const post = (
   })
     .then((response) => response.json())
     .then(callback)
-    .catch((error) => errorCallback ? errorCallback(error) : console.error(error));
+    .catch((error) => (errorCallback ? errorCallback(error) : console.error(error)));
 };

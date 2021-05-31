@@ -18,7 +18,6 @@
     ]
   },
   "dependencies": {
-    "@fluentui/react": "^7.121.12",
     "@reduxjs/toolkit": "^1.1.0",
     "axios": "^0.21.1",
     "electron-is-dev": "^1.2.0",
@@ -34,19 +33,20 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "babel-eslint": "^10.1.0",
     "cross-env": "^7.0.3",
     "electron": "^13.0.1",
     "electron-installer-dmg": "^3.0.0",
     "electron-packager": "^15.0.0",
     "electron-wix-msi": "^3.0.4",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.7.0",
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-standard": "^5.0.0",
     "jsdoc": "^3.6.5",
-    "prettier": "^2.0.4",
     "sass": "^1.26.5"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "homepage": "./",
   "license": "MIT",
