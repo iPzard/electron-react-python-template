@@ -4,13 +4,8 @@ import { get } from 'utils/requests';
 import { Counter } from 'components/counter/Counter';
 import Titlebar from 'components/titlebar/Titlebar';
 
-import { customTheme } from 'theme/palette';
-import { loadTheme } from 'office-ui-fabric-react';
-
 import logo from 'logo.svg';
 import styles from 'components/App.module.scss';
-
-loadTheme({ palette: customTheme });
 
 function App() {
 

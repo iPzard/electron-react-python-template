@@ -7,11 +7,10 @@ import {
 import React, { useState } from 'react';
 
 import { app } from 'utils/services';
+
 import favicon from 'components/titlebar/img/favicon.png';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import styles from 'components/titlebar/scss/Titlebar.module.scss';
 
-initializeIcons();
 
 /**
  * @namespace Titlebar
@@ -32,17 +31,16 @@ const Titlebar = () => {
   return (
     <section className={ styles.titlebar }>
       <div>
-        <img src={ favicon } alt='favicon' />
-        <span id='electron-window-title-text'>{ document.title }</span>
+        <img src={ favicon } alt="favicon" />
+        <span id="electron-window-title-text">{ document.title }</span>
       </div>
 
-      <div id='electron-window-title-buttons'>
-        <MinimizeButton onClick={ app.minimize }/>
-
+      <div id="electron-window-title-buttons">
+        <MinimizeButton onClick={ app.minimize } />
         {
-          maximized ?
-          <ContractButton onClick={ handleMaximizeToggle }/> :
-          <MaximizeButton onClick={ handleMaximizeToggle }/>
+          maximized
+            ? <ContractButton onClick={ handleMaximizeToggle } />
+            : <MaximizeButton onClick={ handleMaximizeToggle } />
         }
         <CloseButton onClick={ app.quit } />
       </div>
