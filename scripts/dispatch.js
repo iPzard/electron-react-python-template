@@ -1,10 +1,12 @@
 const [ , , script, command ] = process.argv;
+const { existsSync, readdirSync } = require('fs');
+const path = require('path');
+
 const { Builder } = require('./build');
 const { Cleaner } = require('./clean');
 const { Packager } = require('./package');
 const { Starter } = require('./start');
 
-const path = require('path');
 
 
 /**
@@ -14,7 +16,7 @@ const path = require('path');
  * @argument command - Command argument describing exact script to run.
  */
 
-switch(script) {
+switch (script) {
   case 'build':
     return buildApp();
 
@@ -26,6 +28,8 @@ switch(script) {
 
   case 'start':
     return startDeveloperMode();
+
+  // no default
 }
 
 /**
@@ -35,7 +39,7 @@ switch(script) {
 function buildApp() {
   const builder = new Builder();
 
-  switch(command) {
+  switch (command) {
     case 'react':
       return builder.buildReact();
 
@@ -44,8 +48,10 @@ function buildApp() {
 
     case 'all':
       return builder.buildAll();
+
+    // no default
   }
-};
+}
 
 /**
  * @description - Cleans project by removing various files and folders.
@@ -53,7 +59,7 @@ function buildApp() {
  */
 function cleanProject() {
   const cleaner = new Cleaner();
-  const getPath = (file) => path.join(__dirname, '..', file);
+  const getPath = (...filePaths) => path.join(__dirname, '..', ...filePaths);
 
   // Files to remove during cleaning
   [
@@ -81,15 +87,28 @@ function cleanProject() {
     getPath('build'),
     getPath('dist'),
     getPath('docs'),
-    getPath('resources'),
+    getPath('resources', 'app'),
 
     // Misc
     getPath('.DS_Store')
   ]
     // Iterate and remove process
     .forEach(cleaner.removePath);
-    console.log('Project is clean.');
-};
+
+  /**
+   * If resources folder isn't used for any
+   * other Python modules, delete it too.
+   */
+  const resourcesDir = getPath('resources');
+  const isResourcesDirExist = existsSync(resourcesDir);
+  const isResourcesDirEmpty = Boolean(!readdirSync(resourcesDir).length);
+
+  if (isResourcesDirExist && isResourcesDirEmpty) {
+    cleaner.removePath(resourcesDir);
+  }
+
+  console.log('Project is clean.');
+}
 
 /**
  * @description - Builds various installers (e.g., DMG, MSI).
@@ -98,14 +117,16 @@ function cleanProject() {
 function packageApp() {
   const packager = new Packager();
 
-  switch(command) {
+  switch (command) {
     case 'windows':
       return packager.packageWindows();
 
     case 'mac':
       return packager.packageMacOS();
+
+    // no default
   }
-};
+}
 
 /**
  * @description - Starts developer mode of app.
@@ -115,4 +136,4 @@ function packageApp() {
 function startDeveloperMode() {
   const start = new Starter();
   start.developerMode();
-};
+}
