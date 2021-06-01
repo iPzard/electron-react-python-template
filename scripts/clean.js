@@ -8,8 +8,8 @@ const {
 
 /**
  * @namespace Cleaner
- * @description - Cleans project by removing the following files and folders:
- * docs, node_modules, yarn.lock, and package-lock.json.
+ * @description - Cleans project by removing several files & folders.
+ * @see scripts\dispatch.js cleanProject() for complete list
  */
 class Cleaner {
   removePath = (pathToRemove) => {
