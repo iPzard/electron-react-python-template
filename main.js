@@ -207,7 +207,7 @@ app.whenReady().then(async () => {
    * and run Flask in shell.
    */
   if (isDevMode) {
-    browserWindows.loadingWindow = new BrowserWindow({ frame: false }),
+    browserWindows.loadingWindow = new BrowserWindow({ frame: false });
     createLoadingWindow().then(() => createMainWindow(port));
     spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
   }
@@ -249,6 +249,8 @@ app.whenReady().then(async () => {
    * explicitly with Cmd + Q.
   */
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') { shutdown(port); }
+    if (process.platform !== 'darwin') {
+      shutdown(port);
+    }
   });
 });

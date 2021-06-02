@@ -59,6 +59,7 @@ module.exports = {
     'no-trailing-spaces': ['warn'],
     'no-unneeded-ternary': ['warn'],
     'no-underscore-dangle': ['warn'],
+    'no-unused-expressions': [0],
     'no-unused-vars': ['warn'],
     'no-use-before-define': ['error', {
       'functions': false

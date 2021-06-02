@@ -16,6 +16,7 @@ class Cleaner {
 
     if (existsSync(pathToRemove)) {
       console.log(`Removing: ${pathToRemove}`);
+
       if (statSync(pathToRemove).isFile()) unlinkSync(pathToRemove);
       else {
         const files = readdirSync(pathToRemove);
