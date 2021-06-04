@@ -55,7 +55,6 @@ const createMainWindow = (port) => {
    * If in developer mode, show a loading window while
    * the app and developer server compile.
    */
-  mainWindow.webContents.openDevTools({ mode: 'undocked' });
   if (isDevMode) {
 
     mainWindow.loadURL('http://localhost:3000');
@@ -66,7 +65,7 @@ const createMainWindow = (port) => {
      * to avoid occasional error from the webContents
      * object being destroyed.
      */
-    //mainWindow.webContents.openDevTools({ mode: 'undocked' });
+    mainWindow.webContents.openDevTools({ mode: 'undocked' });
 
     /**
      * Hide loading window and show main window
