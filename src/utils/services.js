@@ -10,7 +10,6 @@ const { ipcRenderer } = window.require('electron');
  * @property {function} unmaximize - Function to contract (unmaximize) the screen size of the program.
  */
 export const app = {
-  getAppPath: () => ipcRenderer.sendSync('app-path'),
   maximize: () => ipcRenderer.send('app-maximize'),
   minimize: () => ipcRenderer.send('app-minimize'),
   quit: () => ipcRenderer.send('app-quit'),
