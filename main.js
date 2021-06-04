@@ -218,9 +218,9 @@ app.whenReady().then(async () => {
    */
   else {
     createMainWindow(port);
-    const startApp = process.platform === 'darwin' 
+    const startApp = process.platform === 'darwin'
       ? `open -gj "${path.join(app.getAppPath(), 'resources', 'app.app')}" --args`
-      : `start "${path.join(app.getAppPath(), 'resources', 'app', 'app.exe')}"`;
+      : 'start ./resources/app/app.exe';
 
     spawn(`${startApp} ${port}`, { detached: false, shell: true, stdio: 'pipe' });
   }
