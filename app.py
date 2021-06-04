@@ -10,7 +10,6 @@ app_config = {"host": "0.0.0.0", "port": sys.argv[1]}
 """
 # Developer mode uses app.py
 if "app.py" in sys.argv[0]:
-
   # Update app config
   app_config["debug"] = True
 

@@ -10,7 +10,7 @@ import styles from 'components/App.module.scss';
 function App() {
 
   useEffect(() => {
-
+    
     /**
      * Example call to Flask
      * @see /src/utils/requests.js
@@ -18,7 +18,7 @@ function App() {
      */
     get(
       'example', // Route
-      (response) => console.log(response), // Response callback
+      (response) => alert(response), // Response callback
       (error) => console.error(error) // Error callback
     );
   }, []);

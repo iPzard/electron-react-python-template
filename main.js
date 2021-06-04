@@ -55,6 +55,7 @@ const createMainWindow = (port) => {
    * If in developer mode, show a loading window while
    * the app and developer server compile.
    */
+  mainWindow.webContents.openDevTools({ mode: 'undocked' });
   if (isDevMode) {
 
     mainWindow.loadURL('http://localhost:3000');
@@ -65,7 +66,7 @@ const createMainWindow = (port) => {
      * to avoid occasional error from the webContents
      * object being destroyed.
      */
-    mainWindow.webContents.openDevTools({ mode: 'undocked' });
+    //mainWindow.webContents.openDevTools({ mode: 'undocked' });
 
     /**
      * Hide loading window and show main window
@@ -214,11 +215,15 @@ app.whenReady().then(async () => {
 
   /**
    * If using in production, use the main window
-   * and run bundled app.exe file.
+   * and run bundled app file.
    */
   else {
     createMainWindow(port);
-    spawn(`start ./resources/app/app.exe ${port}`, { detached: false, shell: true, stdio: 'pipe' });
+    const startApp = process.platform === 'darwin' 
+      ? `open -gj "${path.join(app.getAppPath(), 'resources', 'app.app')}" --args`
+      : `start "${path.join(app.getAppPath(), 'resources', 'app', 'app.exe')}"`;
+
+    spawn(`${startApp} ${port}`, { detached: false, shell: true, stdio: 'pipe' });
   }
 
   app.on('activate', () => {

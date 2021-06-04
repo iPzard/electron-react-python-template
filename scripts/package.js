@@ -25,10 +25,9 @@ class Packager {
     const options = {
       build: [
         'app',
-        '--asar',
-        '--extra-resource=./resources/app',
+        '--extra-resource=./resources',
         '--icon ./public/favicon.ico',
-        '--darwin',
+        '--win32',
         '--out',
         './dist/mac',
         '--overwrite'
@@ -36,10 +35,10 @@ class Packager {
 
       package: [
         path('../dist/mac/app-darwin-x64/app.app'),
-        'Example',
+        'Example app',
         `--out=${path('../dist/mac/setup')}`,
         `--icon=${path('../utilities/dmg/images/icon.icns')}`,
-        // `--background=${path('../utilities/dmg/images/background.png')}`,
+        `--background=${path('../utilities/dmg/images/background.png')}`,
         `--title="Example App"`,
         `--overwrite`
       ].join(' '),
