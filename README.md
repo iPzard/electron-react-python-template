@@ -3,7 +3,7 @@
 [![Build](https://img.shields.io/badge/build-passing-%23704cb6?style=for-the-badge)](https://github.com/iPzard/electron-react-python-template#readme)
 [![License](https://img.shields.io/github/license/iPzard/electron-react-python-template?color=704cb6&style=for-the-badge)](https://github.com/iPzard/electron-react-python-template/blob/master/LICENSE)
 
-> Multi-platform Electron template that uses React & Redux Toolkit on the front-end and Python/Flask for microservices on the back-end.
+> Multi-platform Electron template, using React & Redux Toolkit on the front-end and Python/Flask for microservices on the back-end.
 
 ![electron_react_python](https://user-images.githubusercontent.com/8584126/95290114-59e42900-0821-11eb-8e43-a708959e8449.gif)
 
