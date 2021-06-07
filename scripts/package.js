@@ -15,8 +15,52 @@ const path = (directory) => {
 class Packager {
 
   /**
+   * @description - Creates DEB installer for linux.
+   * @memberof Packager
+   * 
+   * @tutorial https://github.com/electron-userland/electron-installer-debian
+   */
+  packageLinux = () => {
+
+    // Build Python & React distribution files
+    builder.buildAll();
+
+    const options = {
+      build: [
+        'app',
+        '--extra-resource=./resources',
+        '--icon ./public/favicon.ico',
+        '--platform linux',
+        '--arch x64',
+        '--out',
+        './dist/linux',
+        '--overwrite'
+      ].join(' '),
+
+      package: [
+        `--src ${path('../dist/linux/app-linux-x64/')}`,
+        'Example app',
+        `--dest ${path('../dist/linux/setup')}`,
+        '--arch amd64',
+        `--icon ${path('../utilities/deb/images/icon.ico')}`,
+        `--background ${path('../utilities/deb/images/background.png')}`,
+        '--title "Example App"',
+        '--overwrite'
+      ].join(' '),
+
+      spawn: { detached: false, shell: true, stdio: 'inherit' }
+    };
+
+    spawnSync(`electron-packager . ${options.build}`, options.spawn);
+    spawnSync(`electron-installer-debian ${options.package}`, options.spawn);
+  };
+
+
+  /**
    * @description - Creates DMG installer for macOS.
    * @memberof Packager
+   * 
+   * @tutorial https://github.com/electron-userland/electron-installer-dmg
    */
   packageMacOS = () => {
 
@@ -55,6 +99,8 @@ class Packager {
   /**
    * @description - Creates MSI installer for Windows.
    * @memberof Packager
+   * 
+   * @tutorial https://github.com/felixrieseberg/electron-wix-msi
    */
   packageWindows = () => {
 

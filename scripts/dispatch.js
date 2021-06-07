@@ -8,7 +8,6 @@ const { Packager } = require('./package');
 const { Starter } = require('./start');
 
 
-
 /**
  * @namespace Dispatcher
  * @description - Dispatches script commands to various scripts.
@@ -32,6 +31,7 @@ switch (script) {
   // no default
 }
 
+
 /**
  * @description - Builds various production builds (e.g., Python, React).
  * @memberof Dispatcher
@@ -52,6 +52,7 @@ function buildApp() {
     // no default
   }
 }
+
 
 /**
  * @description - Cleans project by removing various files and folders.
@@ -87,7 +88,6 @@ function cleanProject() {
     getPath('build'),
     getPath('dist'),
     getPath('docs'),
-    getPath('resources', 'app'),
 
     // Misc
     getPath('.DS_Store')
@@ -95,20 +95,30 @@ function cleanProject() {
     // Iterate and remove process
     .forEach(cleaner.removePath);
 
+
   /**
-   * If resources folder isn't used for any
-   * other Python modules, delete it too.
+   * Remove resources/app if it exists, then if the resources
+   * folder isn't used for any other Python modules, delete it too.
    */
   const resourcesDir = getPath('resources');
   const isResourcesDirExist = existsSync(resourcesDir);
-  const isResourcesDirEmpty = Boolean(!readdirSync(resourcesDir).length);
 
-  if (isResourcesDirExist && isResourcesDirEmpty) {
-    cleaner.removePath(resourcesDir);
+  if (isResourcesDirExist) {
+
+    // Remove 'resources/app' directory if it exists
+    const resourcesAppDir = path.join(resourcesDir, 'app');
+    const isResourcesAppDir = existsSync(resourcesAppDir);
+
+    if (isResourcesAppDir) cleaner.removePath(resourcesAppDir);
+
+    // Remove 'resources' directory if it's empty
+    const isResourcesDirEmpty = Boolean(!readdirSync(resourcesDir).length);
+    if (isResourcesDirEmpty) cleaner.removePath(resourcesDir);
   }
 
   console.log('Project is clean.');
 }
+
 
 /**
  * @description - Builds various installers (e.g., DMG, MSI).
@@ -118,15 +128,19 @@ function packageApp() {
   const packager = new Packager();
 
   switch (command) {
-    case 'windows':
-      return packager.packageWindows();
+    case 'linux':
+      return packager.packageLinux();
 
     case 'mac':
       return packager.packageMacOS();
 
+    case 'windows':
+      return packager.packageWindows();
+
     // no default
   }
 }
+
 
 /**
  * @description - Starts developer mode of app.

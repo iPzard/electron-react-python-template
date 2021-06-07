@@ -214,15 +214,19 @@ app.whenReady().then(async () => {
 
   /**
    * If using in production, use the main window
-   * and run bundled app file.
+   * and run bundled app (dmg, elf, or exe) file.
    */
   else {
     createMainWindow(port);
-    const startApp = process.platform === 'darwin'
-      ? `open -gj "${path.join(app.getAppPath(), 'resources', 'app.app')}" --args`
-      : 'start ./resources/app/app.exe';
 
-    spawn(`${startApp} ${port}`, { detached: false, shell: true, stdio: 'pipe' });
+    // Dynamic script assignment for starting Flask in production
+    const runFlask = {
+      darwin: `open -gj "${path.join(app.getAppPath(), 'resources', 'app.app')}" --args`,
+      linux: './resources/app/app',
+      win32: 'start ./resources/app/app.exe'
+    }[process.platform];
+
+    spawn(`${runFlask} ${port}`, { detached: false, shell: true, stdio: 'pipe' });
   }
 
   app.on('activate', () => {

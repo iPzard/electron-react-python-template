@@ -1,22 +1,6 @@
 {
   "author": "Daniel Wade",
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "build": {
-    "extraResources": [
-      "./resources/app"
-    ]
-  },
+  "description": "Started template for Electron, React, Python app",
   "dependencies": {
     "@reduxjs/toolkit": "^1.1.0",
     "axios": "^0.21.1",
@@ -28,7 +12,6 @@
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.1"
   },
-  "description": "Started template for Electron, React, Python app",
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -47,6 +30,26 @@
     "jsdoc": "^3.6.5",
     "sass": "^1.26.5"
   },
+  "optionalDependencies": { 
+    "electron-installer-debian": "^3.1.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "extraResources": [
+      "./resources/app"
+    ]
+  },
   "homepage": "./",
   "license": "MIT",
   "main": "main.js",
@@ -58,6 +61,7 @@
     "build:react": "node ./scripts/dispatch build react",
     "build:python": "node ./scripts/dispatch build python",
     "build:docs": "jsdoc -c jsdoc.json",
+    "build:package:linux": "node ./scripts/dispatch package linux",
     "build:package:mac": "node ./scripts/dispatch package mac",
     "build:package:windows": "node ./scripts/dispatch package windows",
     "clean": "node ./scripts/dispatch clean",
