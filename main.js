@@ -180,9 +180,9 @@ const createLoadingWindow = () => {
  * @returns {Promise}
  */
 const installExtensions = async () => {
-  const forceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
+  const isForceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS', 'DEVTRON' ]
-    .map((extension) => installer.default(installer[extension], forceDownload));
+    .map((extension) => installer.default(installer[extension], isForceDownload));
 
   return Promise
     .allSettled(extensions)
