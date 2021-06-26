@@ -60,7 +60,7 @@ module.exports = {
     'no-unneeded-ternary': ['warn'],
     'no-underscore-dangle': ['warn'],
     'no-unused-expressions': [0],
-    'no-unused-vars': ['warn'],
+    'no-unused-vars': ["warn", { "argsIgnorePattern": "^_" }],
     'no-use-before-define': ['error', {
       'functions': false
     }],

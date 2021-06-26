@@ -4,6 +4,7 @@ const path = require('path');
 
 // Electron modules
 const { app, BrowserWindow, ipcMain } = require('electron');
+const installer = require('electron-devtools-installer');
 
 // Extra modules
 const getPort = require('get-port');
@@ -143,7 +144,9 @@ const createMainWindow = (port) => {
   ipcMain.on('app-minimize', (_event, _arg) => mainWindow.minimize());
   ipcMain.on('app-quit', (_event, _arg) => shutdown(port));
   ipcMain.on('app-unmaximize', (_event, _arg) => mainWindow.unmaximize());
-  ipcMain.on('get-port-number', (event, _arg) => event.returnValue = port);
+  ipcMain.on('get-port-number', (event, _arg) => {
+    event.returnValue = port;
+  });
 };
 
 
@@ -172,6 +175,22 @@ const createLoadingWindow = () => {
   });
 };
 
+/**
+ * @description - Installs developer extensions.
+ * @returns {Promise}
+ */
+const installExtensions = async () => {
+  const forceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
+  const extensions = [
+    'REACT_DEVELOPER_TOOLS',
+    'REDUX_DEVTOOLS',
+    'DEVTRON'
+  ].map((name) => installer.default(installer[name], forceDownload));
+
+  return Promise
+    .allSettled(extensions)
+    .catch(console.error);
+};
 
 /**
  * This method will be called when Electron has finished
@@ -207,6 +226,7 @@ app.whenReady().then(async () => {
    * and run Flask in shell.
    */
   if (isDevMode) {
+    await installExtensions(); // React, Redux, & Devtron devTools
     browserWindows.loadingWindow = new BrowserWindow({ frame: false });
     createLoadingWindow().then(() => createMainWindow(port));
     spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });
