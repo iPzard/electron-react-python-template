@@ -44,7 +44,7 @@ const createMainWindow = (port) => {
    * @description - Function to use custom JavaSCript in the DOM.
    * @param {string} command - JavaScript to execute in DOM.
    * @param {function} callback - Callback to execute here once complete.
-   * @returns {promise}
+   * @returns {Promise}
    */
   const executeOnWindow = (command, callback) => {
     return mainWindow.webContents.executeJavaScript(command)
