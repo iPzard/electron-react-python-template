@@ -185,7 +185,7 @@ const installExtensions = async () => {
     'REACT_DEVELOPER_TOOLS',
     'REDUX_DEVTOOLS',
     'DEVTRON'
-  ].map((name) => installer.default(installer[name], forceDownload));
+  ].map((extension) => installer.default(installer[extension], forceDownload));
 
   return Promise
     .allSettled(extensions)
