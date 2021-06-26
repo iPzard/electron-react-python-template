@@ -175,6 +175,7 @@ const createLoadingWindow = () => {
   });
 };
 
+
 /**
  * @description - Installs developer extensions.
  * @returns {Promise}
@@ -188,6 +189,7 @@ const installExtensions = async () => {
     .allSettled(extensions)
     .catch(console.error);
 };
+
 
 /**
  * This method will be called when Electron has finished
