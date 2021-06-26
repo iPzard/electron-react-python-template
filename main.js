@@ -158,6 +158,7 @@ const createLoadingWindow = () => {
   return new Promise((resolve, reject) => {
     const { loadingWindow } = browserWindows;
 
+    // Variants of developer loading screen
     const loaderConfig = {
       react: 'utilities/loaders/react/index.html',
       redux: 'utilities/loaders/redux/index.html'
@@ -167,10 +168,12 @@ const createLoadingWindow = () => {
       loadingWindow.loadFile(path.join(__dirname, loaderConfig.redux));
 
       loadingWindow.webContents.on('did-finish-load', () => {
-        resolve(loadingWindow.show());
+        loadingWindow.show();
+        resolve();
       });
     } catch (error) {
-      reject(console.error(error));
+      console.error(error);
+      reject();
     }
   });
 };
