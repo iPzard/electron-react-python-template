@@ -181,11 +181,8 @@ const createLoadingWindow = () => {
  */
 const installExtensions = async () => {
   const forceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
-  const extensions = [
-    'REACT_DEVELOPER_TOOLS',
-    'REDUX_DEVTOOLS',
-    'DEVTRON'
-  ].map((extension) => installer.default(installer[extension], forceDownload));
+  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS', 'DEVTRON' ]
+    .map((extension) => installer.default(installer[extension], forceDownload));
 
   return Promise
     .allSettled(extensions)
