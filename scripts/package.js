@@ -17,7 +17,7 @@ class Packager {
   /**
    * @description - Creates DEB installer for linux.
    * @memberof Packager
-   * 
+   *
    * @tutorial https://github.com/electron-userland/electron-installer-debian
    */
   packageLinux = () => {
@@ -59,7 +59,7 @@ class Packager {
   /**
    * @description - Creates DMG installer for macOS.
    * @memberof Packager
-   * 
+   *
    * @tutorial https://github.com/electron-userland/electron-installer-dmg
    */
   packageMacOS = () => {
@@ -99,7 +99,7 @@ class Packager {
   /**
    * @description - Creates MSI installer for Windows.
    * @memberof Packager
-   * 
+   *
    * @tutorial https://github.com/felixrieseberg/electron-wix-msi
    */
   packageWindows = () => {
