@@ -4,7 +4,6 @@ const path = require('path');
 
 // Electron modules
 const { app, BrowserWindow, ipcMain } = require('electron');
-const installer = require('electron-devtools-installer');
 
 // Extra modules
 const getPort = require('get-port');
@@ -185,6 +184,8 @@ const createLoadingWindow = () => {
  */
 const installExtensions = async () => {
   const isForceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
+  const installer = require('electron-devtools-installer');
+
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS', 'DEVTRON' ]
     .map((extension) => installer.default(installer[extension], isForceDownload));
 
