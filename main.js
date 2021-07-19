@@ -186,7 +186,7 @@ const installExtensions = async () => {
   const isForceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
   const installer = require('electron-devtools-installer');
 
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS', 'DEVTRON' ]
+  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS']
     .map((extension) => installer.default(installer[extension], isForceDownload));
 
   return Promise
