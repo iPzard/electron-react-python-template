@@ -61,18 +61,11 @@ const createMainWindow = (port) => {
     mainWindow.hide();
 
     /**
-     * Opening devTools, must be done before dom-ready
-     * to avoid occasional error from the webContents
-     * object being destroyed.
-     */
-    mainWindow.webContents.openDevTools({ mode: 'undocked' });
-
-    /**
      * Hide loading window and show main window
      * once the main window is ready.
      */
     mainWindow.webContents.on('did-finish-load', () => {
-
+      mainWindow.webContents.openDevTools({ mode: 'undocked' });
 
       /**
        * Checks page for errors that may have occurred
@@ -229,7 +222,7 @@ app.whenReady().then(async () => {
    * and run Flask in shell.
    */
   if (isDevMode) {
-    await installExtensions(); // React, Redux, & Devtron devTools
+    await installExtensions(); // React, Redux devTools
     browserWindows.loadingWindow = new BrowserWindow({ frame: false });
     createLoadingWindow().then(() => createMainWindow(port));
     spawn(`python app.py ${port}`, { detached: true, shell: true, stdio: 'inherit' });

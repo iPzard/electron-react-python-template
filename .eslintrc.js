@@ -29,7 +29,7 @@ module.exports = {
     'func-names': ['warn', 'always', {
       generators: 'as-needed'
     }],
-    'global-require': ['warn'],
+    'global-require': [0],
     'implicit-arrow-linebreak': [0],
     'import/no-dynamic-require': ['warn'],
     'import/no-extraneous-dependencies': [0],
@@ -49,18 +49,18 @@ module.exports = {
     'no-console': ['warn', {
       allow: ['warn', 'error']
     }],
-    'no-nested-ternary': [0],
-    'no-param-reassign': [0],
     'no-mixed-spaces-and-tabs': ['warn'],
     'no-multi-spaces': ['warn'],
     'no-multiple-empty-lines': [0],
+    'no-nested-ternary': [0],
+    'no-param-reassign': [0],
     'no-restricted-syntax': [0],
     'no-tabs': ['warn'],
     'no-trailing-spaces': ['warn'],
-    'no-unneeded-ternary': ['warn'],
     'no-underscore-dangle': ['warn'],
+    'no-unneeded-ternary': ['warn'],
     'no-unused-expressions': [0],
-    'no-unused-vars': ["warn", { "argsIgnorePattern": "^_" }],
+    'no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
     'no-use-before-define': ['error', {
       'functions': false
     }],
@@ -86,21 +86,17 @@ module.exports = {
       }
     ],
     'prefer-template': ['warn'],
-    'quotes': ['warn'],
     'quote-props': ['warn', 'consistent'],
-    'rest-spread-spacing': ['warn', 'never'],
-    'semi': ['warn'],
-    'spaced-comment': ['warn'],
-    'space-before-function-paren': ['warn'],
+    'quotes': ['warn'],
     'react/destructuring-assignment': [0],
     'react/forbid-prop-types': [0],
     'react/jsx-closing-bracket-location': ['warn'],
     'react/jsx-curly-newline': ['warn'],
     'react/jsx-curly-spacing': ['warn', 'always'],
+    'react/jsx-equals-spacing': ['warn'],
     'react/jsx-filename-extension': [0],
     'react/jsx-fragments': [0],
     'react/jsx-indent': ['warn', 2],
-    'react/jsx-equals-spacing': ['warn'],
     'react/jsx-one-expression-per-line': ['warn'],
     'react/jsx-props-no-spreading': [0],
     'react/jsx-tag-spacing': ['warn'],
@@ -108,11 +104,16 @@ module.exports = {
     'react/no-access-state-in-setstate': [0],
     'react/no-array-index-key': [0],
     'react/no-unused-state': ['warn'],
-    'react/prop-types': ['warn'],
     'react/prefer-stateless-function': ['warn'],
+    'react/prop-types': ['warn'],
     'react/require-default-props': ['warn'],
     'react/sort-comp': [0],
-    'react/state-in-constructor': ['warn', 'never']
+    'react/state-in-constructor': ['warn', 'never'],
+    'rest-spread-spacing': ['warn', 'never'],
+    'semi': ['warn'],
+    'sort-keys': ['error', 'asc', { 'caseSensitive': false }],
+    'space-before-function-paren': ['warn'],
+    'spaced-comment': ['warn']
   },
   settings: {
     'import/resolver': {
