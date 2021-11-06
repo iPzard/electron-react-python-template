@@ -65,7 +65,7 @@ yarn run build:package:linux
 yarn run build:docs
 ```
 
-*<sup>1</sup>Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi), you must install and added its path to your environment variables.*
+*<sup>1</sup>Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi), you must install and add its path to your environment variables.*
 
 *<sup>2</sup>MacOS uses [electron-installer-dmg](https://github.com/electron-userland/electron-installer-dmg).*
 
