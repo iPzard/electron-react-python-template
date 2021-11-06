@@ -37,7 +37,7 @@ yarn install
 
 Below are the scripts you'll need to run and package your application, as well as build out JSDoc documentation, if you choose to do so. An exhaustive list of scripts that are available can be found in the `package.json` file of the project's root directory, in the `scripts` section.
 
-| ⚠️ &nbsp;&nbsp;When packaging, you must install [PyInstaller](https://pypi.org/project/pyinstaller) and add its path in your environment variables.<br />The name of your package in [package.js](https://github.com/iPzard/electron-react-python-template/blob/master/scripts/package.js) must also match the name field in [package.json](https://github.com/iPzard/electron-react-python-template/blob/master/package.json). |
+| ⚠️ &nbsp;When packaging, you must install [PyInstaller](https://pypi.org/project/pyinstaller) and add its path in your environment variables.<br />The name of your package in [package.js](https://github.com/iPzard/electron-react-python-template/blob/master/scripts/package.js) must also match the name field in [package.json](https://github.com/iPzard/electron-react-python-template/blob/master/package.json). |
 | --- |
 
 **Start Developer Mode:**
