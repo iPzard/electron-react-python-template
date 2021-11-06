@@ -29,7 +29,7 @@ module.exports = {
     'func-names': ['warn', 'always', {
       generators: 'as-needed'
     }],
-    'global-require': ['warn'],
+    'global-require': [0],
     'implicit-arrow-linebreak': [0],
     'import/no-dynamic-require': ['warn'],
     'import/no-extraneous-dependencies': [0],

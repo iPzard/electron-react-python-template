@@ -39,12 +39,12 @@ class Packager {
 
       package: [
         `--src ${path('../dist/linux/app-linux-x64/')}`,
-        'Example app',
+        'electron-react-python-template',
         `--dest ${path('../dist/linux/setup')}`,
         '--arch amd64',
         `--icon ${path('../utilities/deb/images/icon.ico')}`,
         `--background ${path('../utilities/deb/images/background.png')}`,
-        '--title "Example App"',
+        '--title "electron-react-python-template"',
         '--overwrite'
       ].join(' '),
 
@@ -104,6 +104,7 @@ class Packager {
    */
   packageWindows = () => {
 
+    // eslint-disable-next-line no-console
     console.log('Building windows package...');
 
     // Build Python & React distribution files
@@ -131,11 +132,11 @@ class Packager {
     const msiCreator = new MSICreator({
       appDirectory: path('../dist/windows/app-win32-x64'),
       appIconPath: path('../utilities/msi/images/icon.ico'),
-      outputDirectory: path('../dist/windows/setup'),
       description: 'Example app',
       exe: 'app',
       manufacturer: 'Example Manufacturer',
       name: 'Example App',
+      outputDirectory: path('../dist/windows/setup'),
       ui: {
         chooseDirectory: true,
         images: {
