@@ -1,10 +1,4 @@
-const {
-  existsSync,
-  readdirSync,
-  rmdirSync,
-  statSync,
-  unlinkSync
-} = require('fs');
+import { existsSync, readdirSync, rmdirSync, statSync, unlinkSync } from "fs";
 
 /**
  * @namespace Cleaner
@@ -13,7 +7,6 @@ const {
  */
 class Cleaner {
   removePath = (pathToRemove) => {
-
     if (existsSync(pathToRemove)) {
       console.log(`Removing: ${pathToRemove}`);
 
@@ -33,4 +26,4 @@ class Cleaner {
   };
 }
 
-module.exports.Cleaner = Cleaner;
+export default Cleaner;

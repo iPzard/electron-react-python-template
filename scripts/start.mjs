@@ -1,6 +1,6 @@
-const { spawn, spawnSync } = require('child_process');
-const getPort = require('get-port');
-const { get } = require('axios');
+import { spawn, spawnSync } from "child_process";
+import getPort, { portNumbers } from "get-port";
+import get from "axios";
 
 /**
  * @namespace Starter
@@ -14,8 +14,8 @@ class Starter {
   developerMode = async () => {
     // Child spawn options for console
     const spawnOptions = {
-      hideLogs: { detached: false, shell: true, stdio: 'pipe' },
-      showLogs: { detached: false, shell: true, stdio: 'inherit' }
+      hideLogs: { detached: false, shell: true, stdio: "pipe" },
+      showLogs: { detached: false, shell: true, stdio: "inherit" }
     };
 
     /**
@@ -23,45 +23,47 @@ class Starter {
      * Remains unused here so will be the same as the
      * port used in main.js
      */
-    const port = await getPort({
-      port: getPort.makeRange(3001, 3999)
-    });
+    const port = await getPort({ port: portNumbers(3000, 3100) });
 
     // Kill anything that might using required React port
-    spawnSync('npx kill-port 3000', spawnOptions.hideLogs);
+    spawnSync("npx kill-port 3000", spawnOptions.hideLogs);
 
     // Start & identify React & Electron processes
-    spawn('cross-env BROWSER=none react-scripts start', spawnOptions.showLogs);
-    spawn('electron .', spawnOptions.showLogs);
+    spawn(
+      "cross-env BROWSER=none react-scripts --openssl-legacy-provider start",
+      spawnOptions.showLogs
+    );
+    spawn("electron .", spawnOptions.showLogs);
 
     // Kill processes on exit
     const exitOnEvent = (event) => {
       process.once(event, () => {
         try {
           // These errors are expected since the connection is closing
-          const expectedErrors = ['ECONNRESET', 'ECONNREFUSED'];
+          const expectedErrors = ["ECONNRESET", "ECONNREFUSED"];
 
           // Send command to Flask server to quit and close
           get(`http://localhost:${port}/quit`).catch(
-            (error) => !expectedErrors.includes(error.code) && console.log(error)
+            (error) =>
+              !expectedErrors.includes(error.code) && console.log(error)
           );
         } catch (error) {
           // This errors is expected since the process is closing
-          if (error.code !== 'ESRCH') console.error(error);
+          if (error.code !== "ESRCH") console.error(error);
         }
       });
     };
 
     // Set exit event handlers
     [
-      'exit',
-      'SIGINT',
-      'SIGTERM',
-      'SIGUSR1',
-      'SIGUSR2',
-      'uncaughtException'
+      "exit",
+      "SIGINT",
+      "SIGTERM",
+      "SIGUSR1",
+      "SIGUSR2",
+      "uncaughtException"
     ].forEach(exitOnEvent);
   };
 }
 
-module.exports = { Starter };
+export default Starter;

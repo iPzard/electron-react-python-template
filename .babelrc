@@ -2,9 +2,7 @@
   "presets": [
     "@babel/preset-env",
     "@babel/react",
-    ["minify", {
-      "builtIns": false
-    }]
+    ["minify"]
   ],
   "plugins": [
     "@babel/plugin-proposal-async-generator-functions",

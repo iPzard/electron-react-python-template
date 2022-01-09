@@ -1,20 +1,20 @@
-import 'index.scss';
+import "index.scss";
 
-import * as serviceWorker from 'serviceWorker';
+import * as serviceWorker from "serviceWorker";
 
-import App from 'components/App';
-import { Provider } from 'react-redux';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import store from 'state/store';
+import App from "components/App";
+import { Provider } from "react-redux";
+import React from "react";
+import ReactDOM from "react-dom";
+import store from "state/store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={ store }>
+    <Provider store={store}>
       <App />
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
