@@ -28,6 +28,7 @@ yarn-error.log*
 # production
 /build
 /dist
+/dist-electron
 /resources/app
 /resources/app.app
 

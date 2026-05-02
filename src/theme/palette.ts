@@ -5,7 +5,32 @@
  * @tutorial - https://www.aka.ms/themedesigner
 */
 
-export const customTheme = {
+export interface Palette {
+  black: string;
+  neutralDark: string;
+  neutralLight: string;
+  neutralLighter: string;
+  neutralLighterAlt: string;
+  neutralPrimary: string;
+  neutralPrimaryAlt: string;
+  neutralQuaternary: string;
+  neutralQuaternaryAlt: string;
+  neutralSecondary: string;
+  neutralTertiary: string;
+  neutralTertiaryAlt: string;
+  themeDark: string;
+  themeDarkAlt: string;
+  themeDarker: string;
+  themeLight: string;
+  themeLighter: string;
+  themeLighterAlt: string;
+  themePrimary: string;
+  themeSecondary: string;
+  themeTertiary: string;
+  white: string;
+}
+
+export const customTheme: Palette = {
   black: '#3e3e3e',
   neutralDark: '#565656',
   neutralLight: '#e1e1e1',

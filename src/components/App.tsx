@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { get } from '../utils/requests';
 
 import { Counter } from './counter/Counter';
@@ -20,7 +20,7 @@ function App() {
   // the guard. If you want StrictMode's double-invoke check turned off
   // entirely, remove <React.StrictMode> in src/index.js (not recommended —
   // it catches real bugs).
-  const hasFiredExampleCallRef = useRef(false);
+  const hasFiredExampleCallRef = useRef<boolean>(false);
 
   useEffect(() => {
     if (hasFiredExampleCallRef.current) return undefined;
@@ -32,7 +32,7 @@ function App() {
      * @see /src/utils/requests.js
      * @see /app.py
      */
-    get(
+    get<string>(
       'example',
       // eslint-disable-next-line no-alert
       (response) => alert(response),
@@ -42,7 +42,7 @@ function App() {
   }, []);
 
   return (
-    <Fragment>
+    <>
       <Titlebar />
 
       <div className={ styles.app }>
@@ -97,7 +97,7 @@ function App() {
           </span>
         </header>
       </div>
-    </Fragment>
+    </>
   );
 }
 

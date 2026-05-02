@@ -10,8 +10,8 @@
  * @property {function} unmaximize - Restore (unmaximize) the program window.
  */
 export const app = {
-  maximize: () => window.electronAPI.maximize(),
-  minimize: () => window.electronAPI.minimize(),
-  quit: () => window.electronAPI.quit(),
-  unmaximize: () => window.electronAPI.unmaximize()
+  maximize: (): void => window.electronAPI.maximize(),
+  minimize: (): void => window.electronAPI.minimize(),
+  quit: (): void => window.electronAPI.quit(),
+  unmaximize: (): void => window.electronAPI.unmaximize()
 };

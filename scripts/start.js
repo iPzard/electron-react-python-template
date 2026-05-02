@@ -127,6 +127,12 @@ class Starter {
     filterStream(reactProc.stdout, process.stdout, REACT_STDOUT_NOISE);
     filterStream(reactProc.stderr, process.stderr, REACT_STDOUT_NOISE);
 
+    // Compile main.ts + preload.ts to dist-electron/ before Electron starts.
+    // package.json "main" points at dist-electron/main.js, so this output must
+    // exist before `electron .` runs. Synchronous so dev startup is sequential
+    // and any TS errors surface up front instead of after the loader appears.
+    spawnSync('tsc -p tsconfig.electron.json', spawnOptions.showLogs);
+
     // Spawn Electron with stderr piped (not inherited) so we can filter out
     // known-harmless DevTools chatter. stdout still inherits — real Chromium
     // logs and our own console.log calls stay visible.

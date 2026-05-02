@@ -1,6 +1,10 @@
+import type { ElectronAPI } from '../types/electron-api';
+
+type ServicesModule = typeof import('../utils/services');
+
 describe('utils/services', () => {
-  let api;
-  let app;
+  let api: ElectronAPI;
+  let app: ServicesModule['app'];
 
   beforeEach(() => {
     api = {
@@ -10,12 +14,12 @@ describe('utils/services', () => {
       quit: jest.fn(),
       unmaximize: jest.fn()
     };
-    global.window = global.window || {};
-    global.window.electronAPI = api;
+    window.electronAPI = api;
 
     jest.isolateModules(() => {
-      // eslint-disable-next-line global-require
-      ({ app } = require('../utils/services'));
+      // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+      const mod = require('../utils/services') as ServicesModule;
+      ({ app } = mod);
     });
   });
 

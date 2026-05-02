@@ -4,6 +4,7 @@ import counterReducer, {
   incrementByAmount,
   selectCount
 } from '../components/counter/counterSlice';
+import type { RootState } from '../state/store';
 
 describe('counterSlice', () => {
   test('returns initial state', () => {
@@ -27,6 +28,7 @@ describe('counterSlice', () => {
   });
 
   test('selectCount reads counter.value from root state', () => {
-    expect(selectCount({ counter: { value: 42 } })).toBe(42);
+    const rootState: RootState = { counter: { value: 42 } };
+    expect(selectCount(rootState)).toBe(42);
   });
 });

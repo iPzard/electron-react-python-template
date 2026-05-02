@@ -1,14 +1,20 @@
 // Built-in modules
-const { spawn } = require('child_process');
-const fs = require('fs');
-const http = require('http');
-const path = require('path');
+import { spawn } from 'child_process';
+import * as fs from 'fs';
+import * as http from 'http';
+import * as path from 'path';
 
 // Electron modules
-const { app, BrowserWindow, ipcMain } = require('electron');
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  type IpcMainEvent
+} from 'electron';
 
-// Extra modules
-const getPort = require('get-port');
+// Extra modules — get-port v5 uses CommonJS-style namespace export.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+import getPort = require('get-port');
 
 // Electron's `app.isPackaged` is the canonical "is this a packaged build?"
 // signal — no need for the `electron-is-dev` shim. Defined here as a
@@ -31,11 +37,11 @@ const isDevMode = !app.isPackaged;
  * after the user thinks they closed the app. app.exit() is unconditional.
  * @param {number} port - Port that Flask server is running on.
  */
-const shutdown = (port) => {
+const shutdown = (port: number): void => {
   const forceExit = setTimeout(() => app.exit(0), 3000);
   forceExit.unref();
 
-  const finish = () => {
+  const finish = (): void => {
     app.quit();
   };
 
@@ -53,7 +59,12 @@ const shutdown = (port) => {
  * @description - Electron browser windows.
  * @tutorial - https://www.electronjs.org/docs/api/browser-window
  */
-const browserWindows = {};
+interface BrowserWindowsRefs {
+  mainWindow?: BrowserWindow;
+  loadingWindow?: BrowserWindow | null;
+}
+
+const browserWindows: BrowserWindowsRefs = {};
 
 
 /**
@@ -62,8 +73,9 @@ const browserWindows = {};
  *
  * @memberof BrowserWindow
  */
-const createMainWindow = (port) => {
+const createMainWindow = (port: number): void => {
   const { loadingWindow, mainWindow } = browserWindows;
+  if (!mainWindow) throw new Error('mainWindow not initialized before createMainWindow()');
 
   /**
    * @description - Function to use custom JavaSCript in the DOM.
@@ -71,9 +83,12 @@ const createMainWindow = (port) => {
    * @param {function} callback - Callback to execute here once complete.
    * @returns {Promise}
    */
-  const executeOnWindow = (command, callback) => {
+  const executeOnWindow = (
+    command: string,
+    callback?: (result: unknown) => void
+  ): Promise<void> => {
     return mainWindow.webContents.executeJavaScript(command)
-      .then(callback)
+      .then((result: unknown) => { if (callback) callback(result); })
       .catch(console.error);
   };
 
@@ -112,7 +127,7 @@ const createMainWindow = (port) => {
        * @description Updates windows if page is loaded
        * @param {*} isLoaded
        */
-      const handleLoad = (isLoaded) => {
+      const handleLoad = (isLoaded: unknown): void => {
         if (isLoaded) {
 
           /**
@@ -126,7 +141,7 @@ const createMainWindow = (port) => {
            * never fires and the electron.exe process leaks.
            */
           mainWindow.show();
-          loadingWindow.destroy();
+          loadingWindow?.destroy();
           browserWindows.loadingWindow = null;
         }
       };
@@ -142,15 +157,19 @@ const createMainWindow = (port) => {
   /**
    * If using in production, the built version of the
    * React project will be used instead of localhost.
+   *
+   * After Phase 5 of TS migration, this file lives at dist-electron/main.js
+   * (one level deep from app root). Use app.getAppPath() — works in dev
+   * (project root) and prod (asar root) — instead of __dirname.
    */
-  else mainWindow.loadFile(path.join(__dirname, 'build/index.html'));
+  else mainWindow.loadFile(path.join(app.getAppPath(), 'build/index.html'));
 
 
   /**
    * @description - Controls the opacity of title bar on focus/blur.
    * @param {number} value - Opacity to set for title bar.
    */
-  const setTitleOpacity = (value) => `
+  const setTitleOpacity = (value: number): string => `
     if(document.readyState === 'complete') {
       const titleBar = document.getElementById('electron-window-title-text');
       const titleButtons = document.getElementById('electron-window-title-buttons');
@@ -166,13 +185,13 @@ const createMainWindow = (port) => {
 
   /**
    * Listen and respond to ipcRenderer events on the frontend.
-   * @see `src\utils\services.js`
+   * @see `src\utils\services.ts`
    */
-  ipcMain.on('app-maximize', (_event, _arg) => mainWindow.maximize());
-  ipcMain.on('app-minimize', (_event, _arg) => mainWindow.minimize());
-  ipcMain.on('app-quit', (_event, _arg) => shutdown(port));
-  ipcMain.on('app-unmaximize', (_event, _arg) => mainWindow.unmaximize());
-  ipcMain.on('get-port-number', (event, _arg) => {
+  ipcMain.on('app-maximize', () => mainWindow.maximize());
+  ipcMain.on('app-minimize', () => mainWindow.minimize());
+  ipcMain.on('app-quit', () => shutdown(port));
+  ipcMain.on('app-unmaximize', () => mainWindow.unmaximize());
+  ipcMain.on('get-port-number', (event: IpcMainEvent) => {
     event.returnValue = port;
   });
 };
@@ -182,16 +201,22 @@ const createMainWindow = (port) => {
  * @description - Creates loading window to show while build is created.
  * @memberof BrowserWindow
  */
-const createLoadingWindow = () => {
-  return new Promise((resolve, reject) => {
+const createLoadingWindow = (): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
     const { loadingWindow } = browserWindows;
+    if (!loadingWindow) {
+      reject(new Error('loadingWindow not initialized'));
+      return;
+    }
 
     // Path to the developer loading screen shown while CRA compiles.
     // Add new variants under utilities/loaders/<name>/ if you want to swap.
     const loaderHtml = 'utilities/loaders/redux/index.html';
 
     try {
-      loadingWindow.loadFile(path.join(__dirname, loaderHtml));
+      // app.getAppPath() instead of __dirname so this resolves correctly
+      // after main.js relocated to dist-electron/.
+      loadingWindow.loadFile(path.join(app.getAppPath(), loaderHtml));
 
       loadingWindow.webContents.on('did-finish-load', () => {
         loadingWindow.show();
@@ -199,7 +224,7 @@ const createLoadingWindow = () => {
       });
     } catch (error) {
       console.error(error);
-      reject();
+      reject(error);
     }
   });
 };
@@ -212,15 +237,16 @@ const createLoadingWindow = () => {
  * a dev convenience.
  * @returns {Promise}
  */
-const installExtensions = async () => {
+const installExtensions = async (): Promise<unknown> => {
   const isForceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
 
-  let installer;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let installer: any;
   try {
-    // eslint-disable-next-line global-require
+    // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
     installer = require('electron-devtools-installer');
   } catch (error) {
-    if (error.code !== 'MODULE_NOT_FOUND') throw error;
+    if ((error as NodeJS.ErrnoException).code !== 'MODULE_NOT_FOUND') throw error;
     return undefined;
   }
 
@@ -251,13 +277,16 @@ app.whenReady().then(async () => {
   /**
    * Assigns the main browser window on the
    * browserWindows object.
+   *
+   * preload sits next to main.js in dist-electron/ after compile —
+   * use __dirname so this works in dev and inside the asar in prod.
    */
   browserWindows.mainWindow = new BrowserWindow({
     frame: false,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
-      preload: path.join(app.getAppPath(), 'preload.js'),
+      preload: path.join(__dirname, 'preload.js'),
       sandbox: false
     }
   });
@@ -320,8 +349,8 @@ app.whenReady().then(async () => {
       detached: false,
       stdio: ['ignore', 'pipe', 'pipe']
     });
-    flaskProc.stdout.pipe(flaskLog);
-    flaskProc.stderr.pipe(flaskLog);
+    flaskProc.stdout?.pipe(flaskLog);
+    flaskProc.stderr?.pipe(flaskLog);
   }
 
   app.on('activate', () => {

@@ -8,14 +8,26 @@ const spawnOptions = { detached: false, shell: true, stdio: 'inherit' };
 class Builder {
 
   /**
-   * @description - Creates React and Python production builds.
+   * @description - Creates Electron, React, and Python production builds.
    * @memberof Builder
    */
   buildAll = () => {
-    const { buildPython, buildReact } = this;
+    const { buildElectron, buildPython, buildReact } = this;
 
+    buildElectron();
     buildPython();
     buildReact();
+  }
+
+  /**
+   * @description - Compiles main.ts + preload.ts to dist-electron/.
+   * package.json "main" points at dist-electron/main.js, so this output must
+   * exist before electron-packager bundles the asar.
+   * @memberof Builder
+   */
+  buildElectron = () => {
+    console.log('Compiling Electron main + preload (TypeScript)...');
+    spawnSync('tsc -p tsconfig.electron.json', spawnOptions);
   }
 
   /**

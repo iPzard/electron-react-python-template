@@ -1,25 +1,30 @@
+import type { ElectronAPI } from '../types/electron-api';
+
+type RequestsModule = typeof import('../utils/requests');
+
 describe('utils/requests', () => {
-  let getPort;
-  let fetchMock;
-  let get;
-  let post;
+  let getPort: jest.Mock<number, []>;
+  let fetchMock: jest.Mock;
+  let get: RequestsModule['get'];
+  let post: RequestsModule['post'];
 
   beforeEach(() => {
-    getPort = jest.fn(() => 3042);
-    global.window = global.window || {};
-    global.window.electronAPI = {
+    getPort = jest.fn<number, []>(() => 3042);
+    const api: ElectronAPI = {
       getPort,
       maximize: jest.fn(),
       minimize: jest.fn(),
       quit: jest.fn(),
       unmaximize: jest.fn()
     };
+    window.electronAPI = api;
     fetchMock = jest.fn();
-    global.fetch = fetchMock;
+    global.fetch = fetchMock as unknown as typeof fetch;
 
     jest.isolateModules(() => {
-      // eslint-disable-next-line global-require
-      ({ get, post } = require('../utils/requests'));
+      // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+      const mod = require('../utils/requests') as RequestsModule;
+      ({ get, post } = mod);
     });
   });
 
@@ -32,7 +37,7 @@ describe('utils/requests', () => {
     const cb = jest.fn();
 
     get('example', cb);
-    await new Promise((r) => { setTimeout(r, 0); });
+    await new Promise<void>((r) => { setTimeout(r, 0); });
 
     expect(fetchMock).toHaveBeenCalledWith('http://127.0.0.1:3042/example');
     expect(cb).toHaveBeenCalledWith({ ok: true });
@@ -45,7 +50,7 @@ describe('utils/requests', () => {
     const errCb = jest.fn();
 
     get('example', cb, errCb);
-    await new Promise((r) => { setTimeout(r, 0); });
+    await new Promise<void>((r) => { setTimeout(r, 0); });
 
     expect(cb).not.toHaveBeenCalled();
     expect(errCb).toHaveBeenCalledWith(err);
@@ -57,7 +62,7 @@ describe('utils/requests', () => {
     const body = JSON.stringify({ a: 1 });
 
     post(body, 'submit', cb);
-    await new Promise((r) => { setTimeout(r, 0); });
+    await new Promise<void>((r) => { setTimeout(r, 0); });
 
     expect(fetchMock).toHaveBeenCalledWith(
       'http://127.0.0.1:3042/submit',

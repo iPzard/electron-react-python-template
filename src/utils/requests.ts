@@ -7,26 +7,30 @@
 // retries on connection-refused-style errors with exponential backoff up to
 // `maxAttempts` total attempts.
 
-const port = window.electronAPI.getPort();
+const port: number = window.electronAPI.getPort();
 
 const RETRYABLE_NETWORK_ERROR = /Failed to fetch|NetworkError|ECONNREFUSED|connection refused/i;
 
-const fetchWithRetry = async (url, init, maxAttempts = 6) => {
-  let lastError;
+const fetchWithRetry = async (
+  url: string,
+  init?: RequestInit,
+  maxAttempts = 6
+): Promise<Response> => {
+  let lastError: unknown;
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     try {
       // eslint-disable-next-line no-await-in-loop
       return await (init === undefined ? fetch(url) : fetch(url, init));
     } catch (error) {
       lastError = error;
-      const message = (error && error.message) || '';
+      const message = (error instanceof Error ? error.message : '') || '';
       if (!RETRYABLE_NETWORK_ERROR.test(message) || attempt === maxAttempts) {
         throw error;
       }
       // Exponential backoff: 100ms, 200ms, 400ms, 800ms, 1600ms (capped)
       const delay = Math.min(100 * 2 ** (attempt - 1), 1600);
       // eslint-disable-next-line no-await-in-loop
-      await new Promise((r) => { setTimeout(r, delay); });
+      await new Promise<void>((r) => { setTimeout(r, delay); });
     }
   }
   throw lastError;
@@ -44,13 +48,16 @@ const fetchWithRetry = async (url, init, maxAttempts = 6) => {
 * @return response data from Python/Flask service.
 * @memberof Requests
 */
-export const get = (route, callback, errorCallback) => {
+export const get = <T = unknown>(
+  route: string,
+  callback: (data: T) => void,
+  errorCallback?: (error: unknown) => void
+): void => {
   fetchWithRetry(`http://127.0.0.1:${port}/${route}`)
-    .then((response) => response.json())
+    .then((response) => response.json() as Promise<T>)
     .then(callback)
     .catch((error) => (errorCallback ? errorCallback(error) : console.error(error)));
 };
-
 
 /**
 * @description - Helper POST method for sending requests to and from the Python/Flask services.
@@ -60,18 +67,18 @@ export const get = (route, callback, errorCallback) => {
 * @return response data from Python/Flask service.
 * @memberof Requests
 */
-export const post = (
-  body,
-  route,
-  callback,
-  errorCallback
-) => {
+export const post = <TBody extends BodyInit | null | undefined, TResp = unknown>(
+  body: TBody,
+  route: string,
+  callback: (data: TResp) => void,
+  errorCallback?: (error: unknown) => void
+): void => {
   fetchWithRetry(`http://127.0.0.1:${port}/${route}`, {
     body,
     headers: { 'Content-type': 'application/json' },
     method: 'POST'
   })
-    .then((response) => response.json())
+    .then((response) => response.json() as Promise<TResp>)
     .then(callback)
     .catch((error) => (errorCallback ? errorCallback(error) : console.error(error)));
 };

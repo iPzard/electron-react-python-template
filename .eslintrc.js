@@ -43,6 +43,12 @@ module.exports = {
     }],
     'global-require': [0],
     'implicit-arrow-linebreak': [0],
+    'import/extensions': ['warn', 'ignorePackages', {
+      js: 'never',
+      jsx: 'never',
+      ts: 'never',
+      tsx: 'never'
+    }],
     'import/no-dynamic-require': ['warn'],
     'import/no-extraneous-dependencies': [0],
     'import/order': ['warn'],
@@ -130,15 +136,78 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
         paths: ['./', 'src']
       }
     }
   },
   overrides: [
     {
+      // TypeScript files use the TS parser + airbnb-typescript rules.
+      // .js/.jsx files keep the babel parser configured above.
+      // Placed first so the file-specific serviceWorker override below
+      // wins for that single file (later overrides take precedence).
+      files: ['**/*.ts', '**/*.tsx'],
+      extends: [
+        'plugin:react/recommended',
+        'airbnb',
+        'airbnb-typescript'
+      ],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+        ecmaVersion: 12,
+        project: './tsconfig.json',
+        sourceType: 'module'
+      },
+      plugins: ['@typescript-eslint', 'react'],
+      rules: {
+        // @typescript-eslint v8 removed the "style" extension rules that were
+        // present in v5/v6 and that airbnb-typescript@18 still references.
+        // Turn them off here so ESLint does not error with "Definition for rule
+        // ... was not found". The base ESLint equivalents (comma-dangle, indent,
+        // etc.) are re-enabled below so TS files still get style-checked.
+        '@typescript-eslint/brace-style': 'off',
+        '@typescript-eslint/comma-dangle': 'off',
+        '@typescript-eslint/comma-spacing': 'off',
+        '@typescript-eslint/func-call-spacing': 'off',
+        '@typescript-eslint/indent': 'off',
+        '@typescript-eslint/keyword-spacing': 'off',
+        '@typescript-eslint/lines-between-class-members': 'off',
+        '@typescript-eslint/no-extra-semi': 'off',
+        '@typescript-eslint/no-throw-literal': 'off',
+        '@typescript-eslint/object-curly-spacing': 'off',
+        '@typescript-eslint/quotes': 'off',
+        '@typescript-eslint/semi': 'off',
+        '@typescript-eslint/space-before-blocks': 'off',
+        '@typescript-eslint/space-before-function-paren': 'off',
+        '@typescript-eslint/space-infix-ops': 'off',
+        // Re-enable base ESLint style rules for TS files (airbnb-typescript
+        // turned them off expecting the TS versions to handle them above).
+        'comma-dangle': ['warn', 'never'],
+        'indent': ['warn', 2, { SwitchCase: 1 }],
+        'quotes': ['warn'],
+        'semi': ['warn'],
+        // Keep the no-unused-vars TS version (still exists in v8).
+        '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+        // propTypes are removed during TS conversion; runtime check is the
+        // type system itself.
+        '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
+        'import/no-extraneous-dependencies': 'off',
+        'import/prefer-default-export': 'off',
+        'no-param-reassign': [0],
+        'react/jsx-curly-spacing': ['warn', 'always'],
+        'react/jsx-props-no-spreading': [0],
+        'react/prop-types': 'off',
+        'react/require-default-props': 'off'
+      }
+    },
+    {
       // CRA boilerplate file; console.log calls are part of the upstream
       // reference implementation. Allow them rather than touch CRA code.
-      files: ['src/serviceWorker.js'],
+      // Placed after the TS override so it wins (later overrides take
+      // precedence) — the TS override extends airbnb which resets no-console.
+      files: ['src/serviceWorker.js', 'src/serviceWorker.ts'],
       rules: { 'no-console': 'off' }
     }
   ]

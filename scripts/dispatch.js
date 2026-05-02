@@ -87,6 +87,9 @@ function cleanProject({ removeDeps = false } = {}) {
     getPath('build'),
     getPath('dist'),
 
+    // Compiled Electron main + preload (TS → JS via tsconfig.electron.json)
+    getPath('dist-electron'),
+
     // PyInstaller intermediate workpath (see scripts/build.js)
     getPath('.pyi-build'),
 

@@ -2,13 +2,15 @@ import './index.scss';
 
 import { Provider } from 'react-redux';
 import React from 'react';
-// eslint-disable-next-line import/no-unresolved
 import { createRoot } from 'react-dom/client';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import store from './state/store';
 
-const root = createRoot(document.getElementById('root'));
+const container = document.getElementById('root');
+if (!container) throw new Error('Root container #root not found');
+
+const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <Provider store={ store }>

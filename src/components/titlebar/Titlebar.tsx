@@ -11,7 +11,6 @@ import { app } from '../../utils/services';
 import favicon from './img/favicon.png';
 import styles from './scss/Titlebar.module.scss';
 
-
 /**
  * @namespace Titlebar
  * @description Title Component to use as an Electron customized titlebar.
@@ -20,11 +19,11 @@ import styles from './scss/Titlebar.module.scss';
  */
 
 function Titlebar() {
+  const [maximized, setMaximized] = useState(false);
 
-  const [ maximized, setMaximized ] = useState(false);
-
-  const handleMaximizeToggle = () => {
-    !maximized ? app.maximize() : app.unmaximize();
+  const handleMaximizeToggle = (): void => {
+    if (maximized) app.unmaximize();
+    else app.maximize();
     setMaximized(!maximized);
   };
 
