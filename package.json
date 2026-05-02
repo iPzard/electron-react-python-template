@@ -22,7 +22,7 @@
     "@typescript-eslint/eslint-plugin": "8.13.0",
     "@typescript-eslint/parser": "8.13.0",
     "cross-env": "7.0.3",
-    "electron": "30.0.0",
+    "electron": "39.8.5",
     "electron-devtools-installer": "3.2.0",
     "electron-installer-dmg": "3.0.0",
     "electron-packager": "17.1.2",
