@@ -129,7 +129,16 @@ export class Starter {
     // patterns (^LOG from ...) still match webpack's colored output. The
     // ORIGINAL line is what gets forwarded, so colors stay intact for
     // anything we don't filter.
-    const ANSI_RE = /\[[0-9;]*m/g;
+    //
+    // Match the full escape sequence — `\x1b[...m`. The earlier version
+    // matched only `[...m` and left a stray `\x1b` byte at the start of
+    // the line, which broke `^LOG from` etc.
+    //
+    // The ESC byte trips ESLint's `no-control-regex` rule (inherited from
+    // airbnb). The control character is the whole point of an
+    // ANSI-stripping regex — disable the rule for this single line.
+    // eslint-disable-next-line no-control-regex
+    const ANSI_RE = /\[[0-9;]*m/g;
     const filterStream = (
       input: NodeJS.ReadableStream | null,
       sink: NodeJS.WritableStream,
