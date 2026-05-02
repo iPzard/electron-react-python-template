@@ -1,7 +1,14 @@
-const { spawn, spawnSync } = require('child_process');
-const http = require('http');
-const readline = require('readline');
-const getPort = require('get-port');
+import {
+  spawn,
+  spawnSync,
+  type ChildProcess,
+  type SpawnOptions,
+  type SpawnSyncOptions
+} from 'child_process';
+import * as http from 'http';
+import * as readline from 'readline';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+import getPort = require('get-port');
 
 /**
  * Patterns for known-noisy Electron stderr lines that are harmless and
@@ -25,7 +32,7 @@ const getPort = require('get-port');
  *   running with contextIsolation + sandbox:false. DevTools still
  *   function; the error is purely log noise.
  */
-const ELECTRON_STDERR_NOISE = [
+const ELECTRON_STDERR_NOISE: RegExp[] = [
   /Autofill\.enable/,
   /ExtensionLoadWarning/,
   /Permission '.+' is unknown or URL pattern is malformed/,
@@ -50,7 +57,7 @@ const ELECTRON_STDERR_NOISE = [
  * these specific phrases falls through verbatim. If you start seeing
  * unexpected silence, narrow the patterns further.
  */
-const REACT_STDOUT_NOISE = [
+const REACT_STDOUT_NOISE: RegExp[] = [
   /DEP_WEBPACK_DEV_SERVER_ON_(AFTER|BEFORE)_SETUP_MIDDLEWARE/,
   /\(Use `node --trace-deprecation /,
   /^LOG from .*sass-loader/,
@@ -61,11 +68,16 @@ const REACT_STDOUT_NOISE = [
   /^<w> More info: https:\/\/sass-lang\.com/
 ];
 
+interface SpawnOptionsBundle {
+  hideLogs: SpawnSyncOptions;
+  showLogs: SpawnSyncOptions;
+}
+
 /**
  * @namespace Starter
  * @description - Scripts to start Electron, React, and Python.
  */
-class Starter {
+export class Starter {
   /**
    * @description - Starts developer mode.
    *
@@ -76,8 +88,8 @@ class Starter {
    *
    * @memberof Starter
    */
-  developerMode = async () => {
-    const spawnOptions = {
+  developerMode = async (): Promise<void> => {
+    const spawnOptions: SpawnOptionsBundle = {
       hideLogs: { detached: false, shell: true, stdio: 'pipe' },
       showLogs: { detached: false, shell: true, stdio: 'inherit' }
     };
@@ -85,7 +97,7 @@ class Starter {
     /**
      * Method to get first port in range of 3001-3999,
      * Remains unused here so will be the same as the
-     * port used in main.js
+     * port used in main.ts
      */
     const port = await getPort({
       port: getPort.makeRange(3001, 3999)
@@ -106,19 +118,26 @@ class Starter {
     //     `yarn lint` still runs the airbnb config we want.
     // Pipe react-scripts stdout/stderr so we can filter known-noisy upstream
     // deprecation chatter (see REACT_STDOUT_NOISE). Real errors fall through.
+    const reactSpawnOptions: SpawnOptions = {
+      detached: false, shell: true, stdio: ['inherit', 'pipe', 'pipe']
+    };
     const reactProc = spawn(
       'cross-env BROWSER=none HOST=127.0.0.1 DISABLE_ESLINT_PLUGIN=true react-scripts start',
-      { detached: false, shell: true, stdio: ['inherit', 'pipe', 'pipe'] }
+      reactSpawnOptions
     );
     // ANSI color codes get stripped before pattern matching so anchored
     // patterns (^LOG from ...) still match webpack's colored output. The
     // ORIGINAL line is what gets forwarded, so colors stay intact for
     // anything we don't filter.
-    const ANSI_RE = /\[[0-9;]*m/g;
-    const filterStream = (input, sink, patterns) => {
+    const ANSI_RE = /\[[0-9;]*m/g;
+    const filterStream = (
+      input: NodeJS.ReadableStream | null,
+      sink: NodeJS.WritableStream,
+      patterns: RegExp[]
+    ): void => {
       if (!input) return;
       const rl = readline.createInterface({ input });
-      rl.on('line', (line) => {
+      rl.on('line', (line: string) => {
         const clean = line.replace(ANSI_RE, '');
         if (patterns.some((p) => p.test(clean))) return;
         sink.write(`${line}\n`);
@@ -136,18 +155,19 @@ class Starter {
     // Spawn Electron with stderr piped (not inherited) so we can filter out
     // known-harmless DevTools chatter. stdout still inherits — real Chromium
     // logs and our own console.log calls stay visible.
-    const electronProc = spawn('electron .', {
+    const electronSpawnOptions: SpawnOptions = {
       detached: false,
       shell: true,
       stdio: ['inherit', 'inherit', 'pipe']
-    });
+    };
+    const electronProc = spawn('electron .', electronSpawnOptions);
     filterStream(electronProc.stderr, process.stderr, ELECTRON_STDERR_NOISE);
 
     let shuttingDown = false;
     const isWindows = process.platform === 'win32';
 
     // Kill a child process tree (parent + descendants).
-    const killTree = (proc) => {
+    const killTree = (proc: ChildProcess | null | undefined): void => {
       if (!proc || !proc.pid) return;
       if (isWindows) {
         // taskkill /T walks the descendant tree; /F = force.
@@ -155,12 +175,12 @@ class Starter {
           stdio: 'ignore'
         });
       } else {
-        try { process.kill(-proc.pid, 'SIGTERM'); } catch (e) { /* already gone */ }
-        try { proc.kill('SIGTERM'); } catch (e) { /* already gone */ }
+        try { process.kill(-proc.pid, 'SIGTERM'); } catch (_e) { /* already gone */ }
+        try { proc.kill('SIGTERM'); } catch (_e) { /* already gone */ }
       }
     };
 
-    const shutdown = (reason) => {
+    const shutdown = (_reason: string): void => {
       if (shuttingDown) return;
       shuttingDown = true;
 
@@ -170,13 +190,13 @@ class Starter {
       // already exited; anything else gets logged.
       try {
         const req = http.get(`http://127.0.0.1:${port}/quit`);
-        req.on('error', (error) => {
+        req.on('error', (error: NodeJS.ErrnoException) => {
           const expected = ['ECONNRESET', 'ECONNREFUSED'];
-          if (!expected.includes(error.code)) console.log(error);
+          if (error.code && !expected.includes(error.code)) console.log(error);
         });
         req.setTimeout(1000, () => req.destroy());
       } catch (error) {
-        if (error.code !== 'ESRCH') console.error(error);
+        if ((error as NodeJS.ErrnoException).code !== 'ESRCH') console.error(error);
       }
 
       // Kill the React dev server tree (cross-env -> node -> webpack).
@@ -199,7 +219,7 @@ class Starter {
     });
 
     // OS-level signals to the dispatcher itself (Ctrl+C in the terminal).
-    ['SIGINT', 'SIGTERM', 'SIGHUP', 'SIGBREAK'].forEach((signal) => {
+    (['SIGINT', 'SIGTERM', 'SIGHUP', 'SIGBREAK'] as const).forEach((signal) => {
       process.on(signal, () => shutdown(signal));
     });
 
@@ -209,5 +229,3 @@ class Starter {
     });
   };
 }
-
-module.exports = { Starter };

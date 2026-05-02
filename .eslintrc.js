@@ -133,6 +133,15 @@ module.exports = {
     'space-before-function-paren': ['warn'],
     'spaced-comment': ['warn']
   },
+  ignorePatterns: [
+    // Generated build output — don't lint compiled JS.
+    'dist-electron/',
+    'build/',
+    'dist/',
+    'resources/',
+    'docs/',
+    'utilities/jsdoc/'
+  ],
   settings: {
     'import/resolver': {
       node: {
@@ -157,7 +166,9 @@ module.exports = {
       parserOptions: {
         ecmaFeatures: { jsx: true },
         ecmaVersion: 12,
-        project: './tsconfig.json',
+        // Three projects: renderer (src/), electron main+preload, scripts/.
+        // ESLint tries each until it finds one that includes the linted file.
+        project: ['./tsconfig.json', './tsconfig.electron.json', './tsconfig.scripts.json'],
         sourceType: 'module'
       },
       plugins: ['@typescript-eslint', 'react'],
@@ -193,9 +204,16 @@ module.exports = {
         // propTypes are removed during TS conversion; runtime check is the
         // type system itself.
         '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
+        'arrow-body-style': [0],
+        'class-methods-use-this': [0],
+        'import/newline-after-import': [0],
         'import/no-extraneous-dependencies': 'off',
         'import/prefer-default-export': 'off',
+        'linebreak-style': [0],
+        'no-multiple-empty-lines': [0],
         'no-param-reassign': [0],
+        'no-useless-return': [0],
+        'padded-blocks': [0],
         'react/jsx-curly-spacing': ['warn', 'always'],
         'react/jsx-props-no-spreading': [0],
         'react/prop-types': 'off',

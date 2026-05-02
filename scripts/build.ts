@@ -1,23 +1,28 @@
-const { spawnSync } = require('child_process');
-const spawnOptions = { detached: false, shell: true, stdio: 'inherit' };
+import { spawnSync, type SpawnSyncOptions } from 'child_process';
+
+const spawnOptions: SpawnSyncOptions = {
+  detached: false,
+  shell: true,
+  stdio: 'inherit'
+};
 
 /**
  * @namespace Builder
  * @description - Builds React & Python builds of project so Electron can be used.
  */
-class Builder {
+export class Builder {
 
   /**
    * @description - Creates Electron, React, and Python production builds.
    * @memberof Builder
    */
-  buildAll = () => {
+  buildAll = (): void => {
     const { buildElectron, buildPython, buildReact } = this;
 
     buildElectron();
     buildPython();
     buildReact();
-  }
+  };
 
   /**
    * @description - Compiles main.ts + preload.ts to dist-electron/.
@@ -25,10 +30,10 @@ class Builder {
    * exist before electron-packager bundles the asar.
    * @memberof Builder
    */
-  buildElectron = () => {
+  buildElectron = (): void => {
     console.log('Compiling Electron main + preload (TypeScript)...');
     spawnSync('tsc -p tsconfig.electron.json', spawnOptions);
-  }
+  };
 
   /**
    * @description - Creates production build of Python back end. Uses
@@ -37,7 +42,7 @@ class Builder {
    * the top of app.spec.
    * @memberof Builder
    */
-  buildPython = () => {
+  buildPython = (): void => {
     console.log('Creating Python distribution files...');
 
     const options = [
@@ -54,7 +59,7 @@ class Builder {
     // Invoke via `python -m PyInstaller` so the build works even when
     // pip's user scripts directory isn't on PATH (common on Windows).
     spawnSync(`python -m PyInstaller ${options} app.spec`, spawnOptions);
-  }
+  };
 
   /**
    * @description - Creates production build of React front end.
@@ -67,10 +72,8 @@ class Builder {
    * config we want.
    * @memberof Builder
    */
-  buildReact = () => {
+  buildReact = (): void => {
     console.log('Creating React distribution files...');
     spawnSync('cross-env DISABLE_ESLINT_PLUGIN=true react-scripts build', spawnOptions);
-  }
+  };
 }
-
-module.exports.Builder = Builder;

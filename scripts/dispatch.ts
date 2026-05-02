@@ -1,12 +1,12 @@
-const [ , , script, command ] = process.argv;
-const { existsSync, readdirSync } = require('fs');
-const path = require('path');
+import { existsSync, readdirSync } from 'fs';
+import * as path from 'path';
 
-const { Builder } = require('./build');
-const { Cleaner } = require('./clean');
-const { Packager } = require('./package');
-const { Starter } = require('./start');
+import { Builder } from './build';
+import { Cleaner } from './clean';
+import { Packager } from './package';
+import { Starter } from './start';
 
+const [, , script, command] = process.argv;
 
 /**
  * @namespace Dispatcher
@@ -14,21 +14,26 @@ const { Starter } = require('./start');
  * @argument script - Script manager to use (e.g., build or package).
  * @argument command - Command argument describing exact script to run.
  */
+function main(): void {
+  switch (script) {
+    case 'build':
+      buildApp();
+      return;
 
-switch (script) {
-  case 'build':
-    return buildApp();
+    case 'clean':
+      cleanProject({ removeDeps: command === 'all' });
+      return;
 
-  case 'clean':
-    return cleanProject({ removeDeps: command === 'all' });
+    case 'package':
+      packageApp();
+      return;
 
-  case 'package':
-    return packageApp();
+    case 'start':
+      startDeveloperMode();
+      return;
 
-  case 'start':
-    return startDeveloperMode();
-
-  // no default
+    // no default
+  }
 }
 
 
@@ -36,23 +41,30 @@ switch (script) {
  * @description - Builds various production builds (e.g., Python, React).
  * @memberof Dispatcher
  */
-function buildApp() {
+function buildApp(): void {
   const builder = new Builder();
 
   switch (command) {
     case 'react':
-      return builder.buildReact();
+      builder.buildReact();
+      return;
 
     case 'python':
-      return builder.buildPython();
+      builder.buildPython();
+      return;
 
     case 'all':
-      return builder.buildAll();
+      builder.buildAll();
+      return;
 
     // no default
   }
 }
 
+
+interface CleanProjectOptions {
+  removeDeps?: boolean;
+}
 
 /**
  * @description - Cleans project by removing build/test artifacts.
@@ -65,9 +77,9 @@ function buildApp() {
  *  - docs/ is the published JSDoc reference, do NOT delete.
  * @memberof Dispatcher
  */
-function cleanProject({ removeDeps = false } = {}) {
+function cleanProject({ removeDeps = false }: CleanProjectOptions = {}): void {
   const cleaner = new Cleaner();
-  const getPath = (...filePaths) => path.join(__dirname, '..', ...filePaths);
+  const getPath = (...filePaths: string[]): string => path.join(__dirname, '..', ...filePaths);
 
   // Generated artifacts — always removed.
   const artifactPaths = [
@@ -90,7 +102,7 @@ function cleanProject({ removeDeps = false } = {}) {
     // Compiled Electron main + preload (TS → JS via tsconfig.electron.json)
     getPath('dist-electron'),
 
-    // PyInstaller intermediate workpath (see scripts/build.js)
+    // PyInstaller intermediate workpath (see scripts/build.ts)
     getPath('.pyi-build'),
 
     // Misc
@@ -142,18 +154,21 @@ function cleanProject({ removeDeps = false } = {}) {
  * @description - Builds various installers (e.g., DMG, MSI).
  * @memberof Dispatcher
  */
-function packageApp() {
+function packageApp(): void {
   const packager = new Packager();
 
   switch (command) {
     case 'linux':
-      return packager.packageLinux();
+      packager.packageLinux();
+      return;
 
     case 'mac':
-      return packager.packageMacOS();
+      packager.packageMacOS();
+      return;
 
     case 'windows':
-      return packager.packageWindows();
+      packager.packageWindows();
+      return;
 
     // no default
   }
@@ -165,7 +180,9 @@ function packageApp() {
  * Including; React, Electron, and Python/Flask.
  * @memberof Dispatcher
  */
-function startDeveloperMode() {
+function startDeveloperMode(): void {
   const start = new Starter();
   start.developerMode();
 }
+
+main();

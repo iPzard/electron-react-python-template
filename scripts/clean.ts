@@ -1,18 +1,18 @@
-const {
+import {
   existsSync,
   readdirSync,
   rmdirSync,
   statSync,
   unlinkSync
-} = require('fs');
+} from 'fs';
 
 /**
  * @namespace Cleaner
  * @description - Cleans project by removing several files & folders.
- * @see scripts\dispatch.js cleanProject() for complete list
+ * @see scripts\dispatch.ts cleanProject() for complete list
  */
-class Cleaner {
-  removePath = (pathToRemove) => {
+export class Cleaner {
+  removePath = (pathToRemove: string): void => {
 
     if (existsSync(pathToRemove)) {
       console.log(`Removing: ${pathToRemove}`);
@@ -32,5 +32,3 @@ class Cleaner {
     }
   };
 }
-
-module.exports.Cleaner = Cleaner;
