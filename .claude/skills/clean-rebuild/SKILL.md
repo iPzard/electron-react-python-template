@@ -16,12 +16,13 @@ description: Use this skill when the user wants to wipe build artifacts and rebu
 
 ## What `yarn clean` removes
 
-Implemented in `scripts/dispatch.js` `cleanProject()` and `scripts/clean.js` `Cleaner.removePath`.
+Implemented in `scripts/dispatch.ts` `cleanProject()` and `scripts/clean.ts` `Cleaner.removePath`.
 
-**Python cache:** `app.pyc`, `__pycache__`
+**Python cache:** `app.pyc`, `__pycache__`, `.pyi-build/` (PyInstaller workpath)
 **Debug logs:** `npm-debug.log`, `yarn-debug.log`, `yarn-error.log`
 **Test output:** `coverage/`
 **Production output:** `build/`, `dist/`
+**Compiled Electron main + preload:** `dist-electron/` (TS → JS via `tsconfig.electron.json`)
 **Misc:** `.DS_Store`
 **Resources:** `resources/app/` always; `resources/` itself only if it ends up empty.
 
@@ -35,7 +36,7 @@ After `clean:all` you must `yarn install` again. Losing `yarn.lock` can drift de
 
 - `app.spec` — committed PyInstaller spec, treated as source.
 - `docs/` — published JSDoc reference, tracked in git.
-- `.git/`, `.github/`, `.eslintrc.js`, `.babelrc`, anything under `src/`, `scripts/`, `utilities/`, `public/` — source.
+- `.git/`, `.github/`, `.eslintrc.js`, `tsconfig*.json`, `main.ts`, `preload.ts`, anything under `src/`, `scripts/`, `utilities/`, `public/` — source.
 - Python virtualenvs (`venv/`, `.venv/`) — the script does not know about them.
 
 ## Typical fresh-rebuild sequence
@@ -54,7 +55,8 @@ yarn start
 
 - React change doesn't show up in packaged installer → `build/` stale; rerun `yarn build:react`.
 - `app.py` change doesn't show up in packaged installer → `resources/` stale; rerun `yarn build:python`.
-- PyInstaller weirdness → `yarn clean` then `yarn build:python` (cleans `__pycache__`, keeps `app.spec`).
+- `main.ts` / `preload.ts` change doesn't take effect → `dist-electron/` stale; rerun `yarn build:electron` (or just `yarn start`, which compiles first).
+- PyInstaller weirdness → `yarn clean` then `yarn build:python` (cleans `__pycache__` + `.pyi-build/`, keeps `app.spec`).
 - Native module errors after Electron version bump → `yarn clean:all`, then reinstall.
 
 ## What clean does not fix

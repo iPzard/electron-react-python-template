@@ -11,15 +11,18 @@ HOOK = Path(__file__).with_name("verify-on-change.py")
 
 CASES = [
     # (path, should_emit_json)
-    ("C:\\Engineering\\electron-react-python-template\\src\\components\\App.js", True),
+    ("C:\\Engineering\\electron-react-python-template\\src\\components\\App.tsx", True),
+    ("C:\\Engineering\\electron-react-python-template\\src\\components\\counter\\counterSlice.ts", True),
     ("C:\\Engineering\\electron-react-python-template\\app.py", True),
-    ("C:\\Engineering\\electron-react-python-template\\main.js", True),
-    ("C:\\Engineering\\electron-react-python-template\\preload.js", True),
+    ("C:\\Engineering\\electron-react-python-template\\main.ts", True),
+    ("C:\\Engineering\\electron-react-python-template\\preload.ts", True),
     ("C:\\Engineering\\electron-react-python-template\\package.json", True),
     ("C:\\Engineering\\electron-react-python-template\\requirements.txt", True),
-    ("C:\\Engineering\\electron-react-python-template\\scripts\\build.js", True),
+    ("C:\\Engineering\\electron-react-python-template\\tsconfig.json", True),
+    ("C:\\Engineering\\electron-react-python-template\\tsconfig.electron.json", True),
+    ("C:\\Engineering\\electron-react-python-template\\scripts\\build.ts", True),
     ("C:\\Engineering\\electron-react-python-template\\tests\\test_app.py", True),
-    ("/c/Engineering/electron-react-python-template/src/index.js", True),
+    ("/c/Engineering/electron-react-python-template/src/index.tsx", True),
     ("C:\\Engineering\\electron-react-python-template\\CLAUDE.md", False),
     ("C:\\Engineering\\electron-react-python-template\\README.md", False),
     ("C:\\Engineering\\electron-react-python-template\\.claude\\agents\\foo.md", False),
@@ -27,6 +30,7 @@ CASES = [
     ("C:\\Engineering\\electron-react-python-template\\node_modules\\react\\index.js", False),
     ("C:\\Engineering\\electron-react-python-template\\build\\static\\js\\main.js", False),
     ("C:\\Engineering\\electron-react-python-template\\dist\\windows\\app.exe", False),
+    ("C:\\Engineering\\electron-react-python-template\\dist-electron\\main.js", False),
     ("C:\\Engineering\\electron-react-python-template\\public\\index.html", False),
     ("C:\\Engineering\\electron-react-python-template\\docs\\index.html", False),
 ]

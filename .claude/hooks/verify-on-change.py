@@ -20,7 +20,10 @@ def normalize(path: str) -> str:
 
 
 def is_excluded(p: str) -> bool:
-    excluded_dirs = ("/node_modules/", "/.claude/", "/docs/", "/build/", "/dist/", "/resources/")
+    excluded_dirs = (
+        "/node_modules/", "/.claude/", "/docs/", "/build/", "/dist/",
+        "/dist-electron/", "/resources/",
+    )
     if any(seg in p for seg in excluded_dirs):
         return True
     lower = p.lower()
@@ -36,11 +39,14 @@ def is_in_scope(p: str) -> bool:
     base = os.path.basename(p)
     in_scope_files = (
         "app.py",
-        "main.js",
-        "preload.js",
+        "main.ts",
+        "preload.ts",
         "renderer.js",
         "package.json",
         "requirements.txt",
+        "tsconfig.json",
+        "tsconfig.electron.json",
+        "tsconfig.scripts.json",
     )
     return base in in_scope_files
 

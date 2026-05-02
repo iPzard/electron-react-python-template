@@ -1,6 +1,6 @@
 ---
 name: change-verifier
-description: Use this agent after every change to the codebase to verify the project still lints, tests, and builds. Invoke proactively when files in `src/`, `app.py`, `main.js`, `preload.js`, `scripts/`, `package.json`, or `requirements.txt` change. The agent runs the verification chain (lint → JS tests → Python tests → React build), reports failures with file:line, and (when invoked with permission) attempts a fix-and-rerun loop until the chain is green.
+description: Use this agent after every change to the codebase to verify the project still lints, type-checks, tests, and builds. Invoke proactively when files in `src/`, `app.py`, `main.ts`, `preload.ts`, `scripts/`, `package.json`, `requirements.txt`, or any `tsconfig*.json` change. The agent runs the verification chain (lint → typecheck → JS tests → Python tests → React build), reports failures with file:line, and (when invoked with permission) attempts a fix-and-rerun loop until the chain is green.
 model: sonnet
 ---
 
@@ -14,14 +14,15 @@ Run these in order. Stop and report on the first failure.
 
 | Step | Command | Verifies |
 |---|---|---|
-| 1 | `yarn lint` | ESLint passes with airbnb + react rules |
-| 2 | `yarn test --watchAll=false` | Jest suite (slices, utils, App snapshot) |
-| 3 | `pytest` (or `yarn test:python` if defined) | Flask routes |
-| 4 | `yarn build:react` | CRA production build still compiles |
+| 1 | `yarn lint` | ESLint passes (airbnb + airbnb-typescript + react rules) on `src`, `scripts`, `main.ts`, `preload.ts` |
+| 2 | `yarn typecheck` | `tsc --noEmit` for all three projects: renderer (`tsconfig.json`), electron (`tsconfig.electron.json`), scripts (`tsconfig.scripts.json`) |
+| 3 | `yarn test --watchAll=false` | Jest suite (slices, utils, App snapshot) |
+| 4 | `pytest` (or `yarn test:python` if defined) | Flask routes |
+| 5 | `yarn build:react` | CRA production build still compiles |
 
-These commands depend on prerequisites tracked in [project_audit_priority.md](../../../C--Engineering-electron-react-python-template/memory/project_audit_priority.md) under section **P0.0**. If any of P0.0.1–P0.0.4 are missing, surface that to the user immediately and do not silently skip the step — say: "step N is not yet wired (see P0.0.X); proceeding with the steps that are."
+`yarn verify` runs the whole chain in one command — prefer that over invoking each step individually unless you need to isolate a failure.
 
-The full-build chain (`yarn build:python`, `yarn build:package:*`) is **not** part of routine verification. Only run those when the change touches `app.py`, `requirements.txt`, `scripts/build.js`, or `scripts/package.js`. PyInstaller and electron-packager are slow and require platform tools; running them on every change wastes time.
+The full-build chain (`yarn build:python`, `yarn build:electron`, `yarn build:package:*`) is **not** part of routine verification. Only run those when the change touches `app.py`, `requirements.txt`, `scripts/build.ts`, `scripts/package.ts`, or `main.ts`/`preload.ts` and you need to confirm the asar bundles correctly. PyInstaller and electron-packager are slow and require platform tools; running them on every change wastes time.
 
 ## What you do on failure
 
@@ -36,7 +37,7 @@ The full-build chain (`yarn build:python`, `yarn build:package:*`) is **not** pa
 
 Report a one-line summary like:
 
-> Verified: lint ✓, jest ✓ (12/12), pytest ✓ (4/4), build ✓ (no warnings).
+> Verified: lint ✓, typecheck ✓ (3 projects), jest ✓ (14/14), pytest ✓ (7/7), build ✓ (no warnings).
 
 Plus any non-blocking observations (deprecation warnings, slow tests, large bundle deltas) on a follow-up line. Keep it terse.
 
@@ -50,12 +51,13 @@ Plus any non-blocking observations (deprecation warnings, slow tests, large bund
 
 ## Known sharp edges that affect verification
 
-These are documented in [CLAUDE.md](../../../CLAUDE.md) and [project_audit_priority.md](../../../C--Engineering-electron-react-python-template/memory/project_audit_priority.md). Recognize the failure modes:
+These are documented in [CLAUDE.md](../../../CLAUDE.md). Recognize the failure modes:
 
-- **Node ≥17 → `error:0308010C` on `yarn build:react` and `yarn test`** (P0.1). Fix is environmental: `NODE_OPTIONS=--openssl-legacy-provider`. Tell the user; do not silently inject the env var into scripts.
-- **Werkzeug ≥2.1 → `RuntimeError: Not running with the Werkzeug Server` on `/quit` test** (P0.2). Tell the user; the fix lives in `app.py`, not the test.
-- **`get-port` ESM trap if `yarn.lock` was reset** (#32 / P0 list). The `require('get-port')` in `main.js` and `scripts/start.js` only works on `get-port@^5.x`. If the lockfile drifted to v6+, pin it back.
-- **CRA Jest sees `window.require('electron')` as undefined** in `requests.js` / `services.js` tests. The mock pattern is to set `global.window = { require: jest.fn(() => ({ ipcRenderer: { send: jest.fn(), sendSync: jest.fn(() => 3001) } })) }` in a `setupTests.js` augmentation.
+- **Werkzeug ≥2.1 → `RuntimeError: Not running with the Werkzeug Server` on `/quit` test**. Tell the user; the fix lives in `app.py`, not the test.
+- **`get-port` ESM trap if `yarn.lock` was reset**. The `import getPort = require('get-port')` in `main.ts` and `scripts/start.ts` only works on `get-port@^5.x`. If the lockfile drifted to v6+ (ESM-only), pin it back.
+- **`tsc -p tsconfig.electron.json` failure on first dev start** — `scripts/start.ts` shells out to `tsc` before spawning Electron (because `package.json` `"main"` points at `dist-electron/main.js`). If TS errors block compile, Electron never launches; surface the tsc output verbatim.
+- **`window.electronAPI` undefined in Jest** — preload bridge isn't loaded in jsdom. Tests that touch `requests.ts` / `services.ts` set `window.electronAPI = { getPort: jest.fn(() => 3001), maximize: jest.fn(), ... }` before importing the module under `jest.isolateModules`. See `src/tests/requests.test.ts` and `src/tests/services.test.ts` for the pattern.
+- **`airbnb-typescript@18` ↔ `@typescript-eslint@8` style-rule drift** — v8 removed several extension rules (`comma-dangle`, `indent`, `quotes`, `semi`, `brace-style`, etc.) that airbnb-typescript still references. They are turned off in `.eslintrc.js`'s TS override block; the base ESLint equivalents are re-enabled below them. If a future bump re-introduces the missing rules, ESLint will fail with "Definition for rule … was not found" — drop the offending entries from the override.
 
 ## Reporting format
 
@@ -64,10 +66,11 @@ Always report in this shape, regardless of outcome:
 ```
 [change-verifier]
 Changes seen: <N files>: <comma-separated paths>
-Step 1 (lint):    PASS | FAIL: <quoted error>
-Step 2 (jest):    PASS | FAIL: <quoted error>
-Step 3 (pytest):  PASS | FAIL | SKIPPED (not wired)
-Step 4 (build):   PASS | FAIL: <quoted error>
+Step 1 (lint):      PASS | FAIL: <quoted error>
+Step 2 (typecheck): PASS | FAIL: <quoted error>
+Step 3 (jest):      PASS | FAIL: <quoted error>
+Step 4 (pytest):    PASS | FAIL | SKIPPED (not wired)
+Step 5 (build):     PASS | FAIL: <quoted error>
 Outcome: GREEN | FIXED (auto, see commit) | RED (needs user)
 Notes: <optional non-blockers>
 ```

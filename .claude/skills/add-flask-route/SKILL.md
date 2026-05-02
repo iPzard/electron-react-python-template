@@ -28,36 +28,38 @@ Rules:
 
 ## Step 2 — call it from React
 
-Use the helpers in `src/utils/requests.js`. Do NOT use `axios` or raw `fetch` in components — the helpers already inject the dev-mode port via IPC.
+Use the typed helpers in `src/utils/requests.ts`. Do NOT use `axios` or raw `fetch` in components — the helpers already inject the dev-mode port via the preload bridge.
 
-GET:
-```js
+GET (pass the response shape as the type parameter so callsites get full type-checking):
+```ts
 import { get } from '<relative-path>/utils/requests';
 
-get(
+interface YourResponse { result: string }
+
+get<YourResponse>(
   'your-route',                       // route, no leading slash, no http://
-  (response) => { /* success */ },
-  (error)    => console.error(error)
+  (response) => { /* response.result is typed as string */ },
+  (error) => console.error(error)
 );
 ```
 
 POST:
-```js
+```ts
 import { post } from '<relative-path>/utils/requests';
 
-post(
+post<string, YourResponse>(
   JSON.stringify({ key: 'value' }),   // body must be a string
   'your-route',
-  (response) => { /* success */ },
-  (error)    => console.error(error)
+  (response) => { /* typed YourResponse */ },
+  (error) => console.error(error)
 );
 ```
 
-Note: `post()` in `requests.js` does not stringify for you — pass a JSON string, not an object.
+Note: `post()` does not stringify for you — pass a JSON string, not an object.
 
 ## Step 3 — verify in dev
 
-Run `yarn start`. Hit your route from a component (or a `useEffect` like `App.js` does at line 19). Watch the React DevTools network tab and the Flask terminal for the request.
+Run `yarn start`. Hit your route from a component (or a `useEffect` like `App.tsx` does in the example call). Watch the React DevTools network tab and the Flask terminal for the request.
 
 ## Step 4 — production rebuild
 
