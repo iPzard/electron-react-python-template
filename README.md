@@ -44,7 +44,7 @@ yarn install
 
 ## ⚙️ Config
 
-**Electron:** Electron's `main.js`, `preload.js`, and `renderer.js` files can be found in the project's root directory.
+**Electron:** Electron's `main.ts` and `preload.ts` files can be found in the project's root directory. They compile to `dist-electron/` via `tsc -p tsconfig.electron.json` (run automatically by `yarn start` and `yarn build`).
 
 **React:** React files can be found in the `./src/` folder, the custom toolbar is in `./src/components/toolbar`.
 

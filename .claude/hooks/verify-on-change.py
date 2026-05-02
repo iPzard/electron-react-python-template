@@ -41,7 +41,6 @@ def is_in_scope(p: str) -> bool:
         "app.py",
         "main.ts",
         "preload.ts",
-        "renderer.js",
         "package.json",
         "requirements.txt",
         "tsconfig.json",
