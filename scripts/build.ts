@@ -1,7 +1,6 @@
 import { spawnSync, type SpawnSyncOptions } from 'child_process';
 
 const spawnOptions: SpawnSyncOptions = {
-  detached: false,
   shell: true,
   stdio: 'inherit'
 };
@@ -66,7 +65,7 @@ export class Builder {
    *
    * DISABLE_ESLINT_PLUGIN=true: CRA 5 ships eslint-config-react-app and
    * loads it inside the webpack ESLint plugin. Combined with this project's
-   * .eslintrc.js (which already lists `plugins: ['react']`), the build fails
+   * .eslintrc.cjs (which already lists `plugins: ['react']`), the build fails
    * with "Plugin 'react' was conflicted between …". Disabling CRA's plugin
    * keeps the build clean; standalone `yarn lint` still runs the airbnb
    * config we want.

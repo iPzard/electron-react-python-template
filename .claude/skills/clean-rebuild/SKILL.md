@@ -36,7 +36,7 @@ After `clean:all` you must `yarn install` again. Losing `yarn.lock` can drift de
 
 - `app.spec` — committed PyInstaller spec, treated as source.
 - `docs/` — published JSDoc reference, tracked in git.
-- `.git/`, `.github/`, `.eslintrc.js`, `tsconfig*.json`, `main.ts`, `preload.ts`, anything under `src/`, `scripts/`, `utilities/`, `public/` — source.
+- `.git/`, `.github/`, `.eslintrc.cjs`, `tsconfig*.json`, `main.ts`, `preload.ts`, anything under `src/`, `scripts/`, `utilities/`, `public/` — source.
 - Python virtualenvs (`venv/`, `.venv/`) — the script does not know about them.
 
 ## Typical fresh-rebuild sequence

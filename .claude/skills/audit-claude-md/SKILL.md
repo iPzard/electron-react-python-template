@@ -53,7 +53,7 @@ Documented: `./build/`, `./dist-electron/`, `./resources/`, `./dist/<platform>/`
 
 ### Lint rules
 CLAUDE.md claims `'sort-keys': ['error', 'asc']` is the only error-level rule (in the base config; the TS override adds `@typescript-eslint/no-use-before-define`).
-- Read [.eslintrc.js](../../../.eslintrc.js), filter rules whose value is `'error'` or `['error', ...]`. Check both the root `rules` block and the TS overrides block.
+- Read [.eslintrc.cjs](../../../.eslintrc.cjs), filter rules whose value is `'error'` or `['error', ...]`. Check both the root `rules` block and the TS overrides block.
 
 ### Dependency versions
 CLAUDE.md cites: React 18, react-scripts 5, Electron 30, react-redux 9, typescript 5.6, tsx 4.19.
@@ -65,7 +65,7 @@ CLAUDE.md flags these:
 1. `werkzeug.server.shutdown` in `/quit` — verify [app.py](../../../app.py).
 2. `--win32` in `packageMacOS` — verify line in [scripts/package.ts](../../../scripts/package.ts).
 3. Asar bloat from raw `.ts` and tsconfigs at root — verify [scripts/package.ts](../../../scripts/package.ts) `--ignore` regex.
-4. `airbnb-typescript@18` ↔ `@typescript-eslint@8` rule drift — verify the TS override in [.eslintrc.js](../../../.eslintrc.js) still has the offending style rules turned off.
+4. `airbnb-typescript@18` ↔ `@typescript-eslint@8` rule drift — verify the TS override in [.eslintrc.cjs](../../../.eslintrc.cjs) still has the offending style rules turned off.
 5. Old dep pinning — covered above.
 
 If any are fixed, remove from CLAUDE.md. If new sharp edges appeared, add them.

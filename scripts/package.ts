@@ -30,7 +30,6 @@ const APP_MANUFACTURER = (typeof pkg.author === 'string')
   : (pkg.author && pkg.author.name) || pkg.name;
 
 const baseSpawnOptions: SpawnSyncOptions = {
-  detached: false,
   shell: true,
   stdio: 'inherit'
 };

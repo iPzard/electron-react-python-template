@@ -90,8 +90,8 @@ export class Starter {
    */
   developerMode = async (): Promise<void> => {
     const spawnOptions: SpawnOptionsBundle = {
-      hideLogs: { detached: false, shell: true, stdio: 'pipe' },
-      showLogs: { detached: false, shell: true, stdio: 'inherit' }
+      hideLogs: { shell: true, stdio: 'pipe' },
+      showLogs: { shell: true, stdio: 'inherit' }
     };
 
     /**
@@ -112,7 +112,7 @@ export class Starter {
     //   BROWSER=none — Electron is the renderer; no browser tab needed.
     //   DISABLE_ESLINT_PLUGIN=true — CRA 5 ships eslint-config-react-app and
     //     loads it inside the webpack-dev-server overlay. Combined with this
-    //     project's .eslintrc.js (which already lists `plugins: ['react']`),
+    //     project's .eslintrc.cjs (which already lists `plugins: ['react']`),
     //     ESLint errors with "Plugin 'react' was conflicted between …".
     //     Disabling CRA's plugin keeps the overlay quiet; standalone
     //     `yarn lint` still runs the airbnb config we want.
