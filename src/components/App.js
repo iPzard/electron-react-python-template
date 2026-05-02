@@ -1,26 +1,44 @@
-import React, { Fragment, useEffect } from 'react';
-import { get } from 'utils/requests';
+import React, { Fragment, useEffect, useRef } from 'react';
+import { get } from '../utils/requests';
 
-import { Counter } from 'components/counter/Counter';
-import Titlebar from 'components/titlebar/Titlebar';
+import { Counter } from './counter/Counter';
+import Titlebar from './titlebar/Titlebar';
 
-import logo from 'logo.svg';
-import styles from 'components/App.module.scss';
+import logo from '../logo.svg';
+import styles from './App.module.scss';
 
 function App() {
+  // Guard for the example Flask call below.
+  //
+  // Under React 18 + <React.StrictMode> (see src/index.js), every effect with
+  // an empty dep array runs TWICE in development to surface side-effect bugs
+  // — production builds run it once. Without this ref the demo would fire two
+  // alerts on first mount in dev. Real-world fetches should also be idempotent
+  // under StrictMode; this is the canonical pattern.
+  //
+  // If your effect represents an API call that's safe to retry, you can drop
+  // the guard. If you want StrictMode's double-invoke check turned off
+  // entirely, remove <React.StrictMode> in src/index.js (not recommended —
+  // it catches real bugs).
+  const hasFiredExampleCallRef = useRef(false);
 
   useEffect(() => {
+    if (hasFiredExampleCallRef.current) return undefined;
+    hasFiredExampleCallRef.current = true;
 
     /**
-     * Example call to Flask
+     * Example call to Flask. The fetch helper retries on connection-refused
+     * so we no longer need a setTimeout to wait for Flask to bind.
      * @see /src/utils/requests.js
      * @see /app.py
      */
-    setTimeout(() => get(
-      'example', // Route
-      (response) => alert(response), // Response callback
-      (error) => console.error(error) // Error callback
-    ), 3000);
+    get(
+      'example',
+      // eslint-disable-next-line no-alert
+      (response) => alert(response),
+      (error) => console.error(error)
+    );
+    return undefined;
   }, []);
 
   return (

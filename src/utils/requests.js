@@ -1,8 +1,36 @@
-// Electron Inter Process Communication and dialog
-const { ipcRenderer } = window.require('electron');
+// Talks to the Python/Flask backend via fetch. The Flask port is provided by
+// the preload bridge (see preload.js → contextBridge → window.electronAPI).
+// The renderer no longer has direct Electron access (contextIsolation: true).
+//
+// Flask is spawned by Electron in parallel with the React dev server, so the
+// first few requests after startup may race the Flask bind. fetchWithRetry
+// retries on connection-refused-style errors with exponential backoff up to
+// `maxAttempts` total attempts.
 
-// Dynamically generated TCP (open) port between 3000-3999
-const port = ipcRenderer.sendSync('get-port-number');
+const port = window.electronAPI.getPort();
+
+const RETRYABLE_NETWORK_ERROR = /Failed to fetch|NetworkError|ECONNREFUSED|connection refused/i;
+
+const fetchWithRetry = async (url, init, maxAttempts = 6) => {
+  let lastError;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      return await (init === undefined ? fetch(url) : fetch(url, init));
+    } catch (error) {
+      lastError = error;
+      const message = (error && error.message) || '';
+      if (!RETRYABLE_NETWORK_ERROR.test(message) || attempt === maxAttempts) {
+        throw error;
+      }
+      // Exponential backoff: 100ms, 200ms, 400ms, 800ms, 1600ms (capped)
+      const delay = Math.min(100 * 2 ** (attempt - 1), 1600);
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((r) => { setTimeout(r, delay); });
+    }
+  }
+  throw lastError;
+};
 
 /**
  * @namespace Requests
@@ -17,7 +45,7 @@ const port = ipcRenderer.sendSync('get-port-number');
 * @memberof Requests
 */
 export const get = (route, callback, errorCallback) => {
-  fetch(`http://localhost:${port}/${route}`)
+  fetchWithRetry(`http://127.0.0.1:${port}/${route}`)
     .then((response) => response.json())
     .then(callback)
     .catch((error) => (errorCallback ? errorCallback(error) : console.error(error)));
@@ -38,10 +66,10 @@ export const post = (
   callback,
   errorCallback
 ) => {
-  fetch(`http://localhost:${port}/${route}`, {
+  fetchWithRetry(`http://127.0.0.1:${port}/${route}`, {
     body,
-    method: 'POST',
-    headers: { 'Content-type': 'application/json' }
+    headers: { 'Content-type': 'application/json' },
+    method: 'POST'
   })
     .then((response) => response.json())
     .then(callback)

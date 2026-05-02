@@ -1,11 +1,18 @@
-# Number of days of inactivity before an issue becomes stale
-daysUntilStale: 30
+# Number of days of inactivity before an issue becomes stale.
+# Raised from 30 -> 180 so real bug reports do not get auto-closed
+# while waiting for triage (closed issues #50, #36, #46 etc were
+# valid bugs that hit this window).
+daysUntilStale: 180
 # Number of days of inactivity before a stale issue is closed
-daysUntilClose: 7
-# Issues with these labels will never be considered stale
+daysUntilClose: 14
+# Issues with these labels will never be considered stale.
+# `bug` and `documentation` are exempt so legitimate defects and
+# doc gaps are not auto-closed.
 exemptLabels:
   - pinned
   - security
+  - bug
+  - documentation
 # Label to use when marking an issue as stale
 staleLabel: wontfix
 # Comment to post when marking an issue as stale. Set to `false` to disable

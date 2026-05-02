@@ -20,7 +20,7 @@ switch (script) {
     return buildApp();
 
   case 'clean':
-    return cleanProject();
+    return cleanProject({ removeDeps: command === 'all' });
 
   case 'package':
     return packageApp();
@@ -55,46 +55,61 @@ function buildApp() {
 
 
 /**
- * @description - Cleans project by removing various files and folders.
+ * @description - Cleans project by removing build/test artifacts.
+ * `yarn clean` removes only generated artifacts (safe; quick to recover from).
+ * `yarn clean:all` additionally removes node_modules + lockfiles, requiring
+ * a full reinstall — pass `{ removeDeps: true }`.
+ *
+ * Notes:
+ *  - app.spec is committed source (PyInstaller spec), do NOT delete.
+ *  - docs/ is the published JSDoc reference, do NOT delete.
  * @memberof Dispatcher
  */
-function cleanProject() {
+function cleanProject({ removeDeps = false } = {}) {
   const cleaner = new Cleaner();
   const getPath = (...filePaths) => path.join(__dirname, '..', ...filePaths);
 
-  // Files to remove during cleaning
-  [
-    // Cache
+  // Generated artifacts — always removed.
+  const artifactPaths = [
+    // Python cache
     getPath('app.pyc'),
-    getPath('app.spec'),
     getPath('__pycache__'),
 
-    // Debug
+    // Debug logs
     getPath('npm-debug.log'),
     getPath('yarn-debug.log'),
     getPath('yarn-error.log'),
 
-    // Dependencies
+    // Test output
+    getPath('coverage'),
+
+    // Production output
+    getPath('build'),
+    getPath('dist'),
+
+    // PyInstaller intermediate workpath (see scripts/build.js)
+    getPath('.pyi-build'),
+
+    // Misc
+    getPath('.DS_Store')
+  ];
+
+  // Dependency caches and lockfiles — only removed by `yarn clean:all`.
+  // Removing yarn.lock + node_modules forces a full reinstall and may drift
+  // dependency versions, so we gate it behind an explicit opt-in.
+  const dependencyPaths = [
     getPath('.pnp'),
     getPath('.pnp.js'),
     getPath('node_modules'),
     getPath('package-lock.json'),
-    getPath('yarn.lock'),
+    getPath('yarn.lock')
+  ];
 
-    // Testing
-    getPath('coverage'),
+  const pathsToRemove = removeDeps
+    ? [...artifactPaths, ...dependencyPaths]
+    : artifactPaths;
 
-    // Production
-    getPath('build'),
-    getPath('dist'),
-    getPath('docs'),
-
-    // Misc
-    getPath('.DS_Store')
-  ]
-    // Iterate and remove process
-    .forEach(cleaner.removePath);
-
+  pathsToRemove.forEach(cleaner.removePath);
 
   /**
    * Remove resources/app if it exists, then if the resources
@@ -116,7 +131,7 @@ function cleanProject() {
     if (isResourcesDirEmpty) cleaner.removePath(resourcesDir);
   }
 
-  console.log('Project is clean.');
+  console.log(removeDeps ? 'Project fully cleaned (deps removed).' : 'Project artifacts cleaned.');
 }
 
 

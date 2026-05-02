@@ -2,19 +2,31 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    mocha: true
+    jest: true,
+    mocha: true,
+    node: true
   },
   extends: ['plugin:react/recommended', 'airbnb'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly'
   },
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
+    // No babel.config.js / .babelrc in repo (CRA 5 owns its own babel config),
+    // so tell the parser not to look one up. Also pass the JSX preset
+    // explicitly so .jsx-style files lint without "Parsing error: This
+    // experimental syntax requires enabling 'jsx'" errors.
+    babelOptions: {
+      babelrc: false,
+      configFile: false,
+      presets: ['@babel/preset-react']
+    },
     ecmaFeatures: {
       jsx: true
     },
     ecmaVersion: 12,
+    requireConfigFile: false,
     sourceType: 'module'
   },
   plugins: ['react'],
@@ -121,5 +133,13 @@ module.exports = {
         paths: ['./', 'src']
       }
     }
-  }
+  },
+  overrides: [
+    {
+      // CRA boilerplate file; console.log calls are part of the upstream
+      // reference implementation. Allow them rather than touch CRA code.
+      files: ['src/serviceWorker.js'],
+      rules: { 'no-console': 'off' }
+    }
+  ]
 };

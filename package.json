@@ -1,38 +1,42 @@
 {
   "author": "Daniel Wade",
-  "description": "Started template for Electron, React, Python app",
+  "description": "Starter template for Electron, React, Python app",
   "dependencies": {
-    "@reduxjs/toolkit": "^1.1.0",
-    "axios": "^0.21.1",
-    "electron-is-dev": "^1.2.0",
-    "get-port": "^5.1.1",
-    "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-redux": "^7.2.0",
-    "react-scripts": "3.4.1"
+    "@reduxjs/toolkit": "2.11.2",
+    "get-port": "5.1.1",
+    "prop-types": "15.8.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-redux": "9.2.0",
+    "react-scripts": "5.0.1"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "babel-eslint": "^10.1.0",
-    "cross-env": "^7.0.3",
-    "electron": "^13.0.1",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-installer-dmg": "^3.0.0",
-    "electron-packager": "^15.0.0",
-    "electron-wix-msi": "^3.0.4",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-standard": "^5.0.0",
-    "jsdoc": "^3.6.5",
-    "sass": "^1.26.5"
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
+    "@babel/eslint-parser": "7.28.6",
+    "cross-env": "7.0.3",
+    "electron": "30.0.0",
+    "electron-devtools-installer": "3.2.0",
+    "electron-installer-dmg": "3.0.0",
+    "electron-packager": "17.1.2",
+    "electron-wix-msi": "3.0.4",
+    "eslint": "8.57.1",
+    "levenary": "1.1.1",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "jsdoc": "4.0.5",
+    "sass": "1.99.0"
   },
   "optionalDependencies": {
-    "electron-installer-debian": "^3.1.0"
+    "electron-installer-debian": "3.2.0"
+  },
+  "resolutions": {
+    "@babel/preset-env": "7.29.3"
   },
   "browserslist": {
     "production": [
@@ -66,11 +70,15 @@
     "build:package:mac": "node ./scripts/dispatch package mac",
     "build:package:windows": "node ./scripts/dispatch package windows",
     "clean": "node ./scripts/dispatch clean",
+    "clean:all": "node ./scripts/dispatch clean all",
     "eject": "react-scripts eject",
+    "lint": "eslint src --ext .js,.jsx",
     "start": "node ./scripts/dispatch start",
     "start:electron": "electron .",
-    "start:react": "react-scripts start",
-    "test": "react-scripts test"
+    "start:react": "cross-env DISABLE_ESLINT_PLUGIN=true react-scripts start",
+    "test": "react-scripts test",
+    "test:python": "python -m pytest",
+    "verify": "yarn lint && yarn test --watchAll=false && yarn test:python && yarn build:react"
   },
   "version": "1.0.0"
 }

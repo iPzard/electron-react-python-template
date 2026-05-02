@@ -1,5 +1,7 @@
 // Built-in modules
 const { spawn } = require('child_process');
+const fs = require('fs');
+const http = require('http');
 const path = require('path');
 
 // Electron modules
@@ -7,18 +9,42 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 
 // Extra modules
 const getPort = require('get-port');
-const isDevMode = require('electron-is-dev');
-const { get } = require('axios');
+
+// Electron's `app.isPackaged` is the canonical "is this a packaged build?"
+// signal — no need for the `electron-is-dev` shim. Defined here as a
+// constant so the rest of the file reads naturally.
+const isDevMode = !app.isPackaged;
 
 
 /**
  * @description - Shuts down Electron & Flask.
+ *
+ * Uses Node's built-in http module rather than axios — this is the only
+ * HTTP call from the Electron main process, so a dedicated client is
+ * unnecessary. Flask responds with a JSON ack and then exits itself
+ * (see app.py /quit). We don't read the body; we just need the request
+ * to flush before quitting Electron.
+ *
+ * Belt-and-braces: schedule app.exit(0) a few seconds after app.quit().
+ * app.quit() can be silently no-op'd by hidden windows, deadlocked
+ * renderer hangs, or stuck devtools sessions — leaving electron.exe alive
+ * after the user thinks they closed the app. app.exit() is unconditional.
  * @param {number} port - Port that Flask server is running on.
  */
 const shutdown = (port) => {
-  get(`http://localhost:${port}/quit`)
-    .then(app.quit)
-    .catch(app.quit);
+  const forceExit = setTimeout(() => app.exit(0), 3000);
+  forceExit.unref();
+
+  const finish = () => {
+    app.quit();
+  };
+
+  const req = http.get(`http://127.0.0.1:${port}/quit`, finish);
+  req.on('error', finish);
+  req.setTimeout(2000, () => {
+    req.destroy();
+    finish();
+  });
 };
 
 
@@ -57,7 +83,10 @@ const createMainWindow = (port) => {
    */
   if (isDevMode) {
 
-    mainWindow.loadURL('http://localhost:3000');
+    // Use 127.0.0.1 (not localhost) — CRA binds IPv4 only when HOST=127.0.0.1
+    // is set in scripts/start.js. On Windows, Electron resolves "localhost"
+    // to ::1 (IPv6) and the connection is refused.
+    mainWindow.loadURL('http://127.0.0.1:3000');
     mainWindow.hide();
 
     /**
@@ -87,11 +116,18 @@ const createMainWindow = (port) => {
         if (isLoaded) {
 
           /**
-           * Keep show() & hide() in this order to prevent
+           * Keep show() before destroy() in this order to prevent
            * unresponsive behavior during page load.
+           *
+           * IMPORTANT: destroy() — not hide(). The 'window-all-closed'
+           * event only fires when every BrowserWindow is closed/destroyed.
+           * A merely hidden loadingWindow keeps Electron alive in the
+           * background, so when the user closes the main window, app.quit()
+           * never fires and the electron.exe process leaks.
            */
           mainWindow.show();
-          loadingWindow.hide();
+          loadingWindow.destroy();
+          browserWindows.loadingWindow = null;
         }
       };
 
@@ -150,14 +186,12 @@ const createLoadingWindow = () => {
   return new Promise((resolve, reject) => {
     const { loadingWindow } = browserWindows;
 
-    // Variants of developer loading screen
-    const loaderConfig = {
-      react: 'utilities/loaders/react/index.html',
-      redux: 'utilities/loaders/redux/index.html'
-    };
+    // Path to the developer loading screen shown while CRA compiles.
+    // Add new variants under utilities/loaders/<name>/ if you want to swap.
+    const loaderHtml = 'utilities/loaders/redux/index.html';
 
     try {
-      loadingWindow.loadFile(path.join(__dirname, loaderConfig.redux));
+      loadingWindow.loadFile(path.join(__dirname, loaderHtml));
 
       loadingWindow.webContents.on('did-finish-load', () => {
         loadingWindow.show();
@@ -172,12 +206,23 @@ const createLoadingWindow = () => {
 
 
 /**
- * @description - Installs developer extensions.
+ * @description - Installs developer extensions. The package is a devDependency
+ * so it's absent from production bundles (closed issue #23). We therefore
+ * require it lazily and swallow MODULE_NOT_FOUND — the installer is purely
+ * a dev convenience.
  * @returns {Promise}
  */
 const installExtensions = async () => {
   const isForceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
-  const installer = require('electron-devtools-installer');
+
+  let installer;
+  try {
+    // eslint-disable-next-line global-require
+    installer = require('electron-devtools-installer');
+  } catch (error) {
+    if (error.code !== 'MODULE_NOT_FOUND') throw error;
+    return undefined;
+  }
 
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS']
     .map((extension) => installer.default(installer[extension], isForceDownload));
@@ -210,10 +255,10 @@ app.whenReady().then(async () => {
   browserWindows.mainWindow = new BrowserWindow({
     frame: false,
     webPreferences: {
-      contextIsolation: false,
-      enableRemoteModule: true,
-      nodeIntegration: true,
-      preload: path.join(app.getAppPath(), 'preload.js')
+      contextIsolation: true,
+      nodeIntegration: false,
+      preload: path.join(app.getAppPath(), 'preload.js'),
+      sandbox: false
     }
   });
 
@@ -235,14 +280,48 @@ app.whenReady().then(async () => {
   else {
     createMainWindow(port);
 
-    // Dynamic script assignment for starting Flask in production
-    const runFlask = {
-      darwin: `open -gj "${path.join(app.getAppPath(), 'resources', 'app.app')}" --args`,
-      linux: './resources/app/app',
-      win32: 'start ./resources/app/app.exe'
-    }[process.platform];
+    // Production Flask launch.
+    //
+    // Path lives at process.resourcesPath (the dir CONTAINING app.asar),
+    // NOT app.getAppPath() (which is the asar itself — you can't spawn a
+    // binary from inside a read-only archive). electron-packager's
+    // --extra-resource flag drops the PyInstaller dir at
+    //   <install>/resources/app/   on Win/Linux
+    //   <install>/Resources/app/   inside the .app bundle on macOS
+    // and process.resourcesPath resolves to that parent on every platform.
+    //
+    // We spawn the Flask binary directly rather than through a shell. That
+    // avoids the `start` cmd quirk on Windows (returns immediately, drops
+    // stderr) and the `open -gj` path on macOS (swallows errors silently).
+    const flaskBinaryName = process.platform === 'win32' ? 'app.exe' : 'app';
+    const flaskBinary = path.join(
+      process.resourcesPath,
+      'app',
+      flaskBinaryName
+    );
 
-    spawn(`${runFlask} ${port}`, { detached: false, shell: true, stdio: 'pipe' });
+    // Capture Flask stdout + stderr to a logfile in the OS user-data dir.
+    // PyInstaller's `console=False` (in app.spec) means there's no console
+    // window in production, so a Flask traceback would otherwise vanish.
+    // The log path is platform-specific:
+    //   Windows: %APPDATA%\<app-name>\flask.log
+    //   macOS:   ~/Library/Application Support/<app-name>/flask.log
+    //   Linux:   ~/.config/<app-name>/flask.log
+    // Template users who want different routing (rotation, no log at all,
+    // separate stdout/stderr) can edit the few lines below.
+    const userDataDir = app.getPath('userData');
+    fs.mkdirSync(userDataDir, { recursive: true });
+    const flaskLogPath = path.join(userDataDir, 'flask.log');
+    const flaskLog = fs.createWriteStream(flaskLogPath, { flags: 'a' });
+    flaskLog.write(`\n--- Flask launched at ${new Date().toISOString()} on port ${port} ---\n`);
+
+    const flaskProc = spawn(flaskBinary, [String(port)], {
+      cwd: path.dirname(flaskBinary),
+      detached: false,
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+    flaskProc.stdout.pipe(flaskLog);
+    flaskProc.stderr.pipe(flaskLog);
   }
 
   app.on('activate', () => {

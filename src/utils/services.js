@@ -1,17 +1,17 @@
-// Electron Inter Process Communication and dialog
-const { ipcRenderer } = window.require('electron');
+// Window-control helpers backed by the preload bridge (window.electronAPI).
+// See preload.js for the exposed API.
 
 /**
  * @namespace Services
- * @description - Methods from Electron Inter Process Communication.
- * @property {function} maximize - Function to maximize the screen size of the program.
- * @property {function} minimize - Function to minimize the screen size of the program.
- * @property {function} quit - Function to close and exit the program.
- * @property {function} unmaximize - Function to contract (unmaximize) the screen size of the program.
+ * @description - Methods exposed by the preload bridge for window control.
+ * @property {function} maximize - Maximize the program window.
+ * @property {function} minimize - Minimize the program window.
+ * @property {function} quit - Close and exit the program.
+ * @property {function} unmaximize - Restore (unmaximize) the program window.
  */
 export const app = {
-  maximize: () => ipcRenderer.send('app-maximize'),
-  minimize: () => ipcRenderer.send('app-minimize'),
-  quit: () => ipcRenderer.send('app-quit'),
-  unmaximize: () => ipcRenderer.send('app-unmaximize')
+  maximize: () => window.electronAPI.maximize(),
+  minimize: () => window.electronAPI.minimize(),
+  quit: () => window.electronAPI.quit(),
+  unmaximize: () => window.electronAPI.unmaximize()
 };

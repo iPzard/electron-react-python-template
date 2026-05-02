@@ -1,20 +1,20 @@
-import 'index.scss';
+import './index.scss';
 
-import * as serviceWorker from 'serviceWorker';
-
-import App from 'components/App';
 import { Provider } from 'react-redux';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import store from 'state/store';
+// eslint-disable-next-line import/no-unresolved
+import { createRoot } from 'react-dom/client';
+import App from './components/App';
+import * as serviceWorker from './serviceWorker';
+import store from './state/store';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+root.render(
   <React.StrictMode>
     <Provider store={ store }>
       <App />
     </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

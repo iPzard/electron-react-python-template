@@ -8,15 +8,34 @@
 ![electron_react_python](https://user-images.githubusercontent.com/8584126/95290114-59e42900-0821-11eb-8e43-a708959e8449.gif)
 
 ## 🛠️ Setup
-Ensure you have [Node](https://nodejs.org/en/download/) and [Python](https://www.python.org/downloads/) installed, then clone this repository. After it's cloned, navigate to the project's root directory on your computer and
-run the following scrips in a terminal application *(e.g., Git Bash)*:
 
-**Install Python dependencies:**
+> These setup steps are for **developers** building on top of the template. End users who install your packaged app (MSI / DMG / DEB) need none of this — the installer ships everything.
+
+### Prerequisites
+
+| Tool | Recommended | Notes |
+|---|---|---|
+| [Node.js](https://nodejs.org/en/download/) | 20.x LTS | Required ≥ 16. CRA 5 / webpack 5 do **not** need the older `--openssl-legacy-provider` workaround. |
+| [Yarn 1](https://classic.yarnpkg.com/) | 1.22.x | `npm install` works too, but lockfile + scripts are tested against Yarn 1. |
+| [Python](https://www.python.org/downloads/) | 3.10 – 3.12 | Used for the Flask service in dev and bundled by PyInstaller for production. |
+| [pip](https://pip.pypa.io/) | bundled with Python | Use `pip`, `pip3`, or `py -m pip` — whichever your install exposes. |
+
+**Platform-specific (only when packaging installers):**
+
+- **Windows MSI:** [WiX Toolset 3.x](https://github.com/wixtoolset/wix3/releases) on `PATH` (e.g., `C:\Program Files (x86)\WiX Toolset v3.14.1\bin`).
+- **Linux DEB:** `fakeroot` and `dpkg` on `PATH` (`sudo apt install fakeroot dpkg`).
+- **macOS DMG:** no extra tools needed for an unsigned build. Code signing requires an Apple Developer ID.
+
+### Install dependencies
+
+Clone the repo and from the project root:
+
+**Python deps** (Flask, flask-cors, PyInstaller, pytest):
 ```bash
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-**Install Node dependencies:**
+**Node deps:**
 ```bash
 yarn install
 ```
@@ -37,7 +56,7 @@ yarn install
 
 Below are the scripts you'll need to run and package your application, as well as build out JSDoc documentation, if you choose to do so. An exhaustive list of scripts that are available can be found in the `package.json` file of the project's root directory, in the `scripts` section.
 
-| ⚠️ &nbsp;When packaging, you must install [PyInstaller](https://pypi.org/project/pyinstaller) and add its path in your environment variables.<br />The name of your package in [package.js](https://github.com/iPzard/electron-react-python-template/blob/master/scripts/package.js) must also match the name field in [package.json](https://github.com/iPzard/electron-react-python-template/blob/master/package.json). |
+| ⚠️ &nbsp;PyInstaller is included in `requirements.txt`, so a separate install is no longer required. Installer metadata (name, version, manufacturer, description) is pulled from the matching fields in `package.json` automatically. |
 | --- |
 
 **Start Developer Mode:**

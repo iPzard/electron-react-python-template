@@ -1,3 +1,4 @@
-Flask
-flask-cors
-pyinstaller
+Flask>=3.0,<4.0
+flask-cors>=4.0,<7.0
+pyinstaller>=6.0,<7.0
+pytest>=8.0,<10.0

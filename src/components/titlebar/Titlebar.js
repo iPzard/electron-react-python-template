@@ -1,15 +1,15 @@
+import React, { useState } from 'react';
 import {
   CloseButton,
   ContractButton,
   MaximizeButton,
   MinimizeButton
-} from 'components/titlebar/TitlebarButtons';
-import React, { useState } from 'react';
+} from './TitlebarButtons';
 
-import { app } from 'utils/services';
+import { app } from '../../utils/services';
 
-import favicon from 'components/titlebar/img/favicon.png';
-import styles from 'components/titlebar/scss/Titlebar.module.scss';
+import favicon from './img/favicon.png';
+import styles from './scss/Titlebar.module.scss';
 
 
 /**
@@ -19,7 +19,7 @@ import styles from 'components/titlebar/scss/Titlebar.module.scss';
  * electron-window-title-buttons used in main.js to set opacity on/off focus.
  */
 
-const Titlebar = () => {
+function Titlebar() {
 
   const [ maximized, setMaximized ] = useState(false);
 
@@ -46,6 +46,6 @@ const Titlebar = () => {
       </div>
     </section>
   );
-};
+}
 
 export default Titlebar;

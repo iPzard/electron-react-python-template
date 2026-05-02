@@ -5,9 +5,26 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <!--
+      Content Security Policy.
+
+      Production (loadFile in main.js): the CRA-built bundle loads via file://,
+      so 'self' covers scripts/styles. 'unsafe-inline' is needed because CRA
+      injects a small inline runtime script and inline critical-CSS. connect-src
+      allows the renderer to reach Flask at the dynamic dev/prod port (3001–3999)
+      on either localhost or 127.0.0.1 — see main.js port handoff.
+
+      Dev mode: webpack-dev-server needs 'unsafe-eval' for HMR. Electron's
+      "Insecure Content-Security-Policy" warning therefore fires in dev — it
+      is expected and disappears once the app is packaged.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:* http://127.0.0.1:*; img-src 'self' data:; font-src 'self' data:;"
+    />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Electron desktop app powered by React and a Python/Flask microservice."
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--

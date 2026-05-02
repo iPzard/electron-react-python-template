@@ -19,33 +19,45 @@ class Builder {
   }
 
   /**
-   * @description - Creates production build of Python back end.
+   * @description - Creates production build of Python back end. Uses
+   * app.spec (committed) so hiddenimports and bundled data files survive
+   * PyInstaller's static-analysis blind spots — see the comment block at
+   * the top of app.spec.
    * @memberof Builder
    */
   buildPython = () => {
     console.log('Creating Python distribution files...');
 
-    const app = 'app.py';
-    const icon = './public/favicon.ico';
-
     const options = [
-      '--noconsole', // No shell
       '--noconfirm', // Don't confirm overwrite
       '--distpath ./resources', // Dist (out) path
-      `--icon ${icon}` // Icon to use
+      // PyInstaller's intermediate workpath defaults to ./build/<name>/.
+      // That collides with CRA's `react-scripts build` which clears ./build/
+      // and refuses to rmdir a non-empty subdirectory — yarn build:package:*
+      // would fail with "ENOTEMPTY: directory not empty, rmdir 'build/app'".
+      // Route PyInstaller's scratch dir outside ./build/.
+      '--workpath ./.pyi-build'
     ].join(' ');
-    // TODO: Check if python is installed.. If not, prompt user
-    // "Python is required but not installed, install it? (y/n)"
-    spawnSync(`pyinstaller ${options} ${app}`, spawnOptions);
+
+    // Invoke via `python -m PyInstaller` so the build works even when
+    // pip's user scripts directory isn't on PATH (common on Windows).
+    spawnSync(`python -m PyInstaller ${options} app.spec`, spawnOptions);
   }
 
   /**
    * @description - Creates production build of React front end.
+   *
+   * DISABLE_ESLINT_PLUGIN=true: CRA 5 ships eslint-config-react-app and
+   * loads it inside the webpack ESLint plugin. Combined with this project's
+   * .eslintrc.js (which already lists `plugins: ['react']`), the build fails
+   * with "Plugin 'react' was conflicted between …". Disabling CRA's plugin
+   * keeps the build clean; standalone `yarn lint` still runs the airbnb
+   * config we want.
    * @memberof Builder
    */
   buildReact = () => {
     console.log('Creating React distribution files...');
-    spawnSync(`react-scripts build`, spawnOptions);
+    spawnSync('cross-env DISABLE_ESLINT_PLUGIN=true react-scripts build', spawnOptions);
   }
 }
 

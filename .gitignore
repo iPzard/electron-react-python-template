@@ -1,9 +1,16 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-#cache
+# python cache
 app.pyc
-app.spec
 __pycache__
+
+# pyinstaller intermediate workpath (configured in scripts/build.js)
+/.pyi-build
+
+# python virtualenvs
+venv/
+.venv/
+env/
 
 # debug
 npm-debug.log*
@@ -23,6 +30,10 @@ yarn-error.log*
 /dist
 /resources/app
 /resources/app.app
+
+# editors
+.idea/
+.vscode/
 
 # misc
 .DS_Store

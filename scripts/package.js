@@ -8,6 +8,22 @@ const path = (directory) => {
   return require('path').resolve(__dirname, directory);
 };
 
+// Read app metadata from package.json so the installers always reflect the
+// current name/version/description/author. Template users only need to edit
+// package.json — these values flow through to the MSI/DMG/DEB output.
+//
+// `manufacturer` falls back to `author.name` if `author` is an object, or
+// the raw author string. Set `author` in package.json to your company /
+// publisher name; it shows up in Add/Remove Programs on Windows.
+// eslint-disable-next-line global-require
+const pkg = require('../package.json');
+const APP_NAME = pkg.name;
+const APP_VERSION = pkg.version;
+const APP_DESCRIPTION = pkg.description || pkg.name;
+const APP_MANUFACTURER = (typeof pkg.author === 'string')
+  ? pkg.author
+  : (pkg.author && pkg.author.name) || pkg.name;
+
 /**
  * @namespace Packager
  * @description - Packages app for various operating systems.
@@ -28,7 +44,14 @@ class Packager {
     const options = {
       build: [
         'app',
-        '--extra-resource=./resources',
+        // PyInstaller's resources/app/ dir is dropped into the bundle's
+        // Resources/ alongside (NOT inside) the asar. main.js resolves it
+        // via process.resourcesPath, so the runtime path is
+        //   <install>/resources/app/<binary>
+        '--extra-resource=./resources/app',
+        // Keep the asar lean: project source dirs and PyInstaller scratch
+        // are not needed at runtime — the CRA build/ output is.
+        '--ignore="^/(resources|dist|\\.pyi-build|src|public|tests|utilities|docs)(/|$)"',
         '--icon ./public/favicon.ico',
         '--platform linux',
         '--arch x64',
@@ -39,12 +62,12 @@ class Packager {
 
       package: [
         `--src ${path('../dist/linux/app-linux-x64/')}`,
-        'electron-react-python-template',
+        APP_NAME,
         `--dest ${path('../dist/linux/setup')}`,
         '--arch amd64',
         `--icon ${path('../utilities/deb/images/icon.ico')}`,
         `--background ${path('../utilities/deb/images/background.png')}`,
-        '--title "Example app"',
+        `--title "${APP_DESCRIPTION}"`,
         '--overwrite'
       ].join(' '),
 
@@ -70,9 +93,13 @@ class Packager {
     const options = {
       build: [
         'app',
-        '--extra-resource=./resources',
+        // See packageLinux comment; same Resources/app/ layout on macOS,
+        // resolved at runtime via process.resourcesPath.
+        '--extra-resource=./resources/app',
+        '--ignore="^/(resources|dist|\\.pyi-build|src|public|tests|utilities|docs)(/|$)"',
         '--icon ./public/favicon.ico',
-        '--win32',
+        '--platform=darwin',
+        '--arch=x64',
         '--out',
         './dist/mac',
         '--overwrite'
@@ -80,11 +107,11 @@ class Packager {
 
       package: [
         path('../dist/mac/app-darwin-x64/app.app'),
-        'electron-react-python-template',
+        APP_NAME,
         `--out=${path('../dist/mac/setup')}`,
         `--icon=${path('../utilities/dmg/images/icon.icns')}`,
         `--background=${path('../utilities/dmg/images/background.png')}`,
-        '--title="Example app"',
+        `--title="${APP_DESCRIPTION}"`,
         '--overwrite'
       ].join(' '),
 
@@ -114,7 +141,10 @@ class Packager {
       app: [
         'app',
         '--asar',
+        // PyInstaller dist lands at <install>/resources/app/, resolved at
+        // runtime via process.resourcesPath in main.js.
         '--extra-resource=./resources/app',
+        '--ignore="^/(resources|dist|\\.pyi-build|src|public|tests|utilities|docs)(/|$)"',
         '--icon ./public/favicon.ico',
         '--win32',
         '--out',
@@ -132,10 +162,10 @@ class Packager {
     const msiCreator = new MSICreator({
       appDirectory: path('../dist/windows/app-win32-x64'),
       appIconPath: path('../utilities/msi/images/icon.ico'),
-      description: 'Example app',
+      description: APP_DESCRIPTION,
       exe: 'app',
-      manufacturer: 'Example Manufacturer',
-      name: 'electron-react-python-template',
+      manufacturer: APP_MANUFACTURER,
+      name: APP_NAME,
       outputDirectory: path('../dist/windows/setup'),
       ui: {
         chooseDirectory: true,
@@ -144,7 +174,7 @@ class Packager {
           banner: path('../utilities/msi/images/banner.png')
         }
       },
-      version: '1.0.0'
+      version: APP_VERSION
     });
 
     // Customized MSI template

@@ -13,6 +13,6 @@
     "recurse": true,
     "destination": "docs",
     "template": "utilities/jsdoc",
-    "readme": "readme.md"
+    "readme": "README.md"
   }
 }
