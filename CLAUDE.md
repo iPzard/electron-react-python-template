@@ -166,7 +166,6 @@ Output paths:
 ## Known sharp edges
 
 - **`/quit` uses `werkzeug.server.shutdown`** ([app.py](app.py)) which is removed in Werkzeug 2.1+. If a user upgrades Werkzeug and hits `RuntimeError: Not running with the Werkzeug Server`, that's why.
-- **`packageMacOS` passes `--win32` to electron-packager** in [scripts/package.ts](scripts/package.ts). Looks like a copy-paste from the Windows branch. Flag this if mac packaging produces a Windows artifact rather than silently fixing.
 - **`airbnb-typescript@18` ↔ `@typescript-eslint@8` rule drift** — v8 removed the extension style rules airbnb-typescript still references. Disabled in the TS override block of [.eslintrc.cjs](.eslintrc.cjs); base ESLint equivalents re-enabled. Don't re-bump airbnb-typescript without checking compatibility.
 - **`get-port@5` namespace export** — `main.ts` and `scripts/start.ts` consume it via `import getPort = require('get-port')` because v5 publishes the `makeRange` helper as a CommonJS namespace. v6+ went ESM-only and would break this pattern. Pin v5.
 - **Asar bloat** — current `--ignore` regex in [scripts/package.ts](scripts/package.ts) excludes `src/`, `resources/`, `dist/`, etc., but NOT raw `main.ts`/`preload.ts` at root, `tsconfig*.json`, or `dist-electron/src/types/electron-api.js` (an empty type-only emit). Harmless but the asar carries a few KB it doesn't need.

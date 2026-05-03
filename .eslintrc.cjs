@@ -221,6 +221,12 @@ module.exports = {
       }
     },
     {
+      // Build/dev scripts intentionally console.log progress and errors —
+      // they're CLI entry points, not production code. Allow.
+      files: ['scripts/**/*.ts'],
+      rules: { 'no-console': 'off' }
+    },
+    {
       // CRA boilerplate file; console.log calls are part of the upstream
       // reference implementation. Allow them rather than touch CRA code.
       // Placed after the TS override so it wins (later overrides take

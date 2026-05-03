@@ -33,7 +33,6 @@ Output paths:
 
 ## Known issues / likely failure modes
 
-- `packageMacOS` in `scripts/package.ts` passes `--win32` to `electron-packager` for a mac build. This looks like a copy-paste bug from the Windows branch. Flag it if mac packaging produces a Windows artifact.
 - `name` field in `package.json` (`electron-react-python-template`) must match the `MSICreator` `name` and the `electron-installer-debian` package name. Renaming the project = update both places (call out per README).
 - PyInstaller pulls icon from `./public/favicon.ico`. Missing favicon → silent no-icon build, not an error.
 - `extraResources` differs by platform: linux/mac use `./resources`, windows uses `./resources/app`. Don't unify without checking.

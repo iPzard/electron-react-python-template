@@ -61,6 +61,12 @@ export class Packager {
       // Keep the asar lean: project source dirs and PyInstaller scratch
       // are not needed at runtime — the CRA build/ output is.
       '--ignore="^/(resources|dist|\\.pyi-build|src|public|tests|utilities|docs)(/|$)"',
+      // Drop TS source + tsconfigs (only compiled output in dist-electron/
+      // is needed at runtime) and the empty type-only emit at
+      // dist-electron/src/types/electron-api.js (interface-only file).
+      '--ignore="^/(main|preload)\\.ts$"',
+      '--ignore="^/tsconfig.*\\.json$"',
+      '--ignore="^/dist-electron/src(/|$)"',
       '--icon ./public/favicon.ico',
       '--platform linux',
       '--arch x64',
@@ -102,6 +108,12 @@ export class Packager {
       // resolved at runtime via process.resourcesPath.
       '--extra-resource=./resources/app',
       '--ignore="^/(resources|dist|\\.pyi-build|src|public|tests|utilities|docs)(/|$)"',
+      // Drop TS source + tsconfigs (only compiled output in dist-electron/
+      // is needed at runtime) and the empty type-only emit at
+      // dist-electron/src/types/electron-api.js (interface-only file).
+      '--ignore="^/(main|preload)\\.ts$"',
+      '--ignore="^/tsconfig.*\\.json$"',
+      '--ignore="^/dist-electron/src(/|$)"',
       '--icon ./public/favicon.ico',
       '--platform=darwin',
       '--arch=x64',
@@ -145,6 +157,12 @@ export class Packager {
       // runtime via process.resourcesPath in main.js.
       '--extra-resource=./resources/app',
       '--ignore="^/(resources|dist|\\.pyi-build|src|public|tests|utilities|docs)(/|$)"',
+      // Drop TS source + tsconfigs (only compiled output in dist-electron/
+      // is needed at runtime) and the empty type-only emit at
+      // dist-electron/src/types/electron-api.js (interface-only file).
+      '--ignore="^/(main|preload)\\.ts$"',
+      '--ignore="^/tsconfig.*\\.json$"',
+      '--ignore="^/dist-electron/src(/|$)"',
       '--icon ./public/favicon.ico',
       '--win32',
       '--out',

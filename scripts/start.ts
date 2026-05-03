@@ -184,8 +184,8 @@ export class Starter {
           stdio: 'ignore'
         });
       } else {
-        try { process.kill(-proc.pid, 'SIGTERM'); } catch (_e) { /* already gone */ }
-        try { proc.kill('SIGTERM'); } catch (_e) { /* already gone */ }
+        try { process.kill(-proc.pid, 'SIGTERM'); } catch { /* already gone */ }
+        try { proc.kill('SIGTERM'); } catch { /* already gone */ }
       }
     };
 
