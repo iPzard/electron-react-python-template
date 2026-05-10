@@ -143,7 +143,7 @@ yarn build:package:mac           # DMG via electron-installer-dmg
 yarn build:package:linux         # DEB via electron-installer-debian (needs fakeroot, dpkg)
 yarn clean                       # remove build/test artifacts (build/, dist/, dist-electron/, coverage/, __pycache__, .pyi-build/, etc.)
 yarn clean:all                   # also remove node_modules + lockfiles (forces full reinstall)
-yarn build:docs                  # JSDoc → ./docs (custom template in utilities/jsdoc)
+yarn build:docs                  # TypeDoc → ./docs (config in typedoc.json)
 yarn lint                        # ESLint (airbnb + airbnb-typescript) over src/ + scripts/ + main.ts + preload.ts
 yarn typecheck                   # tsc --noEmit for all three tsconfig projects
 yarn test                        # CRA jest runner
@@ -165,12 +165,12 @@ Output paths:
 
 ## Known sharp edges
 
-- **`/quit` uses `werkzeug.server.shutdown`** ([app.py](app.py)) which is removed in Werkzeug 2.1+. If a user upgrades Werkzeug and hits `RuntimeError: Not running with the Werkzeug Server`, that's why.
+- **`/quit` shutdown path** ([app.py:59-65](app.py:59)) — schedules `os._exit(0)` from a `threading.Timer` after acknowledging the request. The classic `werkzeug.server.shutdown` hook was removed in Werkzeug 2.1+; this avoids it entirely. Don't reintroduce the old environ-based pattern when bumping Flask/Werkzeug.
 - **`airbnb-typescript@18` ↔ `@typescript-eslint@8` rule drift** — v8 removed the extension style rules airbnb-typescript still references. Disabled in the TS override block of [.eslintrc.cjs](.eslintrc.cjs); base ESLint equivalents re-enabled. Don't re-bump airbnb-typescript without checking compatibility.
 - **`get-port@5` namespace export** — `main.ts` and `scripts/start.ts` consume it via `import getPort = require('get-port')` because v5 publishes the `makeRange` helper as a CommonJS namespace. v6+ went ESM-only and would break this pattern. Pin v5.
-- **Asar bloat** — current `--ignore` regex in [scripts/package.ts](scripts/package.ts) excludes `src/`, `resources/`, `dist/`, etc., but NOT raw `main.ts`/`preload.ts` at root, `tsconfig*.json`, or `dist-electron/src/types/electron-api.js` (an empty type-only emit). Harmless but the asar carries a few KB it doesn't need.
 - **Old dependency pinning intent:** the user pins exact versions (no carets/tildes). Don't blanket-upgrade; user prefers stability over freshness. See `feedback_pin_versions_exactly.md` memory.
 - **`yarn clean` removes `yarn.lock` and `node_modules`** when run as `yarn clean:all`. Plain `yarn clean` does not — only artifacts. Both are deliberate per `cleanProject()` in [scripts/dispatch.ts](scripts/dispatch.ts), but warn the user before `clean:all` — versions can drift on reinstall.
+- **`yarn build:docs` emits 2 third-party warnings** about `@inheritDoc` summary overwrites in `node_modules/@reduxjs/toolkit/dist/index.d.ts`. They originate inside RTK's own `.d.ts` and TypeDoc's `suppressCommentWarningsInDeclarationFiles` only covers unknown-tag warnings, not `@inheritDoc` conflicts. Output is correct (0 errors). Won't drop until upstream RTK fixes its comments or TypeDoc adds a finer-grained suppress option.
 
 ## Available agents (`.claude/agents/`)
 
@@ -197,7 +197,6 @@ Output paths:
 These are on the roadmap but not yet scheduled. Don't start them without an explicit task — they're each big enough to be their own branch.
 
 - **Migrate ESLint 8 → 9 + flat config in TypeScript** ([.eslintrc.cjs](.eslintrc.cjs) → `eslint.config.ts`). ESLint 8 legacy config can't be authored in TS without loader gymnastics; the file is currently `.cjs` for explicit-CommonJS clarity. Flat config (ESLint 9+) supports `eslint.config.ts` natively via `jiti`/`tsx`. Breaking change — every `extends`/`overrides`/`parserOptions` shape moves to the new flat-array format, and `airbnb` + `airbnb-typescript` need flat-config-compatible replacements (most projects switch to `eslint-config-love`, `@antfu/eslint-config`, or hand-roll).
-- **Replace JSDoc with TypeDoc** (eliminates [utilities/jsdoc/](utilities/jsdoc/) + regenerated [docs/](docs/)). JSDoc theme assets under `utilities/jsdoc/static/scripts/` and `utilities/jsdoc/fixtures/` are the only `.js` files left in project-owned source. TypeDoc reads `tsconfig.json` directly and emits TS-aware documentation; no theme to vendor, no fixture files. Replace `yarn build:docs` to run `typedoc` instead of `jsdoc -c jsdoc.json`. Remove `utilities/jsdoc/` and let `typedoc` rewrite `docs/`.
 
 ## Out of scope (don't add unprompted)
 

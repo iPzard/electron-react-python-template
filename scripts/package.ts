@@ -35,16 +35,14 @@ const baseSpawnOptions: SpawnSyncOptions = {
 };
 
 /**
- * @namespace Packager
- * @description - Packages app for various operating systems.
+ * Packages app for various operating systems.
  */
 export class Packager {
 
   /**
-   * @description - Creates DEB installer for linux.
-   * @memberof Packager
+   * Creates DEB installer for linux.
    *
-   * @tutorial https://github.com/electron-userland/electron-installer-debian
+   * @see https://github.com/electron-userland/electron-installer-debian
    */
   packageLinux = (): void => {
 
@@ -92,10 +90,9 @@ export class Packager {
 
 
   /**
-   * @description - Creates DMG installer for macOS.
-   * @memberof Packager
+   * Creates DMG installer for macOS.
    *
-   * @tutorial https://github.com/electron-userland/electron-installer-dmg
+   * @see https://github.com/electron-userland/electron-installer-dmg
    */
   packageMacOS = (): void => {
 
@@ -138,10 +135,9 @@ export class Packager {
 
 
   /**
-   * @description - Creates MSI installer for Windows.
-   * @memberof Packager
+   * Creates MSI installer for Windows.
    *
-   * @tutorial https://github.com/felixrieseberg/electron-wix-msi
+   * @see https://github.com/felixrieseberg/electron-wix-msi
    */
   packageWindows = (): void => {
 

@@ -6,14 +6,12 @@ const spawnOptions: SpawnSyncOptions = {
 };
 
 /**
- * @namespace Builder
- * @description - Builds React & Python builds of project so Electron can be used.
+ * Builds React & Python builds of project so Electron can be used.
  */
 export class Builder {
 
   /**
-   * @description - Creates Electron, React, and Python production builds.
-   * @memberof Builder
+   * Creates Electron, React, and Python production builds.
    */
   buildAll = (): void => {
     const { buildElectron, buildPython, buildReact } = this;
@@ -24,10 +22,9 @@ export class Builder {
   };
 
   /**
-   * @description - Compiles main.ts + preload.ts to dist-electron/.
+   * Compiles main.ts + preload.ts to dist-electron/.
    * package.json "main" points at dist-electron/main.js, so this output must
    * exist before electron-packager bundles the asar.
-   * @memberof Builder
    */
   buildElectron = (): void => {
     console.log('Compiling Electron main + preload (TypeScript)...');
@@ -35,11 +32,10 @@ export class Builder {
   };
 
   /**
-   * @description - Creates production build of Python back end. Uses
+   * Creates production build of Python back end. Uses
    * app.spec (committed) so hiddenimports and bundled data files survive
    * PyInstaller's static-analysis blind spots — see the comment block at
    * the top of app.spec.
-   * @memberof Builder
    */
   buildPython = (): void => {
     console.log('Creating Python distribution files...');
@@ -61,7 +57,7 @@ export class Builder {
   };
 
   /**
-   * @description - Creates production build of React front end.
+   * Creates production build of React front end.
    *
    * DISABLE_ESLINT_PLUGIN=true: CRA 5 ships eslint-config-react-app and
    * loads it inside the webpack ESLint plugin. Combined with this project's
@@ -69,7 +65,6 @@ export class Builder {
    * with "Plugin 'react' was conflicted between …". Disabling CRA's plugin
    * keeps the build clean; standalone `yarn lint` still runs the airbnb
    * config we want.
-   * @memberof Builder
    */
   buildReact = (): void => {
     console.log('Creating React distribution files...');

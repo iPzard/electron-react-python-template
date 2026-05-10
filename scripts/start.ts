@@ -74,19 +74,16 @@ interface SpawnOptionsBundle {
 }
 
 /**
- * @namespace Starter
- * @description - Scripts to start Electron, React, and Python.
+ * Scripts to start Electron, React, and Python.
  */
 export class Starter {
   /**
-   * @description - Starts developer mode.
+   * Starts developer mode.
    *
    * Spawns three children: webpack-dev-server (React), Flask (via Electron),
    * and Electron itself. Closing the Electron window kills the whole tree —
    * see the cleanup logic below. This used to leak orphan node/python
    * processes when the user shut down via the Electron window.
-   *
-   * @memberof Starter
    */
   developerMode = async (): Promise<void> => {
     const spawnOptions: SpawnOptionsBundle = {

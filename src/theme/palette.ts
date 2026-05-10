@@ -1,8 +1,7 @@
 /**
- * @namespace Theme
- * @description - Theme for Microsoft Fluent UI, which is built into the project.
+ * Theme for Microsoft Fluent UI, which is built into the project.
  *
- * @tutorial - https://www.aka.ms/themedesigner
+ * @see https://www.aka.ms/themedesigner
 */
 
 export interface Palette {

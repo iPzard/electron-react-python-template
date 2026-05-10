@@ -1,0 +1,23 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src", "main.ts", "preload.ts", "scripts"],
+  "entryPointStrategy": "expand",
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/__tests__/**",
+    "**/global.d.ts",
+    "src/serviceWorker.ts",
+    "src/setupTests.ts"
+  ],
+  "out": "docs",
+  "readme": "README.md",
+  "name": "electron-react-python-template",
+  "tsconfig": "./tsconfig.docs.json",
+  "includeVersion": true,
+  "skipErrorChecking": true,
+  "excludeExternals": true,
+  "suppressCommentWarningsInDeclarationFiles": true,
+  "githubPages": true,
+  "hideGenerator": true
+}

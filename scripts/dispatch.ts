@@ -9,8 +9,7 @@ import { Starter } from './start';
 const [, , script, command] = process.argv;
 
 /**
- * @namespace Dispatcher
- * @description - Dispatches script commands to various scripts.
+ * Dispatches script commands to various scripts.
  * @argument script - Script manager to use (e.g., build or package).
  * @argument command - Command argument describing exact script to run.
  */
@@ -38,8 +37,7 @@ function main(): void {
 
 
 /**
- * @description - Builds various production builds (e.g., Python, React).
- * @memberof Dispatcher
+ * Builds various production builds (e.g., Python, React).
  */
 function buildApp(): void {
   const builder = new Builder();
@@ -67,15 +65,14 @@ interface CleanProjectOptions {
 }
 
 /**
- * @description - Cleans project by removing build/test artifacts.
+ * Cleans project by removing build/test artifacts.
  * `yarn clean` removes only generated artifacts (safe; quick to recover from).
  * `yarn clean:all` additionally removes node_modules + lockfiles, requiring
  * a full reinstall — pass `{ removeDeps: true }`.
  *
  * Notes:
  *  - app.spec is committed source (PyInstaller spec), do NOT delete.
- *  - docs/ is the published JSDoc reference, do NOT delete.
- * @memberof Dispatcher
+ *  - docs/ is the published TypeDoc reference, do NOT delete.
  */
 function cleanProject({ removeDeps = false }: CleanProjectOptions = {}): void {
   const cleaner = new Cleaner();
@@ -151,8 +148,7 @@ function cleanProject({ removeDeps = false }: CleanProjectOptions = {}): void {
 
 
 /**
- * @description - Builds various installers (e.g., DMG, MSI).
- * @memberof Dispatcher
+ * Builds various installers (e.g., DMG, MSI).
  */
 function packageApp(): void {
   const packager = new Packager();
@@ -176,9 +172,8 @@ function packageApp(): void {
 
 
 /**
- * @description - Starts developer mode of app.
+ * Starts developer mode of app.
  * Including; React, Electron, and Python/Flask.
- * @memberof Dispatcher
  */
 function startDeveloperMode(): void {
   const start = new Starter();

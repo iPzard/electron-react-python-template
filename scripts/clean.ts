@@ -7,8 +7,7 @@ import {
 } from 'fs';
 
 /**
- * @namespace Cleaner
- * @description - Cleans project by removing several files & folders.
+ * Cleans project by removing several files & folders.
  * @see scripts\dispatch.ts cleanProject() for complete list
  */
 export class Cleaner {

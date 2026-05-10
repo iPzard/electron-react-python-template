@@ -2,8 +2,7 @@
 // See preload.js for the exposed API.
 
 /**
- * @namespace Services
- * @description - Methods exposed by the preload bridge for window control.
+ * Methods exposed by the preload bridge for window control.
  * @property {function} maximize - Maximize the program window.
  * @property {function} minimize - Minimize the program window.
  * @property {function} quit - Close and exit the program.

@@ -2,11 +2,10 @@ import React from 'react';
 
 import styles from './scss/TitlebarButtons.module.scss';
 
-type TitlebarButtonProps = React.ComponentPropsWithoutRef<'button'>;
+export type TitlebarButtonProps = React.ComponentPropsWithoutRef<'button'>;
 
 /**
- * @description Titlebar minimize button.
- * @memberof Titlebar
+ * Titlebar minimize button.
  */
 export function MinimizeButton(props: TitlebarButtonProps) {
   return (
@@ -23,8 +22,7 @@ export function MinimizeButton(props: TitlebarButtonProps) {
 }
 
 /**
- * @description Titlebar maximize button.
- * @memberof Titlebar
+ * Titlebar maximize button.
  */
 export function MaximizeButton(props: TitlebarButtonProps) {
   return (
@@ -41,8 +39,7 @@ export function MaximizeButton(props: TitlebarButtonProps) {
 }
 
 /**
- * @description Titlebar contract (unmaximize) button.
- * @memberof Titlebar
+ * Titlebar contract (unmaximize) button.
  */
 export function ContractButton(props: TitlebarButtonProps) {
   return (
@@ -60,8 +57,7 @@ export function ContractButton(props: TitlebarButtonProps) {
 }
 
 /**
- * @description Titlebar close button.
- * @memberof Titlebar
+ * Titlebar close button.
  */
 export function CloseButton(props: TitlebarButtonProps) {
   return (

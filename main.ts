@@ -23,7 +23,7 @@ const isDevMode = !app.isPackaged;
 
 
 /**
- * @description - Shuts down Electron & Flask.
+ * Shuts down Electron & Flask.
  *
  * Uses Node's built-in http module rather than axios — this is the only
  * HTTP call from the Electron main process, so a dedicated client is
@@ -55,9 +55,9 @@ const shutdown = (port: number): void => {
 
 
 /**
- * @namespace BrowserWindow
- * @description - Electron browser windows.
- * @tutorial - https://www.electronjs.org/docs/api/browser-window
+ * Electron browser windows.
+ *
+ * @see https://www.electronjs.org/docs/api/browser-window
  */
 interface BrowserWindowsRefs {
   mainWindow?: BrowserWindow;
@@ -68,17 +68,15 @@ const browserWindows: BrowserWindowsRefs = {};
 
 
 /**
- * @description - Creates main window.
+ * Creates main window.
  * @param {number} port - Port that Flask server is running on.
- *
- * @memberof BrowserWindow
  */
 const createMainWindow = (port: number): void => {
   const { loadingWindow, mainWindow } = browserWindows;
   if (!mainWindow) throw new Error('mainWindow not initialized before createMainWindow()');
 
   /**
-   * @description - Function to use custom JavaSCript in the DOM.
+   * Function to use custom JavaScript in the DOM.
    * @param {string} command - JavaScript to execute in DOM.
    * @param {function} callback - Callback to execute here once complete.
    * @returns {Promise}
@@ -124,7 +122,7 @@ const createMainWindow = (port: number): void => {
       `;
 
       /**
-       * @description Updates windows if page is loaded
+       * Updates windows if page is loaded
        * @param {*} isLoaded
        */
       const handleLoad = (isLoaded: unknown): void => {
@@ -166,7 +164,7 @@ const createMainWindow = (port: number): void => {
 
 
   /**
-   * @description - Controls the opacity of title bar on focus/blur.
+   * Controls the opacity of title bar on focus/blur.
    * @param {number} value - Opacity to set for title bar.
    */
   const setTitleOpacity = (value: number): string => `
@@ -198,8 +196,7 @@ const createMainWindow = (port: number): void => {
 
 
 /**
- * @description - Creates loading window to show while build is created.
- * @memberof BrowserWindow
+ * Creates loading window to show while build is created.
  */
 const createLoadingWindow = (): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
@@ -231,7 +228,7 @@ const createLoadingWindow = (): Promise<void> => {
 
 
 /**
- * @description - Installs developer extensions. The package is a devDependency
+ * Installs developer extensions. The package is a devDependency
  * so it's absent from production bundles (closed issue #23). We therefore
  * require it lazily and swallow MODULE_NOT_FOUND — the installer is purely
  * a dev convenience.
