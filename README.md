@@ -1,6 +1,6 @@
 # Electron, React & Python Template
 
-[![Build](https://img.shields.io/badge/build-passing-%23704cb6?style=for-the-badge)](https://github.com/iPzard/electron-react-python-template#readme)
+[![CI](https://img.shields.io/github/actions/workflow/status/iPzard/electron-react-python-template/ci.yml?branch=master&color=704cb6&style=for-the-badge)](https://github.com/iPzard/electron-react-python-template/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/iPzard/electron-react-python-template?color=704cb6&style=for-the-badge)](https://github.com/iPzard/electron-react-python-template/blob/master/LICENSE)
 
 > Multi-platform Electron template, using React & Redux Toolkit with Python/Flask microservices.
@@ -15,7 +15,7 @@
 
 | Tool | Recommended | Notes |
 |---|---|---|
-| [Node.js](https://nodejs.org/en/download/) | 20.x LTS | Required ≥ 16. CRA 5 / webpack 5 do **not** need the older `--openssl-legacy-provider` workaround. |
+| [Node.js](https://nodejs.org/en/download/) | 20.x LTS | Required ≥ 18.18 (or ≥ 20.9 LTS). ESLint 9 enforces this. CRA 5 / webpack 5 do **not** need the older `--openssl-legacy-provider` workaround. |
 | [Yarn 1](https://classic.yarnpkg.com/) | 1.22.x | `npm install` works too, but lockfile + scripts are tested against Yarn 1. |
 | [Python](https://www.python.org/downloads/) | 3.10 – 3.12 | Used for the Flask service in dev and bundled by PyInstaller for production. |
 | [pip](https://pip.pypa.io/) | bundled with Python | Use `pip`, `pip3`, or `py -m pip` — whichever your install exposes. |
@@ -46,7 +46,7 @@ yarn install
 
 **Electron:** Electron's `main.ts` and `preload.ts` files can be found in the project's root directory. They compile to `dist-electron/` via `tsc -p tsconfig.electron.json` (run automatically by `yarn start` and `yarn build`).
 
-**React:** React files can be found in the `./src/` folder, the custom toolbar is in `./src/components/toolbar`.
+**React:** React files can be found in the `./src/` folder, the custom titlebar is in `./src/components/titlebar`.
 
 **Python:** Python scripts can be created in the `./app.py` file and used on events via [REST](https://developer.mozilla.org/en-US/docs/Glossary/REST) calls.
 
@@ -54,7 +54,7 @@ yarn install
 
 ## 📜 Scripts
 
-Below are the scripts you'll need to run and package your application, as well as build out JSDoc documentation, if you choose to do so. An exhaustive list of scripts that are available can be found in the `package.json` file of the project's root directory, in the `scripts` section.
+Below are the scripts you'll need to run and package your application, as well as build out TypeDoc documentation, if you choose to do so. An exhaustive list of scripts that are available can be found in the `package.json` file of the project's root directory, in the `scripts` section.
 
 | ⚠️ &nbsp;PyInstaller is included in `requirements.txt`, so a separate install is no longer required. Installer metadata (name, version, manufacturer, description) is pulled from the matching fields in `package.json` automatically. |
 | --- |
@@ -87,8 +87,26 @@ yarn run build:docs
 *<sup>1</sup>Windows uses [electron-wix-msi](https://github.com/felixrieseberg/electron-wix-msi), you must install and add its path to your environment variables.*
 <br><br>
 
+## ✅ Verify
+
+Run before pushing — same chain CI runs.
+
+**Full chain (lint → typecheck → jest → pytest → React build):**
+```bash
+yarn verify
+```
+
+**Individual steps:**
+```bash
+yarn lint        # ESLint 9 flat config (eslint.config.ts)
+yarn typecheck   # tsc --noEmit across renderer / electron / scripts tsconfigs
+yarn test        # CRA jest runner
+yarn test:python # pytest against tests/test_app.py
+```
+<br>
+
 ## 🐱‍👓 Docs
-Code documentation for this template, created with [JSDoc](https://github.com/jsdoc/jsdoc), can be found here:<br>
+Code documentation for this template, created with [TypeDoc](https://typedoc.org/), can be found here:<br>
 [Electron, React, & Python Template](https://ipzard.github.io/electron-react-python-template/)
 <br><br>
 
