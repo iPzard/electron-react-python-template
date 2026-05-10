@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2022", "DOM"],
+    "ignoreDeprecations": "5.0",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": false,
