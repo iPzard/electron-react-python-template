@@ -240,7 +240,7 @@ const installExtensions = async (): Promise<unknown> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let installer: any;
   try {
-    // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     installer = require('electron-devtools-installer');
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== 'MODULE_NOT_FOUND') throw error;

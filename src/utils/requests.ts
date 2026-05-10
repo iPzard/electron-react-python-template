@@ -19,7 +19,6 @@ const fetchWithRetry = async (
   let lastError: unknown;
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     try {
-      // eslint-disable-next-line no-await-in-loop
       return await (init === undefined ? fetch(url) : fetch(url, init));
     } catch (error) {
       lastError = error;
@@ -29,7 +28,6 @@ const fetchWithRetry = async (
       }
       // Exponential backoff: 100ms, 200ms, 400ms, 800ms, 1600ms (capped)
       const delay = Math.min(100 * 2 ** (attempt - 1), 1600);
-      // eslint-disable-next-line no-await-in-loop
       await new Promise<void>((r) => { setTimeout(r, delay); });
     }
   }

@@ -20,7 +20,7 @@ interface PackageJson {
   description?: string;
   author?: string | { name?: string };
 }
-// eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const pkg: PackageJson = require('../package.json');
 const APP_NAME = pkg.name;
 const APP_VERSION = pkg.version;
@@ -168,7 +168,7 @@ export class Packager {
 
     spawnSync(`electron-packager . ${appArgs}`, baseSpawnOptions);
 
-    // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { MSICreator } = require('electron-wix-msi');
 
     const msiCreator = new MSICreator({

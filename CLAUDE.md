@@ -102,12 +102,13 @@ Memory: `feedback_packaged_app_zero_runtime_deps.md`.
 - The `webPreferences.preload` path resolves to `path.join(__dirname, 'preload.js')` — works in dev (`dist-electron/main.js` next to `dist-electron/preload.js`) and inside the asar (`app.asar/dist-electron/main.js` next to `app.asar/dist-electron/preload.js`).
 
 ### Linting
-- ESLint 8 extends `airbnb` + `plugin:react/recommended` for `.js`/`.jsx` ([.eslintrc.cjs](.eslintrc.cjs)). The `**/*.ts`/`**/*.tsx` override switches to `@typescript-eslint/parser` + `airbnb-typescript`. Both blocks share a TS-aware import resolver (`.ts`/`.tsx` resolved alongside `.js`/`.jsx`).
-- airbnb 19 brings many error-level rules: `sort-keys`, `react/button-has-type`, `react/function-component-definition`, `no-promise-executor-return`, etc. Run `yarn lint` (or `yarn lint --fix`) to surface them.
-- `airbnb-typescript@18` references several `@typescript-eslint` style rules that v8 removed (`comma-dangle`, `indent`, `quotes`, `semi`, `brace-style`, etc.) — those are turned off in the TS override block; the base ESLint equivalents are re-enabled below them. If a future bump re-introduces the rules, ESLint will fail with "Definition for rule … was not found"; drop the offending entries from the override.
-- CRA 5 ships its own `eslint-config-react-app` and would conflict with `.eslintrc.cjs`'s `react` plugin. We disable CRA's plugin via `DISABLE_ESLINT_PLUGIN=true` in dev/build (see [scripts/start.ts](scripts/start.ts) and [scripts/build.ts](scripts/build.ts)). Standalone `yarn lint` still runs the airbnb config.
-- `serviceWorker.ts` (CRA boilerplate) gets a file-specific override allowing `console`. The override is placed AFTER the TS override so it wins.
-- `lint` scope: `eslint src scripts main.ts preload.ts --ext .js,.jsx,.ts,.tsx`. Generated output (`dist-electron/`, `build/`, `dist/`, `resources/`, `docs/`, `utilities/jsdoc/`) is excluded via `ignorePatterns`.
+- ESLint 9 flat config in TypeScript: [eslint.config.ts](eslint.config.ts). Loaded by ESLint via `jiti` (declared as a devDependency). Hand-rolled — no `airbnb` / `airbnb-typescript` chain.
+- Stack: `@eslint/js` (recommended JS) + `typescript-eslint` (unified plugin+parser, type-aware via `recommended` + `stylistic` configs) + `eslint-plugin-react` + `eslint-plugin-react-hooks` + `eslint-plugin-jsx-a11y` + `eslint-plugin-import-x` (modern fork; replaces `eslint-plugin-import`).
+- Project conventions preserved: `sort-keys: error` (asc, case-insensitive), `react/button-has-type: error`, `react/function-component-definition: error`, `no-promise-executor-return: error`, `no-console: warn` (allow `warn`/`error`). Style as warnings: `comma-dangle`, `indent`, `quotes`, `semi`, `object-curly-spacing`. The config itself is alphabetized (sort-keys also applies to it).
+- `parserOptions.project` lists all three tsconfigs (`tsconfig.json`, `tsconfig.electron.json`, `tsconfig.scripts.json`) so type-aware lint covers renderer + electron + scripts. `eslint.config.ts` itself opts out of type-aware rules via the `disableTypeChecked` override (it's not in any tsconfig include).
+- CRA 5 ships its own `eslint-config-react-app` and would conflict with our flat config inside webpack-dev-server's overlay. Disabled via `DISABLE_ESLINT_PLUGIN=true` in dev/build (see [scripts/start.ts](scripts/start.ts) and [scripts/build.ts](scripts/build.ts)). Standalone `yarn lint` runs the flat config we want.
+- `serviceWorker.ts` (CRA boilerplate) and `scripts/**/*.ts` (CLI entry points) get file-specific `no-console: off` overrides. Test files relax `no-unsafe-*` type-aware rules.
+- `lint` scope: `eslint .` — the flat config's `ignores` block excludes `dist-electron/`, `build/`, `dist/`, `resources/`, `docs/`, `node_modules/`, `coverage/`, `.pyi-build/`.
 
 ## Verification (run after every change)
 
@@ -166,7 +167,6 @@ Output paths:
 ## Known sharp edges
 
 - **`/quit` shutdown path** ([app.py:59-65](app.py:59)) — schedules `os._exit(0)` from a `threading.Timer` after acknowledging the request. The classic `werkzeug.server.shutdown` hook was removed in Werkzeug 2.1+; this avoids it entirely. Don't reintroduce the old environ-based pattern when bumping Flask/Werkzeug.
-- **`airbnb-typescript@18` ↔ `@typescript-eslint@8` rule drift** — v8 removed the extension style rules airbnb-typescript still references. Disabled in the TS override block of [.eslintrc.cjs](.eslintrc.cjs); base ESLint equivalents re-enabled. Don't re-bump airbnb-typescript without checking compatibility.
 - **`get-port@5` namespace export** — `main.ts` and `scripts/start.ts` consume it via `import getPort = require('get-port')` because v5 publishes the `makeRange` helper as a CommonJS namespace. v6+ went ESM-only and would break this pattern. Pin v5.
 - **Old dependency pinning intent:** the user pins exact versions (no carets/tildes). Don't blanket-upgrade; user prefers stability over freshness. See `feedback_pin_versions_exactly.md` memory.
 - **`yarn clean` removes `yarn.lock` and `node_modules`** when run as `yarn clean:all`. Plain `yarn clean` does not — only artifacts. Both are deliberate per `cleanProject()` in [scripts/dispatch.ts](scripts/dispatch.ts), but warn the user before `clean:all` — versions can drift on reinstall.
@@ -191,12 +191,6 @@ Output paths:
 | `add-react-component` | scaffolding a new `.tsx` component following folder/import/SCSS/typed-props conventions |
 | `clean-rebuild` | what `yarn clean` removes (now includes `dist-electron/`), fresh-rebuild sequence, stale-artifact diagnosis |
 | `audit-claude-md` | verify CLAUDE.md claims still match code; run after refactors / dep bumps |
-
-## TODO (planned but deferred)
-
-These are on the roadmap but not yet scheduled. Don't start them without an explicit task — they're each big enough to be their own branch.
-
-- **Migrate ESLint 8 → 9 + flat config in TypeScript** ([.eslintrc.cjs](.eslintrc.cjs) → `eslint.config.ts`). ESLint 8 legacy config can't be authored in TS without loader gymnastics; the file is currently `.cjs` for explicit-CommonJS clarity. Flat config (ESLint 9+) supports `eslint.config.ts` natively via `jiti`/`tsx`. Breaking change — every `extends`/`overrides`/`parserOptions` shape moves to the new flat-array format, and `airbnb` + `airbnb-typescript` need flat-config-compatible replacements (most projects switch to `eslint-config-love`, `@antfu/eslint-config`, or hand-roll).
 
 ## Out of scope (don't add unprompted)
 

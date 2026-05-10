@@ -22,7 +22,7 @@ describe('utils/requests', () => {
     global.fetch = fetchMock as unknown as typeof fetch;
 
     jest.isolateModules(() => {
-      // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const mod = require('../utils/requests') as RequestsModule;
       ({ get, post } = mod);
     });

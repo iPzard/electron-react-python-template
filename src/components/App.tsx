@@ -34,7 +34,6 @@ function App() {
      */
     get<string>(
       'example',
-      // eslint-disable-next-line no-alert
       (response) => alert(response),
       (error) => console.error(error)
     );
