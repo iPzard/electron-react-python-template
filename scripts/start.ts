@@ -7,8 +7,9 @@ import {
 } from 'child_process';
 import * as http from 'http';
 import * as readline from 'readline';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-import getPort = require('get-port');
+// get-port v5 publishes via `export = getPort` (CommonJS namespace),
+// which works as a default import under esModuleInterop.
+import getPort from 'get-port';
 
 /**
  * Patterns for known-noisy Electron stderr lines that are harmless and
@@ -127,15 +128,11 @@ export class Starter {
     // ORIGINAL line is what gets forwarded, so colors stay intact for
     // anything we don't filter.
     //
-    // Match the full escape sequence — `\x1b[...m`. The earlier version
-    // matched only `[...m` and left a stray `\x1b` byte at the start of
-    // the line, which broke `^LOG from` etc.
-    //
-    // The ESC byte trips ESLint's `no-control-regex` rule (inherited from
-    // airbnb). The control character is the whole point of an
-    // ANSI-stripping regex — disable the rule for this single line.
-    // eslint-disable-next-line no-control-regex
-    const ANSI_RE = /\[[0-9;]*m/g;
+    // Match the full escape sequence — `\x1b[<digits>;<digits>m`. Built
+    // via the RegExp constructor with String.fromCharCode(0x1b) so the
+    // literal ESC byte never appears in a regex literal — that would trip
+    // ESLint's `no-control-regex` rule. Equivalent pattern at runtime.
+    const ANSI_RE = new RegExp(`${String.fromCharCode(0x1b)}\\[[0-9;]*m`, 'g');
     const filterStream = (
       input: NodeJS.ReadableStream | null,
       sink: NodeJS.WritableStream,

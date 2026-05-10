@@ -17,8 +17,7 @@ describe('utils/services', () => {
     window.electronAPI = api;
 
     jest.isolateModules(() => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const mod = require('../utils/services') as ServicesModule;
+      const mod = jest.requireActual<ServicesModule>('../utils/services');
       ({ app } = mod);
     });
   });

@@ -12,9 +12,9 @@ import {
   type IpcMainEvent
 } from 'electron';
 
-// Extra modules — get-port v5 uses CommonJS-style namespace export.
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-import getPort = require('get-port');
+// Extra modules. get-port v5 publishes via `export = getPort` (CommonJS
+// namespace), which works as a default import under esModuleInterop.
+import getPort from 'get-port';
 
 // Electron's `app.isPackaged` is the canonical "is this a packaged build?"
 // signal — no need for the `electron-is-dev` shim. Defined here as a
@@ -234,20 +234,20 @@ const createLoadingWindow = (): Promise<void> => {
  * a dev convenience.
  * @returns {Promise}
  */
+type ElectronDevtoolsInstallerModule = typeof import('electron-devtools-installer');
+
 const installExtensions = async (): Promise<unknown> => {
   const isForceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let installer: any;
+  let installer: ElectronDevtoolsInstallerModule;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    installer = require('electron-devtools-installer');
+    installer = await import('electron-devtools-installer');
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== 'MODULE_NOT_FOUND') throw error;
     return undefined;
   }
 
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS']
+  const extensions = (['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'] as const)
     .map((extension) => installer.default(installer[extension], isForceDownload));
 
   return Promise

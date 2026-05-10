@@ -1,5 +1,7 @@
 import { spawnSync, type SpawnSyncOptions } from 'child_process';
+import { MSICreator } from 'electron-wix-msi';
 import * as nodePath from 'path';
+import pkgJson from '../package.json';
 import { Builder } from './build';
 
 const builder = new Builder();
@@ -20,8 +22,8 @@ interface PackageJson {
   description?: string;
   author?: string | { name?: string };
 }
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const pkg: PackageJson = require('../package.json');
+
+const pkg = pkgJson as PackageJson;
 const APP_NAME = pkg.name;
 const APP_VERSION = pkg.version;
 const APP_DESCRIPTION = pkg.description || pkg.name;
@@ -167,9 +169,6 @@ export class Packager {
     ].join(' ');
 
     spawnSync(`electron-packager . ${appArgs}`, baseSpawnOptions);
-
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { MSICreator } = require('electron-wix-msi');
 
     const msiCreator = new MSICreator({
       appDirectory: path('../dist/windows/app-win32-x64'),
