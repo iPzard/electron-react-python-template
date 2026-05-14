@@ -15,7 +15,7 @@
 
 | Tool | Recommended | Notes |
 |---|---|---|
-| [Node.js](https://nodejs.org/en/download/) | 20.x LTS | Required ≥ 18.18 (or ≥ 20.9 LTS). ESLint 9 and Vite 5 both enforce this. No `--openssl-legacy-provider` workaround needed on modern Node. |
+| [Node.js](https://nodejs.org/en/download/) | 20.19+ LTS (or 22.12+) | Required by Vite 7. ESLint 9 also enforces a modern Node. No `--openssl-legacy-provider` workaround needed. |
 | [Yarn 1](https://classic.yarnpkg.com/) | 1.22.x | `npm install` works too, but lockfile + scripts are tested against Yarn 1. |
 | [Python](https://www.python.org/downloads/) | 3.10 – 3.12 | Used for the Flask service in dev and bundled by PyInstaller for production. |
 | [pip](https://pip.pypa.io/) | bundled with Python | Use `pip`, `pip3`, or `py -m pip` — whichever your install exposes. |

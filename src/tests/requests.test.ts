@@ -4,13 +4,13 @@ import type { ElectronAPI } from '../types/electron-api';
 type RequestsModule = typeof import('../utils/requests');
 
 describe('utils/requests', () => {
-  let getPort: Mock<[], number>;
+  let getPort: Mock<() => number>;
   let fetchMock: Mock;
   let get: RequestsModule['get'];
   let post: RequestsModule['post'];
 
   beforeEach(async () => {
-    getPort = vi.fn<[], number>(() => 3042);
+    getPort = vi.fn<() => number>(() => 3042);
     const api: ElectronAPI = {
       getPort,
       maximize: vi.fn(),

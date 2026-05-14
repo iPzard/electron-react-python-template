@@ -170,7 +170,8 @@ Output paths:
 - **Old dependency pinning intent:** the user pins exact versions (no carets/tildes). Don't blanket-upgrade; user prefers stability over freshness. See `feedback_pin_versions_exactly.md` memory.
 - **`yarn clean` removes `yarn.lock` and `node_modules`** when run as `yarn clean:all`. Plain `yarn clean` does not — only artifacts. Both are deliberate per `cleanProject()` in [scripts/dispatch.ts](scripts/dispatch.ts), but warn the user before `clean:all` — versions can drift on reinstall.
 - **`yarn build:docs` emits 2 third-party warnings** about `@inheritDoc` summary overwrites in `node_modules/@reduxjs/toolkit/dist/index.d.ts`. They originate inside RTK's own `.d.ts` and TypeDoc's `suppressCommentWarningsInDeclarationFiles` only covers unknown-tag warnings, not `@inheritDoc` conflicts. Output is correct (0 errors). Won't drop until upstream RTK fixes its comments or TypeDoc adds a finer-grained suppress option.
-- **Vite 5 CJS Node API deprecation warning** — emitted once per `vite` / `vite build` / `vitest run` invocation: `The CJS build of Vite's Node API is deprecated.` Triggered internally by tsx loading `vite.config.ts` through Node's CJS path. Harmless; clears when the project moves to Vite 6+ (which drops the CJS entrypoint entirely). Don't try to silence with `VITE_CJS_IGNORE_WARNING` — it hides the warning but masks the real fix.
+- **Node 20.19+ required.** Vite 7 dropped Node ≤ 20.18 (and Node 18 entirely). CI uses Node 20.x — pick a recent point release. Hosts still on Node 20.17 / 18 will fail at `yarn install` with an `EBADENGINE` warning followed by Vite refusing to boot.
+- **Vitest 3 type signature change.** `Mock<TArgs, TReturn>` (Jest / Vitest 1.x shape) became `Mock<TFn>` in Vitest 3 — `vi.fn<() => number>(...)` not `vi.fn<[], number>(...)`. Carry that through any new test that types its mock function. Plain `Mock` with no generic still works.
 
 ## Available agents (`.claude/agents/`)
 

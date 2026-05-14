@@ -56,7 +56,7 @@ CLAUDE.md claims `'sort-keys': ['error', 'asc']` is the only error-level rule (i
 - Read [.eslintrc.cjs](../../../.eslintrc.cjs), filter rules whose value is `'error'` or `['error', ...]`. Check both the root `rules` block and the TS overrides block.
 
 ### Dependency versions
-CLAUDE.md cites: React 18, Vite 5, Vitest 1.6, Electron 30, react-redux 9, typescript 5.6, tsx 4.19.
+CLAUDE.md cites: React 18, Vite 7, Vitest 3.2, Electron 30, react-redux 9, typescript 5.6, tsx 4.19.
 - Read [package.json](../../../package.json) `dependencies` + `devDependencies`. Compare major versions.
 - Report any major bumps; minor bumps usually fine. The user pins exact versions — flag any silent caret/tilde additions.
 
@@ -64,7 +64,7 @@ CLAUDE.md cites: React 18, Vite 5, Vitest 1.6, Electron 30, react-redux 9, types
 CLAUDE.md flags these:
 1. `werkzeug.server.shutdown` in `/quit` — verify [app.py](../../../app.py).
 2. `get-port@5` CommonJS namespace import — verify usage in [main.ts](../../../main.ts) and [scripts/start.ts](../../../scripts/start.ts).
-3. Vite 5 CJS Node API deprecation warning — verify it still fires by running `yarn build:react` once; clears when project moves to Vite 6+.
+3. Node 20.19+ requirement (Vite 7) — verify [README.md](../../../README.md) prerequisites table still names it correctly.
 4. Old dep pinning — covered above.
 
 If any are fixed, remove from CLAUDE.md. If new sharp edges appeared, add them.
