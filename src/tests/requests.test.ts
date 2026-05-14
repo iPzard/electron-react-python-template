@@ -1,30 +1,33 @@
+import type { Mock } from 'vitest';
 import type { ElectronAPI } from '../types/electron-api';
 
 type RequestsModule = typeof import('../utils/requests');
 
 describe('utils/requests', () => {
-  let getPort: jest.Mock<number, []>;
-  let fetchMock: jest.Mock;
+  let getPort: Mock<[], number>;
+  let fetchMock: Mock;
   let get: RequestsModule['get'];
   let post: RequestsModule['post'];
 
-  beforeEach(() => {
-    getPort = jest.fn<number, []>(() => 3042);
+  beforeEach(async () => {
+    getPort = vi.fn<[], number>(() => 3042);
     const api: ElectronAPI = {
       getPort,
-      maximize: jest.fn(),
-      minimize: jest.fn(),
-      quit: jest.fn(),
-      unmaximize: jest.fn()
+      maximize: vi.fn(),
+      minimize: vi.fn(),
+      quit: vi.fn(),
+      unmaximize: vi.fn()
     };
     window.electronAPI = api;
-    fetchMock = jest.fn();
+    fetchMock = vi.fn();
     global.fetch = fetchMock as unknown as typeof fetch;
 
-    jest.isolateModules(() => {
-      const mod = jest.requireActual<RequestsModule>('../utils/requests');
-      ({ get, post } = mod);
-    });
+    // Reset the module registry so the import-time side effect
+    // (electronAPI.getPort()) re-fires with the freshly-mocked getPort
+    // for every test. Without this, the module is cached from the first
+    // import and getPort registers a single call regardless of test count.
+    vi.resetModules();
+    ({ get, post } = await vi.importActual<RequestsModule>('../utils/requests'));
   });
 
   test('reads port from electronAPI.getPort on import', () => {
@@ -33,7 +36,7 @@ describe('utils/requests', () => {
 
   test('get hits localhost:<port>/<route> and invokes success callback with parsed JSON', async () => {
     fetchMock.mockResolvedValue({ json: () => Promise.resolve({ ok: true }) });
-    const cb = jest.fn();
+    const cb = vi.fn();
 
     get('example', cb);
     await new Promise<void>((r) => { setTimeout(r, 0); });
@@ -45,8 +48,8 @@ describe('utils/requests', () => {
   test('get invokes errorCallback on fetch failure', async () => {
     const err = new Error('boom');
     fetchMock.mockRejectedValue(err);
-    const cb = jest.fn();
-    const errCb = jest.fn();
+    const cb = vi.fn();
+    const errCb = vi.fn();
 
     get('example', cb, errCb);
     await new Promise<void>((r) => { setTimeout(r, 0); });
@@ -57,7 +60,7 @@ describe('utils/requests', () => {
 
   test('post sends body, JSON content-type, and POST method', async () => {
     fetchMock.mockResolvedValue({ json: () => Promise.resolve('done') });
-    const cb = jest.fn();
+    const cb = vi.fn();
     const body = JSON.stringify({ a: 1 });
 
     post(body, 'submit', cb);

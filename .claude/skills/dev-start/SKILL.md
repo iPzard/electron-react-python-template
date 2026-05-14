@@ -10,7 +10,7 @@ description: Use this skill when the user wants to run the app in dev mode, hits
 `tsx ./scripts/dispatch.ts start` → `Starter.developerMode()`:
 
 1. `npx kill-port 3000` — frees the React dev server port.
-2. `cross-env HOST=127.0.0.1 BROWSER=none DISABLE_ESLINT_PLUGIN=true react-scripts start` — boots CRA dev server on `127.0.0.1:3000`.
+2. `vite` — boots Vite's dev server on `127.0.0.1:3000` (host / port / strictPort / open all configured in `vite.config.ts`, so no env-var shim is needed).
 3. `tsc -p tsconfig.electron.json` — compiles `main.ts` + `preload.ts` to `dist-electron/`. `package.json` `"main": "dist-electron/main.js"` is what Electron loads, so this output must exist before the next step.
 4. `electron .` — boots Electron, which:
    - picks a free port in 3001–3999 via `get-port` (in `main.ts`),
@@ -33,7 +33,7 @@ Run these checks before declaring a bug:
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Loader window hangs forever | React dev server not up yet, or threw a compile error | Check the React-dev-server terminal output; the `did-finish-load` handler in `main.ts` reloads on empty DOM but won't recover from a real CRA error |
+| Loader window hangs forever | Vite dev server not up yet, or threw a compile error | Check the Vite terminal output; the `did-finish-load` handler in `main.ts` reloads on empty DOM but won't recover from a real Vite error |
 | Electron exits immediately at boot | `tsc -p tsconfig.electron.json` failed → `dist-electron/main.js` missing | Look for the `tsc` errors in the terminal (printed before `electron .` is spawned). Fix the TS error and rerun `yarn start`. |
 | Alert "Example response from Flask…" never appears | Flask did not start, or wrong port | Check terminal for Python traceback. Confirm `app.py` got the port arg: it's spawned as `python app.py <port>` in `main.ts` |
 | `EADDRINUSE` on 3000 | Stale React dev server | Kill it manually; `kill-port` in start script runs once at boot |

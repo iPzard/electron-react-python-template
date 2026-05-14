@@ -44,8 +44,8 @@ export class Builder {
       '--noconfirm', // Don't confirm overwrite
       '--distpath ./resources', // Dist (out) path
       // PyInstaller's intermediate workpath defaults to ./build/<name>/.
-      // That collides with CRA's `react-scripts build` which clears ./build/
-      // and refuses to rmdir a non-empty subdirectory — yarn build:package:*
+      // That collides with Vite's `vite build` output dir (./build/), which
+      // would refuse to rmdir a non-empty subdirectory — yarn build:package:*
       // would fail with "ENOTEMPTY: directory not empty, rmdir 'build/app'".
       // Route PyInstaller's scratch dir outside ./build/.
       '--workpath ./.pyi-build'
@@ -57,17 +57,15 @@ export class Builder {
   };
 
   /**
-   * Creates production build of React front end.
+   * Creates production build of React front end via Vite.
    *
-   * DISABLE_ESLINT_PLUGIN=true: CRA 5 ships eslint-config-react-app and
-   * loads it inside the webpack ESLint plugin. Combined with this project's
-   * .eslintrc.cjs (which already lists `plugins: ['react']`), the build fails
-   * with "Plugin 'react' was conflicted between …". Disabling CRA's plugin
-   * keeps the build clean; standalone `yarn lint` still runs the airbnb
-   * config we want.
+   * Output goes to ./build/ (configured in vite.config.ts) so the
+   * Electron prod load path `loadFile('build/index.html')` continues to
+   * work without changes. `base: './'` in the Vite config keeps emitted
+   * asset URLs relative — required for loading via file:// from the asar.
    */
   buildReact = (): void => {
     console.log('Creating React distribution files...');
-    spawnSync('cross-env DISABLE_ESLINT_PLUGIN=true react-scripts build', spawnOptions);
+    spawnSync('vite build', spawnOptions);
   };
 }

@@ -62,7 +62,7 @@ Most new components get rendered inside `src/components/App.tsx`. Add the import
 
 ## Tests
 
-`src/tests/App.test.tsx` is the existing example; tests use `@testing-library/react`. Tests run via `yarn test` (which is `react-scripts test`). New tests can live in `src/tests/` or alongside the component (use `Widget.test.tsx`). Both work with the CRA test runner.
+`src/tests/App.test.tsx` is the existing example; tests use `@testing-library/react`. Tests run via `yarn test` (which is `vitest run`). New tests can live in `src/tests/` or alongside the component (use `Widget.test.tsx`); Vitest picks up `**/*.test.{ts,tsx}` by default. Vitest globals (`describe`/`test`/`expect`/`vi`) are enabled via `vite.config.ts` `test.globals: true`.
 
 ## What NOT to do
 

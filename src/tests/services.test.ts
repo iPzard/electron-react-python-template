@@ -6,20 +6,20 @@ describe('utils/services', () => {
   let api: ElectronAPI;
   let app: ServicesModule['app'];
 
-  beforeEach(() => {
+  beforeEach(async () => {
     api = {
-      getPort: jest.fn(() => 3001),
-      maximize: jest.fn(),
-      minimize: jest.fn(),
-      quit: jest.fn(),
-      unmaximize: jest.fn()
+      getPort: vi.fn(() => 3001),
+      maximize: vi.fn(),
+      minimize: vi.fn(),
+      quit: vi.fn(),
+      unmaximize: vi.fn()
     };
     window.electronAPI = api;
 
-    jest.isolateModules(() => {
-      const mod = jest.requireActual<ServicesModule>('../utils/services');
-      ({ app } = mod);
-    });
+    // Reset the module registry so each test gets a fresh `app` proxy
+    // bound to the per-test electronAPI mocks.
+    vi.resetModules();
+    ({ app } = await vi.importActual<ServicesModule>('../utils/services'));
   });
 
   test('maximize calls electronAPI.maximize', () => {

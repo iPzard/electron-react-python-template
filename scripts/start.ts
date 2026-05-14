@@ -43,31 +43,12 @@ const ELECTRON_STDERR_NOISE: RegExp[] = [
 ];
 
 /**
- * Patterns for known-noisy webpack-dev-server / sass-loader output. Same
- * deal as ELECTRON_STDERR_NOISE — these are upstream issues in CRA 5's
- * bundled adapters that we can't fix without ejecting.
- *
- * - DEP_WEBPACK_DEV_SERVER_ON_(AFTER|BEFORE)_SETUP_MIDDLEWARE: CRA 5 uses
- *   webpack-dev-server 4's deprecated middleware hooks. Will be fixed
- *   when CRA upgrades to setupMiddlewares.
- * - sass legacy JS API deprecation: sass 1.99 deprecated the legacy JS
- *   API; CRA 5's bundled sass-loader still calls it. Fires once per
- *   .module.scss file in the project, so it's loud (5+ blocks here).
- *
- * Filter is intentionally narrow — anything that doesn't contain one of
- * these specific phrases falls through verbatim. If you start seeing
- * unexpected silence, narrow the patterns further.
+ * Patterns for known-noisy Vite dev-server output. Vite is far quieter
+ * than CRA's webpack stack was — the legacy sass-loader deprecation and
+ * webpack-dev-server middleware warnings are gone. Filter list stays in
+ * place so new upstream noise can be silenced without restructuring.
  */
-const REACT_STDOUT_NOISE: RegExp[] = [
-  /DEP_WEBPACK_DEV_SERVER_ON_(AFTER|BEFORE)_SETUP_MIDDLEWARE/,
-  /\(Use `node --trace-deprecation /,
-  /^LOG from .*sass-loader/,
-  /legacy JS API is deprecated/,
-  /sass-lang\.com\/d\/legacy-js-api/,
-  /^<w>\s*$/,
-  /^<w> null\s*$/,
-  /^<w> More info: https:\/\/sass-lang\.com/
-];
+const REACT_STDOUT_NOISE: RegExp[] = [];
 
 interface SpawnOptionsBundle {
   hideLogs: SpawnSyncOptions;
@@ -104,25 +85,19 @@ export class Starter {
     // Kill anything already on the React port.
     spawnSync('npx kill-port 3000', spawnOptions.hideLogs);
 
-    // Start React dev server.
-    //   HOST=127.0.0.1 — bind to loopback so Windows Defender Firewall does
-    //     not prompt; the renderer talks to it via http://127.0.0.1:3000.
-    //   BROWSER=none — Electron is the renderer; no browser tab needed.
-    //   DISABLE_ESLINT_PLUGIN=true — CRA 5 ships eslint-config-react-app and
-    //     loads it inside the webpack-dev-server overlay. Combined with this
-    //     project's .eslintrc.cjs (which already lists `plugins: ['react']`),
-    //     ESLint errors with "Plugin 'react' was conflicted between …".
-    //     Disabling CRA's plugin keeps the overlay quiet; standalone
-    //     `yarn lint` still runs the airbnb config we want.
-    // Pipe react-scripts stdout/stderr so we can filter known-noisy upstream
-    // deprecation chatter (see REACT_STDOUT_NOISE). Real errors fall through.
+    // Start Vite dev server. host/port/strictPort are configured in
+    // vite.config.ts:
+    //   host: '127.0.0.1' — bind to loopback so Windows Defender Firewall
+    //     does not prompt; the renderer talks to it via http://127.0.0.1:3000.
+    //   open: false — Electron is the renderer; no browser tab needed.
+    //   strictPort: true — fail fast if 3000 is occupied instead of silently
+    //     drifting to 3001 (which Electron wouldn't find).
+    // stdout/stderr is piped so REACT_STDOUT_NOISE can filter noise if any
+    // appears; Vite is quiet by default, so the filter list is empty today.
     const reactSpawnOptions: SpawnOptions = {
       detached: false, shell: true, stdio: ['inherit', 'pipe', 'pipe']
     };
-    const reactProc = spawn(
-      'cross-env BROWSER=none HOST=127.0.0.1 DISABLE_ESLINT_PLUGIN=true react-scripts start',
-      reactSpawnOptions
-    );
+    const reactProc = spawn('vite', reactSpawnOptions);
     // ANSI color codes get stripped before pattern matching so anchored
     // patterns (^LOG from ...) still match webpack's colored output. The
     // ORIGINAL line is what gets forwarded, so colors stay intact for

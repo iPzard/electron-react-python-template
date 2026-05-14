@@ -6,8 +6,7 @@
     "get-port": "5.1.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-redux": "9.2.0",
-    "react-scripts": "5.0.1"
+    "react-redux": "9.2.0"
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
@@ -15,11 +14,10 @@
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
-    "@types/jest": "29.5.13",
     "@types/node": "20.16.13",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "cross-env": "7.0.3",
+    "@vitejs/plugin-react": "4.3.4",
     "electron": "30.0.0",
     "electron-devtools-installer": "3.2.0",
     "electron-installer-dmg": "3.0.0",
@@ -32,11 +30,14 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.6.0",
     "jiti": "2.7.0",
+    "jsdom": "25.0.1",
     "sass": "1.99.0",
     "tsx": "4.19.2",
     "typedoc": "0.28.19",
     "typescript": "5.6.3",
-    "typescript-eslint": "8.59.2"
+    "typescript-eslint": "8.59.2",
+    "vite": "5.4.10",
+    "vitest": "1.6.1"
   },
   "optionalDependencies": {
     "electron-installer-debian": "3.2.0"
@@ -44,24 +45,11 @@
   "resolutions": {
     "@babel/preset-env": "7.29.3"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "build": {
     "extraResources": [
       "./resources/app"
     ]
   },
-  "homepage": "./",
   "license": "MIT",
   "main": "dist-electron/main.js",
   "name": "electron-react-python-template",
@@ -78,15 +66,14 @@
     "build:package:windows": "tsx ./scripts/dispatch.ts package windows",
     "clean": "tsx ./scripts/dispatch.ts clean",
     "clean:all": "tsx ./scripts/dispatch.ts clean all",
-    "eject": "react-scripts eject",
     "lint": "eslint .",
     "start": "tsx ./scripts/dispatch.ts start",
     "start:electron": "electron .",
-    "start:react": "cross-env DISABLE_ESLINT_PLUGIN=true react-scripts start",
-    "test": "react-scripts test",
+    "start:react": "vite",
+    "test": "vitest run",
     "test:python": "python -m pytest",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.electron.json && tsc --noEmit -p tsconfig.scripts.json",
-    "verify": "yarn lint && yarn typecheck && yarn test --watchAll=false && yarn test:python && yarn build:react"
+    "verify": "yarn lint && yarn typecheck && yarn test && yarn test:python && yarn build:react"
   },
   "version": "1.0.0"
 }

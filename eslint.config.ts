@@ -55,7 +55,6 @@ export default tseslint.config(
       ecmaVersion: 2022,
       globals: {
         ...globals.browser,
-        ...globals.jest,
         ...globals.node
       },
       parserOptions: {
@@ -144,14 +143,13 @@ export default tseslint.config(
     rules: { 'no-console': 'off' }
   },
   {
-    // CRA boilerplate; console.log calls are part of the upstream
-    // reference implementation. Allow them rather than touch CRA code.
-    files: ['src/serviceWorker.ts'],
-    rules: { 'no-console': 'off' }
-  },
-  {
-    // Test files: relax type-aware rules that fight common test patterns.
+    // Test files: relax type-aware rules that fight common test patterns,
+    // and inject Vitest globals (describe/test/expect/vi/beforeEach/...)
+    // because vite.config.ts sets `test.globals: true`.
     files: ['**/*.test.{ts,tsx}', 'src/setupTests.ts'],
+    languageOptions: {
+      globals: { ...globals.vitest }
+    },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
@@ -162,9 +160,11 @@ export default tseslint.config(
     }
   },
   {
-    // eslint.config.ts itself isn't in any tsconfig — disable type-aware
-    // rules so the parser doesn't complain about missing project info.
+    // eslint.config.ts and vite.config.ts aren't in any tsconfig — disable
+    // type-aware rules so the parser doesn't complain about missing project
+    // info. Both files are executed via their own runners (jiti for ESLint,
+    // Vite itself for vite.config.ts) rather than `tsc`.
     extends: [tseslint.configs.disableTypeChecked],
-    files: ['eslint.config.ts']
+    files: ['eslint.config.ts', 'vite.config.ts']
   }
 );

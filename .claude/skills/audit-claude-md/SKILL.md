@@ -56,15 +56,15 @@ CLAUDE.md claims `'sort-keys': ['error', 'asc']` is the only error-level rule (i
 - Read [.eslintrc.cjs](../../../.eslintrc.cjs), filter rules whose value is `'error'` or `['error', ...]`. Check both the root `rules` block and the TS overrides block.
 
 ### Dependency versions
-CLAUDE.md cites: React 18, react-scripts 5, Electron 30, react-redux 9, typescript 5.6, tsx 4.19.
+CLAUDE.md cites: React 18, Vite 5, Vitest 1.6, Electron 30, react-redux 9, typescript 5.6, tsx 4.19.
 - Read [package.json](../../../package.json) `dependencies` + `devDependencies`. Compare major versions.
 - Report any major bumps; minor bumps usually fine. The user pins exact versions — flag any silent caret/tilde additions.
 
 ### Sharp edges
 CLAUDE.md flags these:
 1. `werkzeug.server.shutdown` in `/quit` — verify [app.py](../../../app.py).
-2. Asar bloat from raw `.ts` and tsconfigs at root — verify [scripts/package.ts](../../../scripts/package.ts) `--ignore` regex.
-3. `airbnb-typescript@18` ↔ `@typescript-eslint@8` rule drift — verify the TS override in [.eslintrc.cjs](../../../.eslintrc.cjs) still has the offending style rules turned off.
+2. `get-port@5` CommonJS namespace import — verify usage in [main.ts](../../../main.ts) and [scripts/start.ts](../../../scripts/start.ts).
+3. Vite 5 CJS Node API deprecation warning — verify it still fires by running `yarn build:react` once; clears when project moves to Vite 6+.
 4. Old dep pinning — covered above.
 
 If any are fixed, remove from CLAUDE.md. If new sharp edges appeared, add them.

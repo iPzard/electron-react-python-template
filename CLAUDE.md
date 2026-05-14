@@ -12,7 +12,7 @@ Two load-bearing rules. The user has called both out explicitly. Re-read at the 
 - Do **not** split `requirements.txt` into `requirements.txt` + `requirements-dev.txt`. Keep one file. Same for any analogous "runtime vs dev" or "best-practice" expansion.
 - Do **not** add new files (CONTRIBUTING.md, configs, helper modules, fixtures folders) unless the task literally names them.
 - Do **not** rename, reformat, or alphabetize unrelated code while in the area.
-- Do **not** run long-lived dev processes (`yarn start`, `electron .`, `react-scripts start`) for smoke tests without explicit user OK and a guaranteed kill in the same call. Orphan processes have happened — don't repeat.
+- Do **not** run long-lived dev processes (`yarn start`, `electron .`, `vite`) for smoke tests without explicit user OK and a guaranteed kill in the same call. Orphan processes have happened — don't repeat.
 - If a side-fix is genuinely required for the requested task to land (e.g., a lint error blocking `yarn verify`), say so explicitly **before** doing it, and only the smallest version.
 
 Memory: `feedback_no_unscoped_changes.md`.
@@ -47,7 +47,7 @@ Memory: `feedback_packaged_app_zero_runtime_deps.md`.
 
 ## How the three processes connect
 
-1. `yarn start` → `tsx ./scripts/dispatch.ts start` → `Starter.developerMode()` ([scripts/start.ts](scripts/start.ts)) — kills port 3000, boots `react-scripts start` (HOST=127.0.0.1, BROWSER=none, DISABLE_ESLINT_PLUGIN=true), runs `tsc -p tsconfig.electron.json` to (re)compile `main.ts` + `preload.ts` to `dist-electron/`, boots `electron .`. Filters known-noisy stderr from both children.
+1. `yarn start` → `tsx ./scripts/dispatch.ts start` → `Starter.developerMode()` ([scripts/start.ts](scripts/start.ts)) — kills port 3000, boots `vite` (host/port/strictPort/open configured in [vite.config.ts](vite.config.ts)), runs `tsc -p tsconfig.electron.json` to (re)compile `main.ts` + `preload.ts` to `dist-electron/`, boots `electron .`. Filters known-noisy stderr from both children.
 2. Electron `dist-electron/main.js` (compiled from [main.ts](main.ts)) picks a free port in **3001–3999** via `get-port`, opens a frameless main window (loads `http://127.0.0.1:3000`) + a redux-themed loading window, and spawns `python app.py <port>`.
 3. The renderer reads the port via `window.electronAPI.getPort()` (preload bridges to the sync IPC channel `get-port-number`) and calls Flask at `http://127.0.0.1:<port>`.
 4. On shutdown, Electron hits `GET /quit` so Flask `os._exit`s itself, then `app.quit()` runs. A 3-second `app.exit(0)` fallback in `shutdown()` covers cases where `app.quit` silently no-ops.
@@ -56,7 +56,7 @@ Memory: `feedback_packaged_app_zero_runtime_deps.md`.
 
 ### TypeScript
 - Three tsconfig projects, all `strict: true`:
-  - [tsconfig.json](tsconfig.json) — renderer (`src/`), `noEmit`, `jsx: react-jsx`. CRA + ts-jest read this.
+  - [tsconfig.json](tsconfig.json) — renderer (`src/`), `noEmit`, `jsx: react-jsx`. Vite reads this via its esbuild transform; Vitest inherits it through the shared Vite config.
   - [tsconfig.electron.json](tsconfig.electron.json) — `main.ts` + `preload.ts`, CommonJS, emits to `dist-electron/`. `lib: ["ES2022", "DOM"]` (preload uses `window`/`document`).
   - [tsconfig.scripts.json](tsconfig.scripts.json) — `scripts/**/*.ts`, `noEmit` (executed via `tsx`).
 - `yarn typecheck` runs all three with `tsc --noEmit`.
@@ -105,9 +105,8 @@ Memory: `feedback_packaged_app_zero_runtime_deps.md`.
 - ESLint 9 flat config in TypeScript: [eslint.config.ts](eslint.config.ts). Loaded by ESLint via `jiti` (declared as a devDependency). Hand-rolled — no `airbnb` / `airbnb-typescript` chain.
 - Stack: `@eslint/js` (recommended JS) + `typescript-eslint` (unified plugin+parser, type-aware via `recommended` + `stylistic` configs) + `eslint-plugin-react` + `eslint-plugin-react-hooks` + `eslint-plugin-jsx-a11y` + `eslint-plugin-import-x` (modern fork; replaces `eslint-plugin-import`).
 - Project conventions preserved: `sort-keys: error` (asc, case-insensitive), `react/button-has-type: error`, `react/function-component-definition: error`, `no-promise-executor-return: error`, `no-console: warn` (allow `warn`/`error`). Style as warnings: `comma-dangle`, `indent`, `quotes`, `semi`, `object-curly-spacing`. The config itself is alphabetized (sort-keys also applies to it).
-- `parserOptions.project` lists all three tsconfigs (`tsconfig.json`, `tsconfig.electron.json`, `tsconfig.scripts.json`) so type-aware lint covers renderer + electron + scripts. `eslint.config.ts` itself opts out of type-aware rules via the `disableTypeChecked` override (it's not in any tsconfig include).
-- CRA 5 ships its own `eslint-config-react-app` and would conflict with our flat config inside webpack-dev-server's overlay. Disabled via `DISABLE_ESLINT_PLUGIN=true` in dev/build (see [scripts/start.ts](scripts/start.ts) and [scripts/build.ts](scripts/build.ts)). Standalone `yarn lint` runs the flat config we want.
-- `serviceWorker.ts` (CRA boilerplate) and `scripts/**/*.ts` (CLI entry points) get file-specific `no-console: off` overrides. Test files relax `no-unsafe-*` type-aware rules.
+- `parserOptions.project` lists all three tsconfigs (`tsconfig.json`, `tsconfig.electron.json`, `tsconfig.scripts.json`) so type-aware lint covers renderer + electron + scripts. `eslint.config.ts` and `vite.config.ts` opt out of type-aware rules via the `disableTypeChecked` override (neither is in any tsconfig include — both are run by their own loaders).
+- `scripts/**/*.ts` (CLI entry points) gets a file-specific `no-console: off` override. Test files relax `no-unsafe-*` type-aware rules and pick up Vitest globals via `globals.vitest`.
 - `lint` scope: `eslint .` — the flat config's `ignores` block excludes `dist-electron/`, `build/`, `dist/`, `resources/`, `docs/`, `node_modules/`, `coverage/`, `.pyi-build/`.
 
 ## Verification (run after every change)
@@ -115,7 +114,7 @@ Memory: `feedback_packaged_app_zero_runtime_deps.md`.
 After any change to source files (`src/`, `app.py`, `main.ts`, `preload.ts`, `scripts/`, `package.json`, `tsconfig*.json`, `requirements*.txt`), the contract is:
 
 ```bash
-yarn verify         # lint → typecheck (3 projects) → jest → pytest → React build
+yarn verify         # lint → typecheck (3 projects) → vitest → pytest → Vite build
 ```
 
 This is the single command the [change-verifier](.claude/agents/change-verifier.md) agent runs. The agent fires automatically via the `PostToolUse` hook in [.claude/settings.json](.claude/settings.json) on every Edit/Write/MultiEdit to in-scope files. The hook script ([.claude/hooks/verify-on-change.py](.claude/hooks/verify-on-change.py)) excludes Markdown, `.claude/`, `node_modules/`, `dist-electron/`, build/dist/resources output, and unrelated assets — see `.claude/hooks/test_verify_on_change.py` for the scope rules.
@@ -123,9 +122,9 @@ This is the single command the [change-verifier](.claude/agents/change-verifier.
 If `yarn verify` fails:
 - Lint failures: usually mechanical (key order, button type, missing import). Fix and rerun. `yarn lint --fix` handles many automatically.
 - Typecheck failures: surfaces as `error TSnnnn` with a file:line. The three tsconfig projects run sequentially; the failing one is always named in the output.
-- Jest failures: read the assertion message. Snapshot updates need explicit user approval.
+- Vitest failures: read the assertion message. Snapshot updates need explicit user approval.
 - Pytest failures: see [tests/test_app.py](tests/test_app.py). Covers `/example` happy path, 404, CORS allowlist + denial, and `/quit` shutdown scheduling.
-- React build failures: read the webpack error.
+- React build failures: read the Vite error — usually a missing import, an unresolved asset path, or a Sass syntax error.
 
 Never silence a failure (`// eslint-disable`, `xtest`, swallowed exceptions). Fix or escalate.
 
@@ -137,7 +136,7 @@ The CI workflow [.github/workflows/ci.yml](.github/workflows/ci.yml) runs the sa
 yarn start                       # dev: React + Electron + Flask together (compiles main.ts/preload.ts first)
 yarn build                       # Electron tsc + PyInstaller bundle + React production build
 yarn build:electron              # tsc -p tsconfig.electron.json → dist-electron/
-yarn build:react                 # CRA production build → build/
+yarn build:react                 # Vite production build → build/
 yarn build:python                # PyInstaller bundle → resources/app/
 yarn build:package:windows       # MSI via electron-wix-msi  (requires WiX on PATH)
 yarn build:package:mac           # DMG via electron-installer-dmg
@@ -145,11 +144,11 @@ yarn build:package:linux         # DEB via electron-installer-debian (needs fake
 yarn clean                       # remove build/test artifacts (build/, dist/, dist-electron/, coverage/, __pycache__, .pyi-build/, etc.)
 yarn clean:all                   # also remove node_modules + lockfiles (forces full reinstall)
 yarn build:docs                  # TypeDoc → ./docs (config in typedoc.json)
-yarn lint                        # ESLint (airbnb + airbnb-typescript) over src/ + scripts/ + main.ts + preload.ts
+yarn lint                        # ESLint 9 flat config over src/ + scripts/ + main.ts + preload.ts
 yarn typecheck                   # tsc --noEmit for all three tsconfig projects
-yarn test                        # CRA jest runner
+yarn test                        # Vitest (vitest run — non-watch)
 yarn test:python                 # pytest against tests/
-yarn verify                      # full chain: lint + typecheck + jest + pytest + react build
+yarn verify                      # full chain: lint + typecheck + vitest + pytest + vite build
 ```
 
 Prerequisites:
@@ -171,6 +170,7 @@ Output paths:
 - **Old dependency pinning intent:** the user pins exact versions (no carets/tildes). Don't blanket-upgrade; user prefers stability over freshness. See `feedback_pin_versions_exactly.md` memory.
 - **`yarn clean` removes `yarn.lock` and `node_modules`** when run as `yarn clean:all`. Plain `yarn clean` does not — only artifacts. Both are deliberate per `cleanProject()` in [scripts/dispatch.ts](scripts/dispatch.ts), but warn the user before `clean:all` — versions can drift on reinstall.
 - **`yarn build:docs` emits 2 third-party warnings** about `@inheritDoc` summary overwrites in `node_modules/@reduxjs/toolkit/dist/index.d.ts`. They originate inside RTK's own `.d.ts` and TypeDoc's `suppressCommentWarningsInDeclarationFiles` only covers unknown-tag warnings, not `@inheritDoc` conflicts. Output is correct (0 errors). Won't drop until upstream RTK fixes its comments or TypeDoc adds a finer-grained suppress option.
+- **Vite 5 CJS Node API deprecation warning** — emitted once per `vite` / `vite build` / `vitest run` invocation: `The CJS build of Vite's Node API is deprecated.` Triggered internally by tsx loading `vite.config.ts` through Node's CJS path. Harmless; clears when the project moves to Vite 6+ (which drops the CJS entrypoint entirely). Don't try to silence with `VITE_CJS_IGNORE_WARNING` — it hides the warning but masks the real fix.
 
 ## Available agents (`.claude/agents/`)
 

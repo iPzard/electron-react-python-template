@@ -13,7 +13,7 @@ You are a packaging specialist for this Electron + React + Python template.
 `yarn build:package:<platform>` → `tsx ./scripts/dispatch.ts package <platform>` → `scripts/package.ts` → calls `Builder.buildAll()` first, which runs **three** sub-builds in order:
 1. `tsc -p tsconfig.electron.json` — compile `main.ts` + `preload.ts` to `dist-electron/`
 2. PyInstaller for `app.py` → `resources/app/`
-3. `react-scripts build` → `build/`
+3. `vite build` → `build/`
 
 Then `electron-packager` bundles everything (with `dist-electron/` inside the asar so `package.json` `"main": "dist-electron/main.js"` resolves) → then platform installer (`electron-installer-debian` / `electron-installer-dmg` / `electron-wix-msi`).
 
@@ -42,7 +42,7 @@ Output paths:
 ## Workflow
 
 1. Read the user's exact error (quote it back).
-2. Identify which stage broke: TS compile (electron), PyInstaller, react-scripts build, electron-packager, or installer step.
+2. Identify which stage broke: TS compile (electron), PyInstaller, `vite build`, electron-packager, or installer step.
 3. Check prerequisites first before code changes.
 4. For code fixes, edit `scripts/package.ts` or `scripts/build.ts` directly — they are class-per-file. After editing, `yarn typecheck` to confirm no TS regression.
 

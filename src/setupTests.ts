@@ -1,3 +1,4 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// CRA looks for this file at src/setupTests.js (or .ts) by default.
+// jest-dom adds custom matchers for asserting on DOM nodes. Wired into
+// Vitest via vite.config.ts -> test.setupFiles. Works the same as the
+// CRA-era setup; @testing-library/jest-dom is runner-agnostic.
 import '@testing-library/jest-dom';
